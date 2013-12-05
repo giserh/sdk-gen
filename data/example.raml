@@ -20,29 +20,36 @@ traits:
 		   		offset:
 		   			description: Number of returning items
 		   			type: number
+		   			minLength: 1
+
 		   		limit:
 		   			description: Starting position
 		   			type: number
+		   			minLength: 1
 	- groups:
 			queryParameters:
 				groups:
 					description: The groups we want to narrow down our search to
 					type: string
+					example: 1,2,4,5
 	- segments:
 			queryParameters:
 				segments:
 					description: The segments we want to narrow down our search to.
 					type: string
+					example: 1,2,4,5
 	- fields:
 			queryParameters:
 				fields:
 					description: The fields we want to show in our result
 					type: string
+					example: id,name,description
 	- ordering:
 			queryParameters:
 				order:
 					description: The fields we want to order by and the type of ordering.
-					type: string												
+					type: string	
+					example: id:DESC,name:ASC											
 /cache:
 	/users:
 		get:
@@ -62,6 +69,4 @@ traits:
 	          		200:
 	            		body:
 	              			schema: user	
-	/segments
-	/events
-	/notifications
+

@@ -2,6 +2,7 @@ import org.raml.parser.visitor.RamlDocumentBuilder
 import scala.io.BufferedSource
 import scala.io.Source
 import org.raml.model.Raml
+import collection.JavaConverters._
 
 object Main {
   
@@ -16,5 +17,12 @@ object Main {
     var version = raml.getVersion()
     println(raml)
     println(s"test $version")
+    val res=raml.getResources().asScala
+//    println(res)
+    
+    res.foreach{
+    	a => println(a._2.getResources())
+    }
+    
   } 
 }

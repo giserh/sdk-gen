@@ -26,6 +26,7 @@ public class ClassPathResourceLoader implements ResourceLoader
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourceName);
         if (inputStream == null)
         {
+        	
             inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
         }
         return inputStream;

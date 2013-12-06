@@ -17,11 +17,13 @@ package org.raml.parser.tagresolver;
 
 import static org.yaml.snakeyaml.nodes.NodeId.scalar;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.commons.io.IOUtils;
+import org.raml.parser.loader.FileResourceLoader;
 import org.raml.parser.loader.ResourceLoader;
 import org.raml.parser.visitor.NodeHandler;
 import org.yaml.snakeyaml.Yaml;
@@ -62,7 +64,13 @@ public class IncludeResolver implements TagResolver
             }
             ScalarNode scalarNode = (ScalarNode) node;
             String resourceName = scalarNode.getValue();
+            
             inputStream = resourceLoader.fetchResource(resourceName);
+            
+            if(inputStream == null){
+            	ResourceLoader loader = new FileResourceLoader("./");
+            	inputStream=loader.fetchResource(resourceName);
+            }
 
             if (inputStream == null)
             {

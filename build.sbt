@@ -26,5 +26,6 @@ libraryDependencies ++= Seq(
   "commons-lang" % "commons-lang" % "2.2",
   "commons-beanutils" % "commons-beanutils" % "1.8.3",
   "commons-io" % "commons-io" % "2.4",
-  "org.kitchen-eel" % "json-schema-validator" % "1.4.9"
+  "org.kitchen-eel" % "json-schema-validator" % "1.4.9",
+  "org.fusesource.scalate" % "scalate-core_2.10" % "1.6.1"
 )

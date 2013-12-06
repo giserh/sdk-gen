@@ -42,6 +42,7 @@ public class FileResourceLoader implements ResourceLoader
     @Override
     public InputStream fetchResource(String resourceName)
     {
+    	
         File includedFile = new File(parentPath, resourceName);
         FileInputStream inputStream = null;
         if (logger.isDebugEnabled())

@@ -53,12 +53,14 @@ public class DefaultTupleBuilder<K extends Node, V extends Node> implements Tupl
     @Override
     public NodeBuilder getBuilderForTuple(NodeTuple tuple)
     {
+    	
         if (builders == null || builders.isEmpty())
         {
             return new DefaultTupleBuilder(new DefaultTupleHandler());
         }
         for (TupleBuilder tupleBuilder : builders.values())
         {
+        	
             if (tupleBuilder.getHandler().handles(tuple))
             {
                 return tupleBuilder;

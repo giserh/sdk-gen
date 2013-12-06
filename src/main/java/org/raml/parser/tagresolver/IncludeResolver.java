@@ -67,6 +67,7 @@ public class IncludeResolver implements TagResolver
             
             inputStream = resourceLoader.fetchResource(resourceName);
             
+            /** @FIXME CHANGED BY TOMEK G*/
             if(inputStream == null){
             	ResourceLoader loader = new FileResourceLoader("./");
             	inputStream=loader.fetchResource(resourceName);

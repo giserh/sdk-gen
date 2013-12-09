@@ -51,13 +51,20 @@ traits:
     200:
      body:
       schema: users
- /{userId}:
-  get:
-   is: [fields]
+  post:
+   is: [ paginator, groups, segments, fields, ordering]
    securedBy: [oauth_2_0]
-   description: Get one user
+   description: Get users collection
    responses:
     200:
      body:
       schema: user
-	    
+  /{userId}:
+   get:
+    is: [fields]
+    securedBy: [oauth_2_0]
+    description: Get one user
+    responses:
+     200:
+      body:
+       schema: user

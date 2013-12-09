@@ -1,0 +1,15 @@
+<%@ var className:String %>
+<%@ var methodNames: List[String] %>
+<?php
+namespace Sdk;
+
+class ${className}{
+
+	#for (name <- methodNames)
+public function ${name}() { 
+		return "";
+ 	}
+	#end
+ 
+ 
+ } 

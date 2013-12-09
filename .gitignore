@@ -24,3 +24,4 @@ error.log
 /*.sc
 /conf/dev.conf
 /conf/test.conf
+/generated

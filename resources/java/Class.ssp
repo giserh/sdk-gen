@@ -1,0 +1,13 @@
+<%@ var className:String %>
+<%@ var methodNames: List[String] %>
+
+class ${className}{
+
+	#for (name <- methodNames)
+String ${name}() { 
+		return "";
+ 	}
+	#end
+ 
+ 
+ } 

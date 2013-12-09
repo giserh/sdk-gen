@@ -1,7 +1,0 @@
-<%@ var name:(String,String) %>
-<%@ var city:String %>
-class SampleClass{
- val a="${name._1}" 
- val b="${name._2}"
- 
- } 

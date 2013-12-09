@@ -2,15 +2,14 @@ package gensdk
 
 class Clazz {
 
-	var classes : Map[String,List[Method]] = Map()
+	private var methods : List[Method] = List()
+	var docs: Map[String,String] = Map()
+	def addMethod( method : Method) {
+		methods = method :: methods
+	}
 	
-	def addMethod( name : String , method : Method) {
-		if (classes.contains(name)){
-			classes = classes.updated(name, method :: method :: classes(name))
-		}
-		else {
-			classes = classes + (name -> List(method))
-		}
+	def addDoc(name : String, description: String){
+		docs += (name -> description)
 	}
 	
 	

@@ -14,30 +14,30 @@ import generator.SDKGenerator
 import generator.PhpSDKGenerator
 import generator.JsSDKGenerator
 import generator.JavaSDKGenerator
-import scala.util.Try
 
 object Main {
 
 	def main(args: Array[String]): Unit = {
-				
-		/*Raml file we are going to use */
-		var buf = Try(Source.fromFile("data/example.raml"))
+
+		var buf: Option[BufferedSource] = None
+
+		buf = Some(Source.fromFile("data/example.raml"))
 		val source: String = buf.get.getLines mkString "\n"
 
-		/*Package object representing the SDK to be created*/
 		val pack = new Package
 		
-		/*Result of parsing the raml object */
 		val raml: Raml = new RamlDocumentBuilder().build(source)
 		
-		/*Create package*/
+		//get package
 		pack.parse(raml)
 		
-		/*Generator representing the type of sdk to use*/
-		val generator = new PhpSDKGenerator("localhost:9000/api")
 		
-		/*Generate sdk code*/
+		val generator = new JavaSDKGenerator("localhost")
+		//generate code
 		generator.generate(pack,"php")
 		
+		
+		
+
 	}
 }

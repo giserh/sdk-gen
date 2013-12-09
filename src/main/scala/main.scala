@@ -1,19 +1,15 @@
-import org.raml.parser.visitor.RamlDocumentBuilder
 import scala.io.BufferedSource
 import scala.io.Source
 import org.raml.model.Raml
-import collection.JavaConverters._
-import org.fusesource.scalate._
-import java.io.PrintWriter
-import java.io.StringWriter
-import java.io.File
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.raml.parser.visitor.RamlDocumentBuilder
+import composer.JavaSDKGenerator
 import gensdk.Package
-import generator.SDKGenerator
-import generator.PhpSDKGenerator
-import generator.JsSDKGenerator
-import generator.JavaSDKGenerator
+import composer.JavaSDKGenerator
+import composer.Composer
+import composer.CodeComposer
+import composer.Generator
+import composer.generator.PhpGenerator
+
 
 object Main {
 
@@ -24,19 +20,37 @@ object Main {
 		buf = Some(Source.fromFile("data/example.raml"))
 		val source: String = buf.get.getLines mkString "\n"
 
-		val pack = new Package
 		
-		val raml: Raml = new RamlDocumentBuilder().build(source)
-		
-		//get package
-		pack.parse(raml)
-		
-		
-		val generator = new JavaSDKGenerator("localhost")
-		//generate code
-		generator.generate(pack,"php")
+//		val pack = new Package
+//		
+//		val raml1: Raml = new RamlDocumentBuilder().build(source)
+//		//get package
+//		pack.parse(raml1)
+//		val generator = new JavaSDKGenerator("localhost")
+//		//generate code
+//		generator.generate(pack,"php")
 		
 		
+		/**from configuration*/
+		val baseUrl = "https://api.isaacloud/v1/api"
+		val resourcePath = "/tmp/sdk-gen/"  
+		val tempDirectory = "/tmp/gen_tmp/"
+ 
+		/**from command line*/
+		val outputDirectory = "/tmp/gen_tmp/generated/"
+		
+		val codeGenerator:Generator = new PhpGenerator  
+		var raml:Raml = new RamlDocumentBuilder().build(source)
+		
+		var composer:CodeComposer = new CodeComposer()
+		composer.withBaseUrl(baseUrl)
+				.withGenerator(codeGenerator)
+				.withOutputDirectory(outputDirectory)
+				.withRaml(raml)
+				.withResourcePath(resourcePath)
+				.withTempDirectory(tempDirectory)
+				.compose
+				
 		
 
 	}

@@ -1,4 +1,4 @@
-package generator
+package composer
 
 import java.io.PrintWriter
 import gensdk.Clazz
@@ -7,6 +7,7 @@ import org.fusesource.scalate.TemplateEngine
 import java.io.File
 import gensdk.Package
 import gensdk.Method
+import composer.SDKGenerator
 
 class PhpSDKGenerator(val baseUrl : String) extends SDKGenerator{
 	

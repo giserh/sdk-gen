@@ -1,9 +1,7 @@
-package generator
+package composer
 
 import org.fusesource.scalate.TemplateEngine
 import gensdk.Package
-import org.fusesource.scalate.DefaultRenderContext
-import java.io.PrintWriter
 import gensdk.Clazz
 import java.io.File
 import gensdk.Method

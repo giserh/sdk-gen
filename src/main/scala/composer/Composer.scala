@@ -1,22 +1,16 @@
-package generator
+package composer
 
-import org.raml.model.Raml
 import java.io.File
+import org.raml.model.Raml
+import java.io.FileOutputStream
+import java.io.FileInputStream
 
+class GeneratorException(message: String = null, cause: Throwable = null) extends Exception(message, cause)
 trait Generator {
   def generate(raml:Raml,resourcePath: String, baseUrl: String, tempDirectory: String): Boolean
 }
 
-class PhpGeneratorException(message: String = null, cause: Throwable = null) extends Exception(message, cause)
-class PhpGenerator extends Generator{
-  private val name = "php"
-  override def generate(raml:Raml,resourcePath: String, baseUrl: String, tempDirectory: String): Boolean = {
-    true
-  }
-  
-}
-
-
+/**CodeGEnerator*/
 class CodeGeneratorException(message: String = null, cause: Throwable = null) extends Exception(message, cause)
 abstract class Composer {
   
@@ -36,13 +30,14 @@ abstract class Composer {
   def withRaml(raml: Raml): Composer
 }
 
+/**Code composer*/
 class CodeComposer extends Composer {
 
   
-  var resourcePath: String = "/resource"
+  var resourcePath: String = "./resource/"
   var baseUrl: String = ""
-  var tempDirectory: String = "/tmp"
-  var outputDirectory: String = "tmp"
+  var tempDirectory: String = "/tmp/"
+  var outputDirectory: String = "/tmp/"
 
     
   var raml:Raml = null
@@ -86,6 +81,7 @@ class CodeWorkerException(message: String = null, cause: Throwable = null) exten
 class CodeWorker(composer: Composer) {
   /**all operations need to be done */
 
+  
   val generator = composer.generator
   val resourcePath = composer.resourcePath
   val raml = composer.raml
@@ -95,22 +91,45 @@ class CodeWorker(composer: Composer) {
 
   /**Create temporary folder*/
   var tmpFolder = composer.tempDirectory + tmpFolderName;
-  var tmpDir: File = new File(composer.tempDirectory + tmpFolderName  );
-  if(!tmpDir.mkdir()){
+  var tmpDir: File = new File(tmpFolder);
+  if(tmpDir.mkdir()){
+    println(s"Create tmp direcotory in ${tmpDir.getAbsolutePath()}");
+  }else{  
     throw new CodeWorkerException(s"Failed trying to create temporary folder in: $tmpFolder ")
   }
   
   /**Prepare output directory*/
   var outputDir: File = new File(composer.outputDirectory)
   if(!outputDir.exists()){
-    if(!outputDir.mkdir()) throw new CodeWorkerException(s"Failed trying to create output folder in: $tmpFolder ")
+    if(outputDir.mkdir()) {
+      println(s"Output direcotry has been created in ${outputDir.getAbsolutePath()}");
+    }else{
+      throw new CodeWorkerException(s"Failed trying to create output folder in: ${composer.outputDirectory} ")
+    }
+  }else{
+    println(s"Output direcotry is ${outputDir.getAbsolutePath()}");
   }
   
   /**Invoke adapter*/
   generator.generate(raml,resourcePath, composer.baseUrl, tmpDir.getAbsolutePath())
   
-  /**Remove old files @TODO*/
+  /**Copy tmp file to new output location @TODO*/
   
+  //new FileOutputStream(tmpDir).getChannel().transferFrom(new FileInputStream(outputDir).getChannel, 0, Long.MaxValue )
+  
+  /**Remove old files @TODO*/
+  removeTmp()
+  
+  private def copyFromTmpToOutput() : Unit = {
+  }
+  private def prepereTmp() : Unit = {
+  }
+  private def prepereOutput() : Unit = {
+  }
+  private def removeTmp() : Unit =  tmpDir.delete() match{
+	  case true => println("Delete tmp direcotry")
+	  case false => throw new CodeWorkerException(s"Failed trying to delete temporary folder in: $tmpFolder ")
+}
   
 
 }

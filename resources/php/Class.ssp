@@ -1,12 +1,14 @@
+#import(gensdk.Method)
 <%@ var className:String %>
 <%@ var methodNames: List[String] %>
+<%@ var parameters: Map[String,String] %>
 <?php
 namespace Sdk;
 
 class ${className}{
 
 	#for (name <- methodNames)
-public function ${name}() { 
+public function ${name}( ${parameters(name)}) { 
 		return "";
  	}
 	#end

@@ -41,29 +41,39 @@ traits:
       description: The fields we want to order by and the type of ordering.
       type: string
       example: "id,name,description"
+/queue:
+ /events:
+  get:
+   is: [ paginator, fields, ordering]
+   securedBy: [oauth_2_0]
+   description: Get events for a client.
+   responses:
+    200:
+     body:
+      schema: events
+  post:
+   is: [fields]
+   securedBy: [oauth_2_0]
+   description: Create a new event.
+   responses:
+    200:
+     body:
+      schema: events
 /cache:
  /users:
   get:
    is: [ paginator, groups, segments, fields, ordering]
    securedBy: [oauth_2_0]
-   description: Get users collection
+   description: Get users collection.
    responses:
     200:
      body:
       schema: users
-  post:
-   is: [ paginator, groups, segments, fields, ordering]
-   securedBy: [oauth_2_0]
-   description: Get users collection
-   responses:
-    200:
-     body:
-      schema: user
   /{userId}:
    get:
     is: [fields]
     securedBy: [oauth_2_0]
-    description: Get one user
+    description: Get one user.
     responses:
      200:
       body:

@@ -5,20 +5,12 @@ import org.fusesource.scalate.DefaultRenderContext
 import org.fusesource.scalate.TemplateEngine
 import java.io.File
 import gensdk.Package
+import gensdk.Method
 
-class JsSDKGenerator extends SDKGenerator {
-	val engine = new TemplateEngine
-	def generate(pack: Package) {
-		
-		val dir = new File(".\\generated\\js");
-    
-		// attempt to create the directory here
-		val successful = dir.mkdir();
-		
-		pack.getClazzes.foreach(generateClass)
-	}
+class JsSDKGenerator(val baseUrl : String) extends SDKGenerator {
+	
 
-	def generateClass(clazz : Clazz){
+	override def generateClass(clazz : Clazz){
 		val file = "./resources/js/Class.ssp"
 
 			
@@ -30,5 +22,9 @@ class JsSDKGenerator extends SDKGenerator {
 		val out = templ.render(context)
 		
 		buffer.flush()
+	}
+	
+	override def generateMethod(method : Method){
+		
 	}
 }

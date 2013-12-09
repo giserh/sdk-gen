@@ -25,7 +25,7 @@ class Package {
 	def parse(raml: Raml) {
 
 		val version = raml.getVersion()
-		println(s"Generating SDK for API version $version")
+		println(s"Building SDK package for API version $version")
 
 		val traits = analyseTraits(raml.getTraits())
 
@@ -64,13 +64,16 @@ class Package {
 
 		val clazz: Clazz = new Clazz(url)
 		methods.asScala.foreach {
-			a =>
+			action =>
 				{
 					//private val regex = """\{[a-zA-Z0-9,]+\}""".r
-					a._2.getIs()
 					//		regex.findAllIn(url)
-					val m = new Method(mapRestType(a._1), url)
-
+					val atype=action._1
+					val act=action._2
+					val m = new Method(mapRestType(atype), url)
+					m.setupTraits(act.getIs().asScala.toList)
+					// get secured by
+					m.addDoc("desciption", act.getDescription())
 					clazz.addMethod(m)
 				}
 		}

@@ -5,7 +5,7 @@ import org.scalatest._
 
 class SampleScalaTest extends FunSuite with Matchers {
 
-	test("pop values in last-in-first-out order") {
+  test("pop values in last-in-first-out order") {
     val stack = new Stack[Int]
     stack.push(1)
     stack.push(2)

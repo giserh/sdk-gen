@@ -1,10 +1,11 @@
-package gensdk
+package analyser
 
 import org.raml.model.Raml
 import org.raml.parser.visitor.RamlDocumentBuilder
 import collection.JavaConverters._
 import org.raml.model.Resource
 import org.raml.model.ActionType
+
 class Package {
 
 	private var docs: Map[String, String] = Map()
@@ -48,12 +49,12 @@ class Package {
 
 	}
 
-	private def mapRestType(atype: ActionType): Rest.Method = {
+	private def mapRestType(atype: ActionType): analyser.RestType= {
 		atype match {
-			case ActionType.GET => Rest.Get()
-			case ActionType.POST => Rest.Post()
-			case ActionType.PUT => Rest.Put()
-			case ActionType.PATCH => Rest.Patch()
+			case ActionType.GET => Get()
+			case ActionType.POST => Post()
+			case ActionType.PUT => Put()
+			case ActionType.PATCH => Patch()
 		}
 	}
 

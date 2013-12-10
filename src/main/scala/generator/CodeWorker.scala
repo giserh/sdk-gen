@@ -8,7 +8,7 @@ import java.io.File
 class CodeWorkerException(message: String = null, cause: Throwable = null) extends Exception(message, cause)
 
 class CodeWorker(context: Context) {
-	/**all operations need to be done */
+	/**all operations need to be done in context of */
 
 	val generator = context.generator
 	val resourcePath = context.resourcePath

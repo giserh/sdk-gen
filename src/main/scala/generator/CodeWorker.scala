@@ -20,7 +20,7 @@ class CodeWorker(context: Context) {
 	prepareTmp()
 
 	/**Invoke adapter*/
-	println(generator)
+	println(tmpDir)
 	generator.generate(raml, resourcePath, context.baseUrl, tmpDir.getAbsolutePath())
 
 	/**Copy tmp file to new output location @TODO*/
@@ -64,7 +64,7 @@ class CodeWorker(context: Context) {
 		new File(context.tempDirectory).mkdir()
 
 		var tmpFolder = context.tempDirectory + tmpFolderName;
-		var tmpDir: File = new File(tmpFolder);
+		this.tmpDir= new File(tmpFolder);
 		if (tmpDir.mkdir()) {
 			println(s"Created tmp directory in ${tmpDir.getAbsolutePath()}");
 		} else {
@@ -72,7 +72,7 @@ class CodeWorker(context: Context) {
 		}
 
 		/**Prepare output directory*/
-		var outputDir: File = new File(context.outputDirectory)
+		this.outputDir = new File(context.outputDirectory)
 		if (!outputDir.exists()) {
 			if (outputDir.mkdir()) {
 				println(s"Output directory has been created in ${outputDir.getAbsolutePath()}");

@@ -2,9 +2,9 @@
 <?php
 namespace IsaaCloudSDK;
 
-#for (class <- classes)
-	${class}
-#end
+	#for (clazz<- classes)
+		${clazz}
+	#end
  
  
  

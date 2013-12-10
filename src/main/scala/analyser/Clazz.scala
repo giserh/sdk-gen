@@ -1,4 +1,4 @@
-package gensdk
+package analyser
 
 class Clazz(val url: String) {
 

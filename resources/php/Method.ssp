@@ -1,0 +1,10 @@
+#import(gensdk.Method)
+<%@ var methodName:String %>
+<%@ var parameters: List[String] %>
+<%@ var body: String %>
+
+public function ${name}( $${parameters.mkString(", $")} ) { 
+		${body}
+ 	}
+	
+ 

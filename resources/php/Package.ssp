@@ -1,0 +1,10 @@
+<%@ var classes: List[String] %>
+<?php
+namespace IsaaCloudSDK;
+
+#for (class <- classes)
+	${class}
+#end
+ 
+ 
+ 

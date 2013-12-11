@@ -1,10 +1,7 @@
+<% escapeMarkup = false %>
 <%@ var classes: List[String] %>
 <?php
 namespace IsaaCloudSDK;
-
-	#for (clazz<- classes)
-		${clazz}
-	#end
- 
- 
- 
+#for (clazz<- classes)
+	${clazz}
+#end

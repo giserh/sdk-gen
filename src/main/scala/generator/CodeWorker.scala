@@ -4,23 +4,25 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.channels.FileChannel
 import java.io.File
+import java.util.Date
+
 
 class CodeWorkerException(message: String = null, cause: Throwable = null) extends Exception(message, cause)
 
 class CodeWorker(context: Context) {
-	/**all operations need to be done in context of */
 
+	/**All operations need to be done in context of */
 	val generator = context.generator
 	val resourcePath = context.resourcePath
 	val raml = context.raml
 	var tmpDir: File = null
 	var outputDir: File = null
 
-	/** Prepare temporary directory**/
+	/** Prepare temporary and output directories */
 	prepareTmp()
+	prepareOutput()
 
 	/**Invoke adapter*/
-	println(tmpDir)
 	generator.generate(raml, resourcePath, context.baseUrl, tmpDir.getAbsolutePath())
 
 	/**Copy tmp file to new output location @TODO*/
@@ -55,21 +57,25 @@ class CodeWorker(context: Context) {
 			destChannel.close();
 		}
 	}
+
 	private def prepareTmp(): Unit = {
 
 		/**Temporary directory name*/
-		var tmpFolderName = "package_" + context.hashCode()
+		var tmpFolderName = "package_" + new Date().getTime()
 
 		/**Create temporary folder*/
 		new File(context.tempDirectory).mkdir()
 
 		var tmpFolder = context.tempDirectory + tmpFolderName;
-		this.tmpDir= new File(tmpFolder);
+		this.tmpDir = new File(tmpFolder);
 		if (tmpDir.mkdir()) {
 			println(s"Created tmp directory in ${tmpDir.getAbsolutePath()}");
 		} else {
 			throw new CodeWorkerException(s"Failed to create temporary folder in: $tmpFolder ")
 		}
+
+	}
+	private def prepareOutput(): Unit = {
 
 		/**Prepare output directory*/
 		this.outputDir = new File(context.outputDirectory)
@@ -83,9 +89,33 @@ class CodeWorker(context: Context) {
 			println(s"Output directory is ${outputDir.getAbsolutePath()}");
 		}
 	}
-	private def prepareOutput(): Unit = {
+
+	private def deleteDir(toDelete: File): Boolean = {
+		val files = toDelete.listFiles();
+		var deleted = true
+		
+		for { file <- files } {
+			if (file.isDirectory()) {
+				val ne = deleteDir(file)
+				if (!ne) deleted = false 
+				
+			} else {
+				val ne = deleteFile(file)
+				if (!ne) deleted = false 
+			}
+		}	
+		if (!toDelete.delete()) deleted = false
+		deleted
 	}
-	private def removeTmp(): Unit = tmpDir.delete() match {
+
+	private def deleteFile(toDelete: File): Boolean = {
+		try {
+			toDelete.delete()
+		} catch {
+			case e: Throwable => /* @TODO Should be logged*/ false
+		}
+	}
+	private def removeTmp(): Unit = deleteDir(tmpDir) match {
 		case true => println("Deleted tmp directory")
 		case false => throw new CodeWorkerException(s"Failed trying to delete temporary folder")
 	}

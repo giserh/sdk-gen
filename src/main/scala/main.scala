@@ -13,7 +13,7 @@ import generator.PhpSDKGenerator
 object Main {
 
 	def main(args: Array[String]): Unit = {
-		/**@TODO add command line user interace*/	
+		/**@TODO add command line user interface*/	
 		var buf: Option[BufferedSource] = None
 
 		buf = Some(Source.fromFile("data/example.raml"))

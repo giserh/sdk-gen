@@ -7,6 +7,7 @@ import java.io.File
 import analyser.Method
 import org.raml.model.Raml
 import java.io.PrintWriter
+import analyser.Analyser
 
 /**
  * Exception that may occur during code generation
@@ -27,11 +28,10 @@ trait SourceGenerator extends Generator{
 	 * @return whether SDK was generated
 	 */
 	override def generate(raml:Raml,resourcePath: String, baseUrl: String, tempDirectory: String): Boolean = {
-		val pack : Package = new Package
-		pack.parse(raml)
+		val pack : Package = Analyser.analyseRaml(raml)
 		
-		val classes : List[String] = pack.getClazzes.map{
-			clazz => generateClass(clazz, resourcePath + "/Class.ssp", clazz.getMethods.map{
+		val classes : List[String] = pack.clazzes.map{
+			clazz => generateClass(clazz, resourcePath + "/Class.ssp", clazz.methods.map{
 				m => generateMethod(m, resourcePath + "/Method.ssp")
 				})
 			}

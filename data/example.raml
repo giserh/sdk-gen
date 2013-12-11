@@ -42,7 +42,9 @@ traits:
       type: string
       example: "id,name,description"
 /queue:
+ displayName: Queue
  /events:
+  displayName: QueueEvents
   get:
    is: [ paginator, fields, ordering]
    securedBy: [oauth_2_0]
@@ -60,7 +62,9 @@ traits:
      body:
       schema: events
 /cache:
+ displayName: Cache
  /users:
+  displayName: CacheUsers
   get:
    is: [ paginator, groups, segments, fields, ordering]
    securedBy: [oauth_2_0]

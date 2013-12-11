@@ -1,9 +1,7 @@
+<% escapeMarkup = false %>
 <%@ var methodName:String %>
 <%@ var parameters: List[String] %>
 <%@ var body: String %>
-
 public function ${methodName}( $${parameters.mkString(", $")} ) { 
-		${body}
- 	}
-	
- 
+	${body}
+	}

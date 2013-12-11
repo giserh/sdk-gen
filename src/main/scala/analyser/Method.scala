@@ -1,56 +1,83 @@
 package analyser
 
+import org.raml.model.SecurityReference
+
 abstract class RestType
 
-class Get extends RestType {
+
+case object Get extends RestType {
 	override def toString(): String = {
 		"get"
 	}
 }
 
-class Patch extends RestType {
+
+case object Patch extends RestType {
 	override def toString(): String = {
 		"patch"
 	}
 }
-class Post extends RestType {
+
+case object Post extends RestType {
 	override def toString(): String = {
 		"post"
 	}
 }
-class Put extends RestType {
+
+case object Put extends RestType {
 	override def toString(): String = {
 		"put"
 	}
 }
 
-class Method(val restType: RestType, val url: String) {
+class Method(val restType: RestType, val url: String, private var _name : String = null, val securedBy : List[SecurityReference]) {
 
-	val name: String = restType.toString() + createName(url)
-	private var docs: Map[String, String] = Map()
+	/* @TODO add One to method name if display name was given*/
+	if (_name == null) _name = restType.toString() + createName(url)
+	else _name = restType.toString() + _name	
+	
+	private var _docs: Map[String, String] = Map()
+	private var _body: Option[String] = None
+	private var _query: Map[String, Any] = Map()
 
-	private var body: Option[String] = None
-	var query: Map[String, Any] = Map()
-
+	addIdToQuery()
+	
+	def name = _name
+	def query = _query
+	def body = _body
+	def body_= (value:String): Unit = _body = Some(value)
+	def docs = _docs
+	
 	def addDoc(name: String, description: String) {
-		docs += (name -> description)
+		_docs += (name -> description)
 	}
 
 	def addQueryParameter(key: String, value: Any) {
-		query = query + (key -> value)
-	}
-
-	def setBody(newBody: String) {
-		body = Some(newBody)
+		_query = query + (key -> value)
 	}
 
 	/**
 	 * Creates name from url
 	 */
-	def createName(url: String): String = {
+	private def createName(url: String): String = {
 		val regex = """\{[a-zA-Z0-9,]+\}""".r
-		val urlNew = regex.replaceAllIn(url, "One")
+		val urlNew = regex.findFirstIn(url) match{
+			case Some(v) => regex.replaceAllIn(url, "") + "One"
+			case None => url
+		}		
+		
 		urlNew.split("/").toList.map { s => s.capitalize }.mkString("")
+	}
+	
+	private def addIdToQuery(){
+		val regex = """\{[a-zA-Z0-9,]+\}""".r
+		regex.findAllIn(this.url).foreach{
+			id => {				
+				var getId = id.replace("{", "")				
+				getId = getId.replace("}", "")
+				addQueryParameter(getId, classOf[Long])
+			}
+		}
 	}
 
 	/**

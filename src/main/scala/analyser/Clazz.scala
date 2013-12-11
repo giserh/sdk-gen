@@ -1,32 +1,32 @@
 package analyser
 
-class Clazz(val url: String) {
+class Clazz(val url: String, private var _name : String = null) {
 
-	private val regex = """\{[a-zA-Z0-9,]+\}""".r
-	val name : String = createName(url)
-	println(name)
+	if (_name == null) _name = createName(url)
+	private var _methods : List[Method] = List()
+	private var docs: Map[String,String] = Map()
 	
-	private var methods : List[Method] = List()
-	var docs: Map[String,String] = Map()
+	def name = _name
 	
-	def addMethod( method : Method) {
-		methods = method :: methods
+	def methods = _methods
+	
+	def add( method : Method) {
+		_methods = method :: _methods
 	}
 	
 	def addDoc(name : String, description: String){
 		docs += (name -> description)
 	}
 	
-	def createName(url: String): String = {
-
+	private def createName(url: String): String = {
+		val regex = """\{[a-zA-Z0-9,]+\}""".r
 		val urlNew = regex.replaceAllIn(url, "One")
 		 urlNew.split("/").toList.map { s => s.capitalize }.mkString("")		
 
 	}
 	
-	override def toString() = name
+	override def toString = name
 	
-	def getMethods() : List[Method] ={
-		methods
-	}
+	
+	
 }

@@ -1,13 +1,10 @@
+<% escapeMarkup = false %>
 <%@ var className:String %>
 <%@ var methods: List[String] %>
-
-
-
 class ${className}{
 
 	#for (method<- methods)
 		${method}
-	#end
- 
+	#end 
  
  } 

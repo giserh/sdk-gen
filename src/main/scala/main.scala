@@ -12,6 +12,7 @@ import generator.CodeContext
 import generator.CodeWorkerException
 import generator.Generator
 import generator.PhpSDKGenerator
+import com.typesafe.config._
 
 object Main {
   

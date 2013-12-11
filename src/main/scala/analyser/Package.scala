@@ -51,10 +51,10 @@ class Package {
 
 	private def mapRestType(atype: ActionType): analyser.RestType= {
 		atype match {
-			case ActionType.GET => Get()
-			case ActionType.POST => Post()
-			case ActionType.PUT => Put()
-			case ActionType.PATCH => Patch()
+			case ActionType.GET => new Get
+			case ActionType.POST => new Post
+			case ActionType.PUT => new Put
+			case ActionType.PATCH => new Patch
 		}
 	}
 

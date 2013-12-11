@@ -2,23 +2,23 @@ package analyser
 
 abstract class RestType
 
-case class Get extends RestType {
+class Get extends RestType {
 	override def toString(): String = {
 		"get"
 	}
 }
 
-case class Patch extends RestType {
+class Patch extends RestType {
 	override def toString(): String = {
 		"patch"
 	}
 }
-case class Post extends RestType {
+class Post extends RestType {
 	override def toString(): String = {
 		"post"
 	}
 }
-case class Put extends RestType {
+class Put extends RestType {
 	override def toString(): String = {
 		"put"
 	}

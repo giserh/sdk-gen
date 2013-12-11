@@ -4,22 +4,26 @@ import org.raml.model.SecurityReference
 
 abstract class RestType
 
+
 case object Get extends RestType {
 	override def toString(): String = {
 		"get"
 	}
 }
 
+
 case object Patch extends RestType {
 	override def toString(): String = {
 		"patch"
 	}
 }
+
 case object Post extends RestType {
 	override def toString(): String = {
 		"post"
 	}
 }
+
 case object Put extends RestType {
 	override def toString(): String = {
 		"put"

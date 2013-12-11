@@ -29,6 +29,7 @@ class Package(
 
 	def addClazz(clazz: Clazz) {
 		_clazzes = clazz :: clazzes
+
 	}
 
 }

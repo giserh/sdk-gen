@@ -34,7 +34,8 @@ object Build extends Build {
       libraryDependencies ++= Seq(
         "junit" % "junit" % "4.11",
         "org.scalatest" % "scalatest_2.10" % "2.0",
-        "com.typesafe" % "config" % "1.0.2"
+        "com.typesafe" % "config" % "1.0.2",
+        "com.github.scopt" %% "scopt" % "3.2.0"
         )))
     .dependsOn(raml)
 

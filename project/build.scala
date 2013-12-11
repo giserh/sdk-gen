@@ -6,7 +6,7 @@ object Build extends Build {
   // lazy val common = Project("common",
   //   base = file("common"))
   //lazy val common =  uri("ssh://git@github.com/isaacloud/common-package.git#%s".format("master"))
-  lazy val raml = RootProject(uri("ssh://git@github.com/asikorski/raml-scala-parser.git#%s".format("master")))
+  lazy val raml = RootProject(uri("https://github.com/asikorski/raml-scala-parser.git#%s".format("master")))
   //lazy val ext = uri("ssh://git@github.com:asikorski/raml-scala-parser.git")
   //lazy val raml = Project("raml-scala-parser", base = file("raml-scala-parser"))
 

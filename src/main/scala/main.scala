@@ -59,9 +59,9 @@ object Main {
       if(!options.contains("raml")) throw new InvalidParameterException("RAML file are not definded!")
       
       /**from command line -g --generator, -o --output raml */
-      val ramlFile = options.get("raml").get
-      val outputDirectory = options.get("output").get
-      val codeGenerator = options.get("generator").get
+      val ramlFile = options("raml")
+      val outputDirectory = options("output")
+      val codeGenerator = options("generator")
       
       /** Get configuration for application*/
       var application = config.getConfig("application")

@@ -22,6 +22,7 @@ class PhpSDKGenerator extends SourceGenerator{
 		val context = new DefaultRenderContext("/", engine, buffer)
 		
 		context.attributes("classes") = clazzes
+		context.attributes("docs") = pack.docs
 		templ.render(context)
 		
 		buffer.flush()
@@ -38,6 +39,7 @@ class PhpSDKGenerator extends SourceGenerator{
 		
 		context.attributes("className") = clazz.name
 		context.attributes("methods") = methods
+		context.attributes("docs") = clazz.docs
 		templ.render(context)
 		
 		buffer.flush()
@@ -54,6 +56,7 @@ class PhpSDKGenerator extends SourceGenerator{
 		val tmp=method.query.map{tuple => tuple._1}.toList
 		context.attributes("parameters") = method.query.map{tuple => tuple._1}
 		context.attributes("body") = """return "";"""
+		context.attributes("docs") = method.docs
 		context.attributes("methodName") = method.name
 		
 		templ.render(context)

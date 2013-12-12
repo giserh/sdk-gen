@@ -1,6 +1,13 @@
 <% escapeMarkup = false %>
 <%@ var classes: List[String] %>
+<%@ var docs: Map[String,String] %>
 <?php
+/**
+#for(doc <- docs)
+/* @${doc._1} ${doc._2}
+#end 
+ */ 
+ 
 namespace IsaaCloudSDK;
 #for (clazz<- classes)
 	${clazz}

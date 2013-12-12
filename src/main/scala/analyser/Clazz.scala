@@ -4,10 +4,10 @@ class Clazz(val url: String, private var _name : String = null) {
 
 	if (_name == null) _name = createName(url)
 	private var _methods : List[Method] = List()
-	private var docs: Map[String,String] = Map()
+	private var _docs: Map[String,String] = Map()
 	
 	def name = _name
-	
+	def docs = _docs	
 	def methods = _methods
 	
 	def add( method : Method) {
@@ -15,7 +15,7 @@ class Clazz(val url: String, private var _name : String = null) {
 	}
 	
 	def addDoc(name : String, description: String){
-		docs += (name -> description)
+		_docs += (name -> description)
 	}
 	
 	private def createName(url: String): String = {

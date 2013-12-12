@@ -2,38 +2,19 @@ package analyser
 
 import org.raml.model.SecurityReference
 
-abstract class RestType
+/**Color strategy*/
+object RestType extends Enumeration {
+    val PUT = Value("put")
+    val POST = Value("post")
+    val GET = Value("get")
+    val PATCH = Value("patch")
+    val DELETE = Value("delete")
+  }
 
-
-case object Get extends RestType {
-	override def toString(): String = {
-		"get"
-	}
-}
-
-
-case object Patch extends RestType {
-	override def toString(): String = {
-		"patch"
-	}
-}
-
-case object Post extends RestType {
-	override def toString(): String = {
-		"post"
-	}
-}
-
-case object Put extends RestType {
-	override def toString(): String = {
-		"put"
-	}
-}
-
-class Method(val restType: RestType, val url: String, private var _name : String = null, val securedBy : List[SecurityReference]) {
+class Method(val restType: RestType.Value, val url: String, private var _name : String = null, val securedBy : List[SecurityReference]) {
 
 	/* @TODO add One to method name if display name was given*/
-	if (_name == null) _name = restType.toString() + createName(url)
+	if (_name == null) _name = restType + createName(url)
 	else _name = restType.toString() + _name	
 	
 	private var _docs: Map[String, String] = Map()
@@ -75,12 +56,13 @@ class Method(val restType: RestType, val url: String, private var _name : String
 			id => {				
 				var getId = id.replace("{", "")				
 				getId = getId.replace("}", "")
-				addQueryParameter(getId, classOf[Long])
+				addQueryParameter(getId, classOf[String])
 			}
 		}
 	}
 
 	/**
+	 * @TODO make it generic
 	 * Check the traits that are available for this method
 	 */
 	def setupTraits(traits: List[String]) {

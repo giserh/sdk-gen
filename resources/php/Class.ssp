@@ -1,7 +1,13 @@
 <% escapeMarkup = false %>
 <%@ var className:String %>
+<%@ var docs:Map[String,String] %>
 <%@ var methods: List[String] %>
-class ${className}{
+/**
+#for(doc <- docs)
+/* @${doc._1} ${doc._2}
+#end 
+ */ 
+class ${className} extends Connector{
 
 	#for (method<- methods)
 		${method}

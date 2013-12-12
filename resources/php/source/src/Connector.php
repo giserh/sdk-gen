@@ -64,7 +64,7 @@ abstract class Connector {
     private $contentType = "application/json charset=utf-8";
 
     /**
-     * This method provide low level REST-call mechnism
+     * This method provide low level REST-call access mechnism
      * 
      * @param type $uri - the relative url addr
      * @param type $httpMethod - http method in the filed of GET, POST, PUT, OPTIONS, or PATH

@@ -1,11 +1,8 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
-
 class HttpMethods extends SplEnum {
 
     const GET = "GET";
@@ -17,7 +14,7 @@ class HttpMethods extends SplEnum {
 }
 
 /**
- * Description of SDK
+ * Response object
  *
  */
 class Response {
@@ -59,9 +56,11 @@ class AccessDeniedException extends Exception {
  */
 abstract class Connector {
 
-    private $baseURL;
+    private $apiBaseURL;
+    private $oauthBaseURL;
     private $apiVersion;
-    private $OAuth2;
+    private $token;
+    
     private $contentType = "application/json charset=utf-8";
 
     /**
@@ -107,7 +106,11 @@ abstract class Connector {
         /**
          * Responder data object
          */
-        $response == new Response(200, array(), array());
+        $response = new Response(200, array(), array());
+        
+        /**
+         * Callback if was defined
+         */
         if ((is_string($callback) && function_exists($callback)) || (is_object($callback) && ($callback instanceof Closure))) {
            return $callback($response);
         }else{

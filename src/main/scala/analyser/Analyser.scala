@@ -83,15 +83,21 @@ object Analyser {
 
 					val actionType = action_tuple._1
 					val action = action_tuple._2
-
-					/* @TODO : use responses and body parameters.**/
-					//action.getResponses()
-					//action.getBody
+				
 					val m = new Method(mapRestType(actionType), url, displayName, action.getSecuredBy().asScala.toList)
 					m.setupTraits(action.getIs().asScala.toList)
 
-					// get secured by
-					m.addDoc("desciption", action.getDescription())
+					val body=action.getBody
+					
+					if(!body.isEmpty()) m.addQueryParameter("body", "json")
+					
+					val response = action.getResponses() 
+					
+					// @TODO - get real response
+					m.addDoc("response", "200")
+					
+					// @TODO get secured by
+					m.addDoc("description", action.getDescription())
 					clazz.add(m)
 				}
 		}

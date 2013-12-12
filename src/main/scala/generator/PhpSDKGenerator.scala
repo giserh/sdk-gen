@@ -54,10 +54,11 @@ class PhpSDKGenerator extends SourceGenerator{
 		val context = new DefaultRenderContext("/", engine, buffer)
 		
 		val tmp=method.query.map{tuple => tuple._1}.toList
-		context.attributes("parameters") = method.query.map{tuple => tuple._1}
-		context.attributes("body") = """return "";"""
+		context.attributes("parameters") = method.query
 		context.attributes("docs") = method.docs
 		context.attributes("methodName") = method.name
+		context.attributes("url") = method.url
+		context.attributes("rtype") = method.restType.toString()
 		
 		templ.render(context)
 		buffer.flush()

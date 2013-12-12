@@ -54,6 +54,8 @@ traits:
      body:
       schema: events
   post:
+   body:
+    createAuthority:
    is: [fields]
    securedBy: [oauth_2_0]
    description: Create a new event.

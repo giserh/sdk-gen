@@ -19,7 +19,7 @@ class Method(val restType: RestType.Value, val url: String, private var _name : 
 	
 	private var _docs: Map[String, String] = Map()
 	private var _body: Option[String] = None
-	private var _query: Map[String, Any] = Map()
+	private var _query: Map[String, String] = Map()
 
 	addIdToQuery()
 	
@@ -33,7 +33,7 @@ class Method(val restType: RestType.Value, val url: String, private var _name : 
 		_docs += (name -> description)
 	}
 
-	def addQueryParameter(key: String, value: Any) {
+	def addQueryParameter(key: String, value: String) {
 		_query = query + (key -> value)
 	}
 
@@ -56,7 +56,7 @@ class Method(val restType: RestType.Value, val url: String, private var _name : 
 			id => {				
 				var getId = id.replace("{", "")				
 				getId = getId.replace("}", "")
-				addQueryParameter(getId, classOf[String])
+				addQueryParameter(getId, "String")
 			}
 		}
 	}
@@ -68,24 +68,24 @@ class Method(val restType: RestType.Value, val url: String, private var _name : 
 	def setupTraits(traits: List[String]) {
 		traits match {
 			case "paginator" :: tail => {
-				addQueryParameter("limit", classOf[Long])
-				addQueryParameter("offset", classOf[Long])
+				addQueryParameter("limit", "Long")
+				addQueryParameter("offset", "Long")
 				setupTraits(tail)
 			}
 			case "ordering" :: tail => {
-				addQueryParameter("order", classOf[List[(String, String)]])
+				addQueryParameter("order", "List[(String, String)]]")
 				setupTraits(tail)
 			}
 			case "fields" :: tail => {
-				addQueryParameter("fields", classOf[List[String]])
+				addQueryParameter("fields", "List[String]]")
 				setupTraits(tail)
 			}
 			case "groups" :: tail => {
-				addQueryParameter("groups", classOf[List[Long]])
+				addQueryParameter("groups", "List[Long]]")
 				setupTraits(tail)
 			}
 			case "segments" :: tail => {
-				addQueryParameter("segments", classOf[List[Long]])
+				addQueryParameter("segments", "List[Long]")
 				setupTraits(tail)
 			}
 			case Nil =>

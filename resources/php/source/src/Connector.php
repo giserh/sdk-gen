@@ -73,7 +73,7 @@ abstract class Connector {
      * 
      * @return Response Response value object
      */
-    public function callService($uri, $httpMethod, $parameters, $callback = null) {
+    public function callService($uri, $httpMethod, $parameters,$body=array(), $callback = null) {
         /**
          * Get method type from string
          */
@@ -93,8 +93,6 @@ abstract class Connector {
         );
 
         $url = null;
-        $body = array();
-        
         /**
          * Curl it!
          */

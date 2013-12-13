@@ -53,6 +53,28 @@ class ConnectorException extends \RuntimeException {
 }
 
 /**
+ * OAuth 2.0 connector implementation
+ * 
+ */
+class OAuth2 {
+
+    public function __construct() {
+        
+    }
+
+    public function getToken() {
+        $token = "";
+
+        return $token;
+    }
+
+    public function refreshToken() {
+        
+    }
+
+}
+
+/**
  * Main connector class
  */
 abstract class Connector {
@@ -60,11 +82,14 @@ abstract class Connector {
     private $baseOuathUrl = null;
     private $baseApiUrl = null;
     private $version = null;
-    private $options = array();
-    
-    private $token;
     private $contentType = "application/json charset=utf-8";
     private $methods = array("GET", "POST", "PUT", "PATH", "OPTIONS");
+
+    /**
+     * Credentials configuration
+     */
+    private $clientId = null;
+    private $secret = null;
 
     /**
      * Constructor of connector, set up all connection parameters
@@ -72,14 +97,30 @@ abstract class Connector {
      * @param string $baseApiUrl Base url path to api server
      * @param string $baseOuathUrl Base url path to authenticate server
      * @param string $version Version compatible API (in pattern x.y.z)
-     * @param array $options Optional array of parameters
+     * @param array $config Array of configutation
      */
-    public function __construct($baseApiUrl, $baseOuathUrl, $version, $options = array()) {
+    public function __construct($baseApiUrl, $baseOuathUrl, $version, $config) {
         $this->baseApiUrl = $baseApiUrl;
         $this->baseOuathUrl = $baseOuathUrl;
         $this->version = $version;
-        $this->options = $options;
-        
+
+        /**
+         * Set up configuration
+         */
+        if (is_array($config)) {
+            //Set up clientId
+            if (!isset($config["clientId"])) {
+                throw new \ConnectorException("There are not defined client id");
+            } else {
+                $this->clientId = $config["clientId"];
+            }
+
+            if (!isset($config["secret"])) {
+                throw new \ConnectorException("There are not defined secret");
+            } else {
+                $this->secret = $config["secret"];
+            }
+        }
     }
 
     /**
@@ -139,14 +180,22 @@ abstract class Connector {
     }
 
     /**
-     * Get token
+     * Setters and Getters
      */
-    private function getToken() {
-        return "xxx";
+    public function getClientId() {
+        return $this->clientId;
     }
 
-    private function getScope() {
-        
+    public function getSecret() {
+        return $this->secret;
+    }
+
+    public function setClientId($clientId) {
+        $this->clientId = $clientId;
+    }
+
+    public function setSecret($secret) {
+        $this->secret = $secret;
     }
 
 }

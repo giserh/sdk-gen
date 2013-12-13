@@ -53,14 +53,18 @@ class ConnectorException extends \RuntimeException {
  */
 abstract class Connector {
 
-    private $apiBaseURL;
-    private $oauthBaseURL;
-    private $apiVersion;
+    private $baseOuathUrl = null;
+    private $baseApiUrl = null;
+    private $version = null;
+    
     private $token;
-
-    private $methods = array("GET","POST","PUT","PATH","OPTIONS");
     private $contentType = "application/json charset=utf-8";
+    private $methods = array("GET","POST","PUT","PATH","OPTIONS");
+    
 
+    public function __construct($baseApiUrl,$baseOuathUrl,$version) {
+        ;
+    }
     /**
      * This method provide low level REST-call access mechnism
      * 

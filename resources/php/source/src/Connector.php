@@ -71,6 +71,10 @@ abstract class Connector {
     private $secret = null;
 
     /**
+     * Hash
+     */
+    private $hash = "xcxsd";
+    /**
      * Constructor of connector, set up all connection parameters
      * 
      * @param string $baseApiUrl Base url path to api server
@@ -112,7 +116,19 @@ abstract class Connector {
             }
         }
     }
-
+    /**
+     * Merge string with array
+     * 
+     * @param type $string
+     * @param type $parameters
+     * 
+     * @return string Merged string
+     */
+    public function merge($string,$parameters){
+        
+        $mergedString = "";
+        return $mergedString;
+    }
     /**
      * This method provide low level REST-call access mechnism
      * 
@@ -131,18 +147,12 @@ abstract class Connector {
         if (!in_array($method, $this->methods)) {
             throw new ConnectorException("{$httpMethod} is invalid http method!");
         }
-
-        /**
-         * Build authentication data
-         */
-        $authentication = "Barer {$this->getToken()}";
-
         /**
          * Build request header
          */
         $header = array(
             "Content-type" => $this->contentType,
-            "Authentication" => $authentication
+            "Authentication" => $this->getAuthentication()
         );
 
         if (in_array($method, array("GET", "DELETE"))) {
@@ -212,6 +222,15 @@ abstract class Connector {
      */
     public function curlIt($header, $method, $url, $body = null) {
         return new Response(200, array(), array());
+    }
+
+    /**
+     * 
+     * Build authentication data
+     * @return string Authentication Token
+     */
+    public function getAuthentication() {
+        return "Barer {$this->getToken()}";
     }
 
 }

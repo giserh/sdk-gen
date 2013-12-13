@@ -60,11 +60,7 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
                 ->setMethods(array("curlIt"))
                 ->setConstructorArgs($args)
                 ->getMockForAbstractClass();
-
-
-
-
-
+        
         $responder = new IsaaCloud\Response(200, array(), array());
         
         /**

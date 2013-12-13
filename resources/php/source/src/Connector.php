@@ -71,7 +71,7 @@ abstract class Connector {
      * 
      * @param string $baseApiUrl Base url path to api server
      * @param string $baseOuathUrl Base url path to authenticate server
-     * @param string $version Version compatible API
+     * @param string $version Version compatible API (in pattern x.y.z)
      * @param array $options Optional array of parameters
      */
     public function __construct($baseApiUrl, $baseOuathUrl, $version, $options = array()) {

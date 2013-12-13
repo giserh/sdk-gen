@@ -115,8 +115,9 @@ abstract class Connector {
         /**
          * Get method type from string
          */
-        if (!in_array($httpMethod, $this->methods)) {
-            throw new \ConnectorException("Invalid http method");
+        $method = strtoupper($httpMethod);
+        if (!in_array($method, $this->methods)) {
+            throw new ConnectorException("{$httpMethod} is invalid http method!");
         }
 
         /**
@@ -133,15 +134,11 @@ abstract class Connector {
         );
 
         $url = null;
-        /**
-         * Curl it!
-         */
-        curlIt($header, $method, $url, $body);
 
         /**
          * Responder data object
          */
-        $response = new Response(200, array(), array());
+        $response = $this->curlIt($header, $method, $url, $body); 
 
         /**
          * Callback if was defined
@@ -182,6 +179,10 @@ abstract class Connector {
     public function getVersion() {
         return $this->version;
     }
+    
+    public function getToken() {
+        return "xxx";
+    }
 
     
     /**
@@ -192,8 +193,8 @@ abstract class Connector {
      * @param type $url
      * @param array $body
      */
-    function curlIt($header, $method, $url, $body = null) {
-        
+    private function curlIt($header, $method, $url, $body = null) {
+        return new Response(200, array(), array());
     }
 
 }

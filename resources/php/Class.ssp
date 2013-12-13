@@ -4,7 +4,7 @@
 <%@ var methods: List[String] %>
 /**
 #for(doc <- docs)
-/* @${doc._1} ${doc._2}
+* @${doc._1} ${doc._2}
 #end 
  */ 
 class ${className} extends Connector{

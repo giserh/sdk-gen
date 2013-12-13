@@ -1,3 +1,5 @@
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.security.InvalidParameterException
 
 import scala.io.BufferedSource
@@ -9,90 +11,89 @@ import org.raml.parser.visitor.RamlDocumentBuilder
 import com.typesafe.config.ConfigFactory
 
 import generator.CodeContext
-import generator.CodeWorkerException
 import generator.Generator
 import generator.PhpSDKGenerator
-import com.typesafe.config._
 
 object Main {
-  
 
-  val config = ConfigFactory.load()
+	val config = ConfigFactory.load()
 
-  /**Get runner option*/
-  val usage = """ Usage: sdkgen [--generator | -g string] [--output -o directory] filename """
-  def nextOption(map: Map[String,_], list: List[String]): Map[String,_] = {
-    list match {
-      case Nil => map
-      case ("--generator" | "-g") :: value :: tail => value match {
-        /** @TODO add new generators */
-        case "php" => nextOption(map ++ Map("generator" -> new PhpSDKGenerator), tail)
-        case _ => throw new InvalidParameterException(s"Not found generator: $value")
-      }
-      case ("--output" | "-o") :: value :: tail => {
-        /** @TODO validate output*/
-        nextOption(map ++ Map("output" -> value.toString), tail)
-      }
-      /**get last parameter - path to RAML file */
-      case string :: Nil => {
-        /** @TODO check file is exist , in future get file from remote resource*/
-        nextOption(map ++ Map("raml" -> string), list.tail)
-      }
-      case option :: tail =>
-        println("Unknown option " + option)
-        exit(1)
-    }
-  }
-  
-  def main(args: Array[String]): Unit = {
+	/**Get runner option*/
+	val usage = """ Usage: sdkgen [--generator | -g string] [--output -o directory] raml_filename """
 
-    /**Check whether the parameters passed*/
-    if (args.length != 0) {
+	def nextOption(list: List[String]): Map[String, Any] = {
+		list match {
+			case ("--generator" | "-g") :: value :: tail => value match {
+				/** @TODO add new generators */
+				case "php" => Map("generator" -> new PhpSDKGenerator) ++ nextOption(tail)
+				case _ => throw new InvalidParameterException(s"Not found generator: $value")
+			}
+			case ("--output" | "-o") :: value :: tail => {
+				Map("output" -> value) ++ nextOption(tail)
+			}
+			/**get last parameter - path to RAML file */
+			case ramlFile :: Nil => {
+				/** @TODO in future get file from remote resource*/
+				if (!Files.exists(Paths.get(ramlFile))) throw new InvalidParameterException(s"File does not exists: $ramlFile")
+				else Map("raml" -> ramlFile)
+			}
+			case Nil => {
+				println("Not enough parameters ")
+				sys.exit(1)
+			}
+			case other => {
+				println("Unknown option " + other.head)
+				sys.exit(1)
+			}
+		}
+	}
 
-      
-      /**catch options*/
-      val options: Map[String,Any] = nextOption(Map(), args.toList)
-      
+	def main(args: Array[String]): Unit = {
 
-      if(!options.contains("generator")) throw new InvalidParameterException("Generator are not definded!")
-      if(!options.contains("output")) throw new InvalidParameterException("Output directory are not definded!")
-      if(!options.contains("raml")) throw new InvalidParameterException("RAML file are not definded!")
-      
-      /**from command line -g --generator, -o --output raml */
-      val ramlFile = options("raml")
-      val outputDirectory = options("output")
-      val codeGenerator = options("generator")
-      
-      /** Get configuration for application*/
-      var application = config.getConfig("application")
+		/**Check whether we have any parameters*/
+		if (args.length != 0) {
 
-      /**Load RAML file*/
-      var buf: Option[BufferedSource] = None
-      buf = Some(Source.fromFile(ramlFile.asInstanceOf[String]))
-      val source: String = buf.get.getLines mkString "\n"
+			/**Create options map*/
+			val options: Map[String, Any] = nextOption(args.toList)
 
-      /** Get data from configuration*/
-      val baseUrl = application.getString("baseUrl")
-      val resourcePath = application.getString("resourcePath")
-      val tempDirectory = application.getString("tempDirectory")
+			if (!options.contains("generator")) throw new InvalidParameterException("Generator are not defined!")
+			if (!options.contains("output")) throw new InvalidParameterException("Output directory are not defined!")
+			if (!options.contains("raml")) throw new InvalidParameterException("RAML files are not defined!")
 
-      
-      var raml: Raml = new RamlDocumentBuilder().build(source)
+			/**from command line -g --generator, -o --output raml */
+			val ramlFile : String = options("raml").asInstanceOf[String]
+			val outputDirectory : String = options("output").asInstanceOf[String]
+			val codeGenerator : Generator = options("generator").asInstanceOf[Generator]
 
-      /**Invoke code generator*/
-      var composer: CodeContext = new CodeContext()
-      composer.withBaseUrl(baseUrl)
-        .withGenerator(codeGenerator.asInstanceOf[Generator])
-        .withOutputDirectory(outputDirectory.toString)
-        .withRaml(raml)
-        .withResourcePath(resourcePath)
-        .withTempDirectory(tempDirectory)
-        .compose
+			/** Get configuration for application*/
+			var application = config.getConfig("application")
 
-    } else {
-      /**there are no parameters*/
-      println(usage)
-    }
+			/**Load RAML file*/
+			var buf: Option[BufferedSource] = None
+			buf = Some(Source.fromFile(ramlFile))
+			val source: String = buf.get.getLines mkString "\n"
 
-  }
+			/** Get data from configuration*/
+			val baseUrl = application.getString("baseUrl")
+			val resourcePath = application.getString("resourcePath")
+			val tempDirectory = application.getString("tempDirectory")
+
+			var raml: Raml = new RamlDocumentBuilder().build(source)
+
+			/**Invoke code generator*/
+			var composer: CodeContext = new CodeContext()
+			composer.withBaseUrl(baseUrl)
+				.withGenerator(codeGenerator)
+				.withOutputDirectory(outputDirectory)
+				.withRaml(raml)
+				.withResourcePath(resourcePath)
+				.withTempDirectory(tempDirectory)
+				.compose
+
+		} else {
+			/**there are no parameters*/
+			println(usage)
+		}
+
+	}
 }

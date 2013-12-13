@@ -4,7 +4,7 @@
 <?php
 /**
 #for(doc <- docs)
-/* @${doc._1} ${doc._2}
+* @${doc._1} ${doc._2}
 #end 
  */ 
  

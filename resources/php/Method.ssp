@@ -1,14 +1,29 @@
 <% escapeMarkup = false %>
 <%@ var methodName:String %>
-<%@ var parameters: List[String] %>
-<%@ var body: String %>
+<%@ var parameters: Map[String,String] %>
 <%@ var docs: Map[String,String] %>
+<%@ var url : String %>
+<%@ var rtype : String %>
 /**
+* Accessible at url : ${url}
 #for(doc <- docs)
-/* @${doc._1} ${doc._2}
+* ${doc._1} ${doc._2}
+#end 
+#for(param <- parameters)
+* @param ${param._1} : ${param._2}
 #end 
  */ 
-public function ${methodName}( $${parameters.mkString(", $")} ) { 
-	${body}
-	
+public function ${methodName}( $${parameters.map(tuple => tuple._1).mkString(", $")} ) { 
+
+	$array = [
+    #for(param <- parameters.filter(_._1 != "body"))
+	"${param._1}" => $${param._1},
+	#end 
+	];
+
+	#if (parameters.contains("body"))
+  		$this->callService( "${url}", "${rtype}",  $array , $body)
+	#else
+		$this->callService( "${url}", "${rtype}",  $array)
+	#end	
 	}

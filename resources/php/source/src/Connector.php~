@@ -1,9 +1,17 @@
 <?php
-namespace IsaaCloud;
+
 /**
  * 
  */
+class HttpMethods extends SplEnum {
 
+    const GET = "GET";
+    const POST = "POST";
+    const PUT = "PUT";
+    const PATH = "PATH";
+    const OPTIONS = "OPTIONS";
+
+}
 
 /**
  * Response object
@@ -35,17 +43,12 @@ class Response {
 
 }
 
-class NotFoundException extends \Exception {
+class NotFoundException extends Exception {
     
 }
 
-class AccessDeniedException extends \Exception {
+class AccessDeniedException extends Exception {
     
-}
-class ConnectorException extends \RuntimeException {
-      public function __construct($message = '', $code = 0) {
-        return parent::__construct($message, $code);
-    }
 }
 
 /**
@@ -53,18 +56,13 @@ class ConnectorException extends \RuntimeException {
  */
 abstract class Connector {
 
-    private $baseOuathUrl = null;
-    private $baseApiUrl = null;
-    private $version = null;
-    
+    private $apiBaseURL;
+    private $oauthBaseURL;
+    private $apiVersion;
     private $token;
-    private $contentType = "application/json charset=utf-8";
-    private $methods = array("GET","POST","PUT","PATH","OPTIONS");
     
+    private $contentType = "application/json charset=utf-8";
 
-    public function __construct($baseApiUrl,$baseOuathUrl,$version) {
-        ;
-    }
     /**
      * This method provide low level REST-call access mechnism
      * 
@@ -75,14 +73,11 @@ abstract class Connector {
      * 
      * @return Response Response value object
      */
-
-    public function callService($uri, $httpMethod, $parameters, $body=array(), $callback = null) {
+    public function callService($uri, $httpMethod, $parameters, $body = array(), $callback = null) {
         /**
          * Get method type from string
          */
-        if (!in_array($httpMethod, $this->methods)) {
-            throw new \ConnectorException("Invalid http method");
-        }
+        $method = new HttpMethods(strtoupper($httpMethod));
 
         /**
          * Build authentication data
@@ -98,6 +93,8 @@ abstract class Connector {
         );
 
         $url = null;
+        $body = array();
+        
         /**
          * Curl it!
          */

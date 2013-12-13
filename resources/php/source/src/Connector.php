@@ -171,7 +171,19 @@ abstract class Connector {
     public function setSecret($secret) {
         $this->secret = $secret;
     }
+    public function getBaseOuathUrl() {
+        return $this->baseOuathUrl;
+    }
 
+    public function getBaseApiUrl() {
+        return $this->baseApiUrl;
+    }
+
+    public function getVersion() {
+        return $this->version;
+    }
+
+    
     /**
      * Build and call request with CURL
      * 

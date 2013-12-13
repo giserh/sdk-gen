@@ -60,11 +60,14 @@ abstract class Connector {
     private $baseOuathUrl = null;
     private $baseApiUrl = null;
     private $version = null;
-    private $options = array();
-    
-    private $token;
     private $contentType = "application/json charset=utf-8";
     private $methods = array("GET", "POST", "PUT", "PATH", "OPTIONS");
+
+    /**
+     * Credentials configuration
+     */
+    private $clientId = null;
+    private $secret = null;
 
     /**
      * Constructor of connector, set up all connection parameters
@@ -72,14 +75,30 @@ abstract class Connector {
      * @param string $baseApiUrl Base url path to api server
      * @param string $baseOuathUrl Base url path to authenticate server
      * @param string $version Version compatible API (in pattern x.y.z)
-     * @param array $options Optional array of parameters
+     * @param array $config Array of configutation
      */
-    public function __construct($baseApiUrl, $baseOuathUrl, $version, $options = array()) {
+    public function __construct($baseApiUrl, $baseOuathUrl, $version, $config) {
         $this->baseApiUrl = $baseApiUrl;
         $this->baseOuathUrl = $baseOuathUrl;
         $this->version = $version;
-        $this->options = $options;
-        
+
+        /**
+         * Set up configuration
+         */
+        if (is_array($config)) {
+            //Set up clientId
+            if (!isset($config["clientId"])) {
+                throw new \ConnectorException("There are not defined client id");
+            } else {
+                $this->clientId = $config["clientId"];
+            }
+
+            if (!isset($config["secret"])) {
+                throw new \ConnectorException("There are not defined secret");
+            } else {
+                $this->secret = $config["secret"];
+            }
+        }
     }
 
     /**
@@ -96,8 +115,9 @@ abstract class Connector {
         /**
          * Get method type from string
          */
-        if (!in_array($httpMethod, $this->methods)) {
-            throw new \ConnectorException("Invalid http method");
+        $method = strtoupper($httpMethod);
+        if (!in_array($method, $this->methods)) {
+            throw new ConnectorException("{$httpMethod} is invalid http method!");
         }
 
         /**
@@ -114,19 +134,11 @@ abstract class Connector {
         );
 
         $url = null;
-        /**
-         * Curl it!
-         */
-        curlIt($header, $method, $url, $body);
-
-        function curlIt($header, $method, $url, $body) {
-            
-        }
 
         /**
          * Responder data object
          */
-        $response = new Response(200, array(), array());
+        $response = $this->curlIt($header, $method, $url, $body); 
 
         /**
          * Callback if was defined
@@ -139,14 +151,50 @@ abstract class Connector {
     }
 
     /**
-     * Get token
+     * Setters and Getters
      */
-    private function getToken() {
+    public function getClientId() {
+        return $this->clientId;
+    }
+
+    public function getSecret() {
+        return $this->secret;
+    }
+
+    public function setClientId($clientId) {
+        $this->clientId = $clientId;
+    }
+
+    public function setSecret($secret) {
+        $this->secret = $secret;
+    }
+    public function getBaseOuathUrl() {
+        return $this->baseOuathUrl;
+    }
+
+    public function getBaseApiUrl() {
+        return $this->baseApiUrl;
+    }
+
+    public function getVersion() {
+        return $this->version;
+    }
+    
+    public function getToken() {
         return "xxx";
     }
 
-    private function getScope() {
-        
+    
+    /**
+     * Build and call request with CURL
+     * 
+     * @param array $header 
+     * @param string $method HTTP method
+     * @param type $url
+     * @param array $body
+     */
+    private function curlIt($header, $method, $url, $body = null) {
+        return new Response(200, array(), array());
     }
 
 }

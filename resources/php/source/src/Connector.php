@@ -1,9 +1,10 @@
 <?php
+
 namespace IsaaCloud;
+
 /**
  * 
  */
-
 
 /**
  * Response object
@@ -42,29 +43,45 @@ class NotFoundException extends \Exception {
 class AccessDeniedException extends \Exception {
     
 }
+
 class ConnectorException extends \RuntimeException {
-      public function __construct($message = '', $code = 0) {
+
+    public function __construct($message = '', $code = 0) {
         return parent::__construct($message, $code);
     }
+
 }
 
 /**
- * All error code
+ * Main connector class
  */
 abstract class Connector {
 
     private $baseOuathUrl = null;
     private $baseApiUrl = null;
     private $version = null;
+    private $options = array();
     
     private $token;
     private $contentType = "application/json charset=utf-8";
-    private $methods = array("GET","POST","PUT","PATH","OPTIONS");
-    
+    private $methods = array("GET", "POST", "PUT", "PATH", "OPTIONS");
 
-    public function __construct($baseApiUrl,$baseOuathUrl,$version) {
-        ;
+    /**
+     * Constructor of connector, set up all connection parameters
+     * 
+     * @param string $baseApiUrl Base url path to api server
+     * @param string $baseOuathUrl Base url path to authenticate server
+     * @param string $version Version compatible API
+     * @param array $options Optional array of parameters
+     */
+    public function __construct($baseApiUrl, $baseOuathUrl, $version, $options = array()) {
+        $this->baseApiUrl = $baseApiUrl;
+        $this->baseOuathUrl = $baseOuathUrl;
+        $this->version = $version;
+        $this->options = $options;
+        
     }
+
     /**
      * This method provide low level REST-call access mechnism
      * 
@@ -75,8 +92,7 @@ abstract class Connector {
      * 
      * @return Response Response value object
      */
-
-    public function callService($uri, $httpMethod, $parameters, $body=array(), $callback = null) {
+    public function callService($uri, $httpMethod, $parameters, $body = array(), $callback = null) {
         /**
          * Get method type from string
          */
@@ -102,6 +118,7 @@ abstract class Connector {
          * Curl it!
          */
         curlIt($header, $method, $url, $body);
+
         function curlIt($header, $method, $url, $body) {
             
         }
@@ -110,16 +127,15 @@ abstract class Connector {
          * Responder data object
          */
         $response = new Response(200, array(), array());
-        
+
         /**
          * Callback if was defined
          */
         if ((is_string($callback) && function_exists($callback)) || (is_object($callback) && ($callback instanceof Closure))) {
-           return $callback($response);
-        }else{
-           return $response;
+            return $callback($response);
+        } else {
+            return $response;
         }
-        
     }
 
     /**

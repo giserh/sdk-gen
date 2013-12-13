@@ -53,28 +53,6 @@ class ConnectorException extends \RuntimeException {
 }
 
 /**
- * OAuth 2.0 connector implementation
- * 
- */
-class OAuth2 {
-
-    public function __construct() {
-        
-    }
-
-    public function getToken() {
-        $token = "";
-
-        return $token;
-    }
-
-    public function refreshToken() {
-        
-    }
-
-}
-
-/**
  * Main connector class
  */
 abstract class Connector {
@@ -160,10 +138,6 @@ abstract class Connector {
          */
         curlIt($header, $method, $url, $body);
 
-        function curlIt($header, $method, $url, $body) {
-            
-        }
-
         /**
          * Responder data object
          */
@@ -196,6 +170,18 @@ abstract class Connector {
 
     public function setSecret($secret) {
         $this->secret = $secret;
+    }
+
+    /**
+     * Build and call request with CURL
+     * 
+     * @param array $header 
+     * @param string $method HTTP method
+     * @param type $url
+     * @param array $body
+     */
+    function curlIt($header, $method, $url, $body = null) {
+        
     }
 
 }

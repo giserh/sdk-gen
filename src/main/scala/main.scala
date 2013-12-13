@@ -19,7 +19,7 @@ object Main {
 	val config = ConfigFactory.load()
 
 	/**Get runner option*/
-	val usage = """ Usage: sdkgen [--generator | -g string] [--output -o directory] raml_filename """
+	val usage = """ Usage: sdkgen [--generator | -g string] [--output -o directory] [--include -i directory]  raml_filename """
 
 	def nextOption(list: List[String]): Map[String, Any] = {
 		list match {
@@ -30,6 +30,9 @@ object Main {
 			}
 			case ("--output" | "-o") :: value :: tail => {
 				Map("output" -> value) ++ nextOption(tail)
+			}
+			case ("--include" | "-i") :: value :: tail => {
+				Map("include" -> value) ++ nextOption(tail)
 			}
 			/**get last parameter - path to RAML file */
 			case ramlFile :: Nil => {
@@ -65,6 +68,7 @@ object Main {
 			val outputDirectory : String = options("output").asInstanceOf[String]
 			val codeGenerator : Generator = options("generator").asInstanceOf[Generator]
 
+			
 			/** Get configuration for application*/
 			var application = config.getConfig("application")
 
@@ -78,6 +82,10 @@ object Main {
 			val resourcePath = application.getString("resourcePath")
 			val tempDirectory = application.getString("tempDirectory")
 
+			var includePath = resourcePath + "/include"
+			if( options.contains("include") )
+				includePath = options("include").asInstanceOf[String]
+			
 			var raml: Raml = new RamlDocumentBuilder().build(source)
 
 			/**Invoke code generator*/
@@ -88,6 +96,7 @@ object Main {
 				.withRaml(raml)
 				.withResourcePath(resourcePath)
 				.withTempDirectory(tempDirectory)
+				.withIncludePath(includePath)
 				.compose
 
 		} else {

@@ -10,7 +10,7 @@ import analyser.Method
 import java.io.StringWriter
 
 
-class PhpSDKGenerator extends SourceGenerator{
+class PhpSDKGenerator extends SourceGenerator(".php"){
 	
 
 	val engine : TemplateEngine = new TemplateEngine
@@ -23,6 +23,7 @@ class PhpSDKGenerator extends SourceGenerator{
 		
 		context.attributes("classes") = clazzes
 		context.attributes("docs") = pack.docs
+		
 		templ.render(context)
 		
 		buffer.flush()

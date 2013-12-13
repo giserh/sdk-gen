@@ -21,6 +21,7 @@ class Response {
     private $code;
     private $body;
     private $header;
+    private $paginator;
 
     public function getCode() {
         return $this->code;
@@ -78,8 +79,19 @@ abstract class Connector {
      * @param array $config Array of configutation
      */
     public function __construct($baseApiUrl, $baseOuathUrl, $version, $config) {
-        $this->baseApiUrl = $baseApiUrl;
-        $this->baseOuathUrl = $baseOuathUrl;
+
+        if ((filter_var($baseApiUrl, FILTER_VALIDATE_URL) == true)) {
+            $this->baseApiUrl = $baseApiUrl;
+        } else {
+            throw new ConnectorException("{$baseApiUrl} is invalid url!");
+        }
+
+        if ((filter_var($baseOuathUrl, FILTER_VALIDATE_URL) == true)) {
+            $this->baseOuathUrl = $baseOuathUrl;
+        } else {
+            throw new ConnectorException("{$baseOuathUrl} is invalid url!");
+        }
+
         $this->version = $version;
 
         /**
@@ -88,13 +100,13 @@ abstract class Connector {
         if (is_array($config)) {
             //Set up clientId
             if (!isset($config["clientId"])) {
-                throw new \ConnectorException("There are not defined client id");
+                throw new ConnectorException("There are not defined client id");
             } else {
                 $this->clientId = $config["clientId"];
             }
 
             if (!isset($config["secret"])) {
-                throw new \ConnectorException("There are not defined secret");
+                throw new ConnectorException("There are not defined secret");
             } else {
                 $this->secret = $config["secret"];
             }
@@ -111,7 +123,7 @@ abstract class Connector {
      * 
      * @return Response Response value object
      */
-    public function callService($uri, $httpMethod, $parameters, $body = array(), $callback = null) {
+    public function callService($uri, $httpMethod, $parameters, $body = null, $callback = null) {
         /**
          * Get method type from string
          */
@@ -133,12 +145,17 @@ abstract class Connector {
             "Authentication" => $authentication
         );
 
-        $url = null;
+        if (in_array($method, array("GET", "DELETE"))) {
+            $body = null;
+        }
+
+
+        $url = "https://test.com/";
 
         /**
          * Responder data object
          */
-        $response = $this->curlIt($header, $method, $url, $body); 
+        $response = $this->curlIt($header, $method, $url, $body);
 
         /**
          * Callback if was defined
@@ -168,6 +185,7 @@ abstract class Connector {
     public function setSecret($secret) {
         $this->secret = $secret;
     }
+
     public function getBaseOuathUrl() {
         return $this->baseOuathUrl;
     }
@@ -179,12 +197,11 @@ abstract class Connector {
     public function getVersion() {
         return $this->version;
     }
-    
+
     public function getToken() {
         return "xxx";
     }
 
-    
     /**
      * Build and call request with CURL
      * 
@@ -193,7 +210,7 @@ abstract class Connector {
      * @param type $url
      * @param array $body
      */
-    private function curlIt($header, $method, $url, $body = null) {
+    public function curlIt($header, $method, $url, $body = null) {
         return new Response(200, array(), array());
     }
 

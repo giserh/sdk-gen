@@ -18,8 +18,10 @@ abstract class Context {
   var baseUrl: String
   var tempDirectory: String
   var outputDirectory: String
+  var includePath: String
 
   def withResourcePath(resourcePath: String): Context
+  def withIncludePath(includePath: String): Context
   def withBaseUrl(baseUrl: String): Context
   def withGenerator(generator: Generator): Context
   def withTempDirectory(tempDirectory: String): Context
@@ -35,39 +37,44 @@ class CodeContext extends Context {
   var baseUrl: String = ""
   var tempDirectory: String = "/tmp/"
   var outputDirectory: String = "./output/"
-
+  var includePath: String = "./resources/include"
     
   var raml:Raml = null
   var generator: Generator = null
 
   override def withResourcePath(resourcePath: String): CodeContext = {
-    CodeContext.this.resourcePath = resourcePath
-    CodeContext.this
+    this.resourcePath = resourcePath
+    this
+  }
+  
+  override def withIncludePath(includePath: String): CodeContext = {
+    this.includePath= includePath
+    this
   }
 
   override def withBaseUrl(baseUrl: String): CodeContext = {
-    CodeContext.this.baseUrl = baseUrl
-    CodeContext.this
+    this.baseUrl = baseUrl
+    this
   }
 
   override def withGenerator(generator: Generator): CodeContext = {
-    CodeContext.this.generator = generator
-    CodeContext.this
+    this.generator = generator
+    this
   }
 
   override def withTempDirectory(tempDirectory: String): CodeContext = {
-    CodeContext.this.tempDirectory = tempDirectory
-    CodeContext.this
+    this.tempDirectory = tempDirectory
+    this
   }
 
   override def withOutputDirectory(outputDirectory: String): CodeContext = {
-    CodeContext.this.outputDirectory = outputDirectory
-    CodeContext.this
+    this.outputDirectory = outputDirectory
+    this
   }
   
   override def withRaml(raml: Raml): CodeContext = {
-    CodeContext.this.raml = raml
-    CodeContext.this
+    this.raml = raml
+    this
   }  
 
   def compose(): CodeWorker = new CodeWorker(CodeContext.this)

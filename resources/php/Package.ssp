@@ -2,6 +2,9 @@
 <%@ var classes: List[String] %>
 <%@ var docs: Map[String,String] %>
 <?php
+
+include 'Connector.php';
+
 /**
 #for(doc <- docs)
 * @${doc._1} ${doc._2}

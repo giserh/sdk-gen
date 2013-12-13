@@ -25,15 +25,16 @@ class CodeWorker(context: Context) {
 	/**Invoke adapter*/
 	generator.generate(raml, resourcePath, context.baseUrl, tmpDir.getAbsolutePath())
 
-	/**Copy tmp file to new output location @TODO*/
+	/**Copy tmp file to new output location*/
 	copyDir(tmpDir, outputDir)
-
+	copyDir(new File(context.includePath), outputDir)
 	/**Remove old files */
 	removeTmp()
 
 	private def copyDir(source: File, dest: File): Unit = {
+		
 		val files = source.listFiles();
-
+		
 		for { file <- files } {
 			if (file.isDirectory()) {
 				copyDir(file, new File(dest, file.getName()));
@@ -51,7 +52,7 @@ class CodeWorker(context: Context) {
 			destChannel = new FileOutputStream(dest).getChannel();
 			destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
 		} catch {
-			case e => e.printStackTrace()
+			case e : Throwable => e.printStackTrace()
 		} finally {
 			sourceChannel.close();
 			destChannel.close();

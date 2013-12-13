@@ -17,7 +17,9 @@ class SourceGeneratorException(message: String = null, cause: Throwable = null) 
 /**
  * Generator for source code (PHP, Javascript etc)   
  */
-trait SourceGenerator extends Generator{
+abstract class SourceGenerator (extension : String = "") extends Generator{
+	
+	protected var sdkFileName = "isaacloud" + extension
 	
 	/**
 	 * Creates the sdk based on Raml
@@ -38,7 +40,7 @@ trait SourceGenerator extends Generator{
 		
 		val packageString = generatePackage(pack, resourcePath + "/Package.ssp", classes)
 	
-		val dest = new PrintWriter(new File(tempDirectory + "/isaacloud.php"))
+		val dest = new PrintWriter(new File(tempDirectory + "/" + sdkFileName))
 		dest.print(packageString)
 		dest.flush()
 		

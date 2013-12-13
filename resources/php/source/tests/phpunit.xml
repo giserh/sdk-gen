@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<!-- see http://www.phpunit.de/wiki/Documentation -->
+<phpunit colors="true"
+         bootstrap="./bootstrap.php"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnFailure="true">
+    <testsuites>
+        <testsuite name="IsaaCloud SDK">
+            <directory>./src</directory>
+        </testsuite>
+    </testsuites>
+
+</phpunit>

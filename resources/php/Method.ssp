@@ -7,20 +7,23 @@
 /**
 * Accessible at url : ${url}
 #for(doc <- docs)
-* @${doc._1} ${doc._2}
+* ${doc._1} ${doc._2}
 #end 
 #for(param <- parameters)
-* @param ${param._1} - type ${param._2}
+* @param ${param._1} : ${param._2}
 #end 
  */ 
 public function ${methodName}( $${parameters.map(tuple => tuple._1).mkString(", $")} ) { 
 
 	$array = [
-    #for(param <- parameters)
+    #for(param <- parameters.filter(_._1 != "body"))
 	"${param._1}" => $${param._1},
 	#end 
 	];
 
-	$this->callService( "${url}", "${rtype}",  $array )
-	
+	#if (parameters.contains("body"))
+  		$this->callService( "${url}", "${rtype}",  $array , $body)
+	#else
+		$this->callService( "${url}", "${rtype}",  $array)
+	#end	
 	}

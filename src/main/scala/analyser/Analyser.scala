@@ -87,17 +87,40 @@ object Analyser {
 					val m = new Method(mapRestType(actionType), url, displayName, action.getSecuredBy().asScala.toList)
 					m.setupTraits(action.getIs().asScala.toList)
 
+					m.addDoc("", action.getDescription())
+					
 					val body=action.getBody
 					
-					if(!body.isEmpty()) m.addQueryParameter("body", "json")
+					/** Analyse the possible values for body **/
+					if(!body.isEmpty()) {
+						var gatherBodyTypes = List[String]()
+						body.asScala.foreach{
+							body_type => {
+								/** Add example schema to docs **/
+								gatherBodyTypes =  (body_type._1 + " schema : \n" +body_type._2.getSchema()).replace("\n", "\n*")  :: gatherBodyTypes
+							}
+							
+						}
+						m.addQueryParameter("body", gatherBodyTypes.mkString(" | ") )
+					}
 					
-					val response = action.getResponses() 
+					val responses = action.getResponses() 
+					if (!responses.isEmpty()){
+						var gatherReturn = List[String]()
+						responses.asScala.foreach{
+							response => {
+								/** Get all mime-types of responses **/
+								val typeSchema = response._2.getBody().asScala.map{ tpl => tpl._1 + " : " + tpl._2.getSchema().replace("\n", "\n *")}.mkString(" | ")
+								/** join all possible responses **/
+								gatherReturn = response._1 + " : " + typeSchema :: gatherReturn 
+							}
+						}
+						m.addDoc("@return", gatherReturn.mkString(" | "))
+					}	
 					
-					// @TODO - get real response
-					m.addDoc("response", "200")
 					
 					// @TODO get secured by
-					m.addDoc("description", action.getDescription())
+					
 					clazz.add(m)
 				}
 		}

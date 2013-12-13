@@ -54,15 +54,37 @@ traits:
      body:
       schema: events
   post:
-   body:
-    createAuthority:
    is: [fields]
    securedBy: [oauth_2_0]
    description: Create a new event.
+   body:
+    application/json: 
+     schema: |
+       {
+        "$schema" : "http://json-schema.org/draft-03/schema",
+        "body" : "object",
+        "subjectId" : "integer",
+        "subjectType" : "string",
+        "sourceId" : "integer",
+        "priority" : "string",
+        "type" : "string"
+       }    
    responses:
     200:
      body:
-      schema: events
+      schema: |
+       {
+        "$schema" : "http://json-schema.org/draft-03/schema",
+        "url" : "string",
+       }
+    500:
+     body:
+      schema: |
+       {
+        "$schema" : "http://json-schema.org/draft-03/schema",
+        "error" : "string",
+        "message" : "string"
+       }
 /cache:
  displayName: Cache
  /users:

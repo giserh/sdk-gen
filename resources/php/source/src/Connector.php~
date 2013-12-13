@@ -77,7 +77,7 @@ abstract class Connector {
         /**
          * Get method type from string
          */
-        $method = new HttpMethods(strtoupper($httpMethod)); 
+        $method = new HttpMethods(strtoupper($httpMethod));
 
         /**
          * Build authentication data

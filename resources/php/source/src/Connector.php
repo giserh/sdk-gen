@@ -1,17 +1,9 @@
 <?php
-
+namespace IsaaCloud;
 /**
  * 
  */
-class HttpMethods extends SplEnum {
 
-    const GET = "GET";
-    const POST = "POST";
-    const PUT = "PUT";
-    const PATH = "PATH";
-    const OPTIONS = "OPTIONS";
-
-}
 
 /**
  * Response object
@@ -43,12 +35,17 @@ class Response {
 
 }
 
-class NotFoundException extends Exception {
+class NotFoundException extends \Exception {
     
 }
 
-class AccessDeniedException extends Exception {
+class AccessDeniedException extends \Exception {
     
+}
+class ConnectorException extends \RuntimeException {
+      public function __construct($message = '', $code = 0) {
+        return parent::__construct($message, $code);
+    }
 }
 
 /**
@@ -60,7 +57,8 @@ abstract class Connector {
     private $oauthBaseURL;
     private $apiVersion;
     private $token;
-    
+
+    private $methods = array("GET","POST","PUT","PATH","OPTIONS");
     private $contentType = "application/json charset=utf-8";
 
     /**
@@ -73,11 +71,13 @@ abstract class Connector {
      * 
      * @return Response Response value object
      */
-    public function callService($uri, $httpMethod, $parameters,$body=array(), $callback = null) {
+    public function callService($uri, $httpMethod, $parameters, $body=array(), $callback = null) {
         /**
          * Get method type from string
          */
-        $method = new HttpMethods(strtoupper($httpMethod));
+        if (!in_array($httpMethod, $this->methods)) {
+            throw new \ConnectorException("Invalid http method");
+        }
 
         /**
          * Build authentication data

@@ -74,6 +74,7 @@ abstract class Connector {
      * Hash
      */
     private $hash = "xcxsd";
+
     /**
      * Constructor of connector, set up all connection parameters
      * 
@@ -116,6 +117,7 @@ abstract class Connector {
             }
         }
     }
+
     /**
      * Merge string with array
      * 
@@ -124,11 +126,16 @@ abstract class Connector {
      * 
      * @return string Merged string
      */
-    public function merge($string,$parameters){
-        
-        $mergedString = "";
+    public function merge($string, array $parameters) {
+        $mergedString = $string;
+        if ((null != $parameters) && (count($parameters) > 0)) {
+            foreach ($parameters as $key => $value) {
+                $mergedString = str_replace($key, $value, $mergedString);
+            }
+        }
         return $mergedString;
     }
+
     /**
      * This method provide low level REST-call access mechnism
      * 
@@ -230,7 +237,8 @@ abstract class Connector {
      * @return string Authentication Token
      */
     public function getAuthentication() {
-        return "Barer {$this->getToken()}";
+        $token = "Barer {$this->getToken()}";
+        return trim($token);
     }
 
 }

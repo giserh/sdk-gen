@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author asikorski
+ */
 class ConnectorTest extends PHPUnit_Framework_TestCase {
 
     public function constructorValidProvider() {
@@ -45,6 +48,9 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
      */
     public function testCallService($uri, $httpMethod, $parameters, $body) {
 
+        /**
+         * Setup constructor parameters
+         */
         $args = array(
             "https://api.isaacloud.com",
             "https://oauth.isaacloud.com",
@@ -60,9 +66,12 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
                 ->setMethods(array("curlIt"))
                 ->setConstructorArgs($args)
                 ->getMockForAbstractClass();
-        
+
+        /**
+         * Expected responder
+         */
         $responder = new IsaaCloud\Response(200, array(), array());
-        
+
         /**
          * Set up callback function
          */
@@ -70,19 +79,19 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
             //Assert that has been defined keys
             $this->assertArrayHasKey("Authentication", $header);
             $this->assertArrayHasKey("Content-type", $header);
-            
+
             //Assert that url is valid
-            if((filter_var($url, FILTER_VALIDATE_URL) == false)){
+            if ((filter_var($url, FILTER_VALIDATE_URL) == false)) {
                 $this->fail("{$url} url is not valid!");
             }
 
             //Assert method is valid
-            $this->assertTrue(in_array($method, array("GET","POST","PUT","PATH","OPTIONS","DELETE")));
+            $this->assertTrue(in_array($method, array("GET", "POST", "PUT", "PATH", "OPTIONS", "DELETE")));
 
-            if(in_array($method, array("GET","DELETE"))){
+            if (in_array($method, array("GET", "DELETE"))) {
                 $this->assertNull($body);
             }
-            
+
             return $responder;
         };
         /**
@@ -98,6 +107,98 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
         $response = $stub->callService($uri, $httpMethod, $parameters, $body);
 
         $this->assertEquals($response, $responder);
+    }
+
+    /**
+     * Test get authentication string
+     */
+    public function testGetAuthentication($type = "Barer") {
+        $args = array(
+            "https://api.isaacloud.com",
+            "https://oauth.isaacloud.com",
+            "1.0.0",
+            array(
+                "clientId" => 123,
+                "secret" => 123
+        ));
+        /**
+         * Build mock object
+         */
+        $stub = $this->getMockBuilder("IsaaCloud\Connector")
+                ->setConstructorArgs($args)
+                ->getMockForAbstractClass();
+
+        $authentcationString = $stub->getAuthentication();
+
+        $this->assertNotNull($authentcationString);
+        $this->assertNotEmpty($authentcationString);
+    }
+
+    public function mergeProvider() {
+        $dataProvider = array(
+            array(
+                "/resource/{test1}",
+                array(
+                    "{test1}" => 1),
+                "/resource/1"
+            ),
+            array(
+                "/resource/{test1}/resource2/{test2}",
+                array(
+                    "{test1}" => 1,
+                    "{test2}" => 2),
+                "/resource/1/resource2/2"
+            ),
+            array(
+                "/resource/{test1}/resource2/{test2}/resource3/{test3}",
+                array(
+                    "{test1}" => 1,
+                    "{test2}" => 2,
+                    "{test3}" => 3),
+                "/resource/1/resource2/2/resource3/3"
+            ),
+            array(
+                "/resource/1",
+                array(),
+                "/resource/1"
+            )
+            ,
+            array(
+                "/resource/{test1}/resource2/{test2}",
+                array(
+                    "{test1}" => "string",
+                    "{test2}" => "string2"),
+                "/resource/string/resource2/string2"
+            )
+        );
+        return $dataProvider;
+    }
+
+    /**
+     * @dataProvider mergeProvider
+     */
+    public function testMerge($string, $parameters, $expected) {
+        $args = array(
+            "https://api.isaacloud.com",
+            "https://oauth.isaacloud.com",
+            "1.0.0",
+            array(
+                "clientId" => 123,
+                "secret" => 123
+        ));
+        /**
+         * Build mock object
+         */
+        $stub = $this->getMockBuilder("IsaaCloud\Connector")
+                ->setConstructorArgs($args)
+                ->getMockForAbstractClass();
+
+        /**
+         * TestIt!
+         */
+        $mergedString = $stub->merge($string, $parameters);
+        $this->assertNotNull($mergedString);
+        $this->assertEquals($mergedString, $expected);
     }
 
 }

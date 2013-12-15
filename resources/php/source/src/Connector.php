@@ -126,7 +126,7 @@ abstract class Connector {
      * 
      * @return string Merged string
      */
-    public function merge($string, array $parameters) {
+    public function merge($string, array $parameters = array()) {
         $mergedString = $string;
         if ((null != $parameters) && (count($parameters) > 0)) {
             foreach ($parameters as $key => $value) {
@@ -166,8 +166,10 @@ abstract class Connector {
             $body = null;
         }
 
-
-        $url = "https://test.com/";
+        /**
+         * Build url address to call
+         */
+        $url = $this->merge($this->baseApiUrl . $uri, $parameters);
 
         /**
          * Responder data object
@@ -237,7 +239,7 @@ abstract class Connector {
      * @return string Authentication Token
      */
     public function getAuthentication() {
-        $token = "Barer {$this->getToken()}";
+        $token = "Barer xxx";
         return trim($token);
     }
 

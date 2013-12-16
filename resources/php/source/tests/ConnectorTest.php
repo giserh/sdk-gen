@@ -200,5 +200,13 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
         $this->assertNotNull($mergedString);
         $this->assertEquals($mergedString, $expected);
     }
+    /**
+     * Test get session mechanism
+     */
+    public function testGetSessionData(){
+        
+    }
+    
+
 
 }

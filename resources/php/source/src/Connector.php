@@ -299,8 +299,31 @@ abstract class Connector {
      * @return string Authentication Token
      */
     public function getAuthentication() {
-        $token = "Barer xxx";
+        
+        function token(){
+            
+        }
+        $token = "Barer {$token()}";
         return trim($token);
     }
-
+    
+    /**
+     * Get sesssion data
+     * 
+     * @param type $session_name
+     * @param type $session_save_handler
+     */
+    public function getSessionData ($session_name = 'PHPSESSID', $session_save_handler = 'files') {
+        $session_data = array();
+        
+        if (array_key_exists($session_name, $_COOKIE)) {
+            
+            $session_id = $_COOKIE[$session_name];
+            $old_session_id = session_id();
+            
+            
+        }
+        return $session_data;
+    }
+    
 }

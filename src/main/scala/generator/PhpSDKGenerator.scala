@@ -41,6 +41,9 @@ class PhpSDKGenerator extends SourceGenerator(".php"){
 		context.attributes("className") = clazz.name
 		context.attributes("methods") = methods
 		context.attributes("docs") = clazz.docs
+		context.attributes("version") = clazz.version
+		context.attributes("baseUrl") = clazz.baseUrl
+		context.attributes("baseOauthUrl") = clazz.oauthUrl
 		templ.render(context)
 		
 		buffer.flush()

@@ -2,12 +2,21 @@
 <%@ var className:String %>
 <%@ var docs:Map[String,String] %>
 <%@ var methods: List[String] %>
+<%@ var baseUrl: String %>
+<%@ var baseOauthUrl: String %>
+<%@ var version: String %>
+
 /**
 #for(doc <- docs)
 * @${doc._1} ${doc._2}
 #end 
  */ 
 class ${className} extends Connector{
+
+	public function __construct($config)
+    {
+        parent::__construct( "${baseUrl}", "${baseOauthUrl}", "${version}", $config);
+    }
 
 	#for (method<- methods)
 		${method}

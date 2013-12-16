@@ -288,7 +288,7 @@ abstract class Connector {
                 $response = new Response($curlHttpCode, $jsonCurlBody, $curlResponseHeader);
                 return $response;
             } catch (Exception $exc) {
-                throw new ConnectorException("Error while parsing remote response!");
+                throw new ConnectorException("Error while parsing remote response! ");
             }
         }
     }

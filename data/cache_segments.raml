@@ -1,0 +1,28 @@
+displayName: CacheSegments
+get:
+  is: [ paginator, fields, ordering]
+  securedBy: [oauth_2_0]
+  description: Get users collection. 
+  responses:
+    200:
+      body: !include data/schemas/user_schema.raml   
+    500:
+      body: !include data/schemas/error_500_schema.raml
+    404:
+      body: !include data/schemas/error_other_schema.raml 
+    400:
+      body: !include data/schemas/error_other_schema.raml    
+/{segmentId}:
+  get:
+    is: [fields]
+    securedBy: [oauth_2_0]
+    description: Get segments. 
+    responses:
+      200:
+        body: !include data/schemas/segment_schema.raml   
+      500:
+        body: !include data/schemas/error_500_schema.raml
+      404:
+        body: !include data/schemas/error_other_schema.raml 
+      400:
+        body: !include data/schemas/error_other_schema.raml

@@ -1,0 +1,61 @@
+displayName: CacheLeaderboards
+/{leaderboardId}:
+  get:
+    is: [fields, segments, paginator, groups, ordering]
+    securedBy: [oauth_2_0]
+    description: Get users with one of the leaderboards. 
+    responses:
+      200:
+        body: !include data/schemas/leaderboard_schema.raml   
+      500:
+        body: !include data/schemas/error_500_schema.raml
+      404:
+        body: !include data/schemas/error_other_schema.raml 
+      400:
+        body: !include data/schemas/error_other_schema.raml
+  /users:
+    /{userId}:
+      /friends:
+        get:
+          is: [fields, segments, paginator, groups, ordering]
+          securedBy: [oauth_2_0]
+          description: Get user's friends with one of the leaderboards. 
+          responses:
+            200:
+              body: !include data/schemas/leaderboard_schema.raml   
+            500:
+              body: !include data/schemas/error_500_schema.raml
+            404:
+              body: !include data/schemas/error_other_schema.raml 
+            400:
+              body: !include data/schemas/error_other_schema.raml
+  /segments:
+    /{segmentId}:
+      get:
+        is: [fields, segments, paginator, groups, ordering]
+        securedBy: [oauth_2_0]
+        description: Get user's with a segment Id in one of the leaderboards. 
+        responses:
+          200:
+            body: !include data/schemas/leaderboard_schema.raml   
+          500:
+            body: !include data/schemas/error_500_schema.raml
+          404:
+            body: !include data/schemas/error_other_schema.raml 
+          400:
+            body: !include data/schemas/error_other_schema.raml
+  /groups:
+    /{groupId}:
+      get:
+        is: [fields, segments, paginator, groups, ordering]
+        securedBy: [oauth_2_0]
+        description: Get user's with a group Id in one of the leaderboards. 
+        responses:
+          200:
+            body: !include data/schemas/leaderboard_schema.raml   
+          500:
+            body: !include data/schemas/error_500_schema.raml
+          404:
+            body: !include data/schemas/error_other_schema.raml 
+          400:
+            body: !include data/schemas/error_other_schema.raml

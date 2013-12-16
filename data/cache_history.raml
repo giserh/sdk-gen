@@ -1,0 +1,14 @@
+displayName: CacheHistory
+get:
+  is: [ paginator, fields, ordering]
+  securedBy: [oauth_2_0]
+  description: Get history list.
+  responses:
+    200:
+      body: !include data/schemas/history_schema.raml
+    500:
+      body: !include data/schemas/error_500_schema.raml
+    404:
+      body: !include data/schemas/error_other_schema.raml 
+    400:
+      body: !include data/schemas/error_other_schema.raml

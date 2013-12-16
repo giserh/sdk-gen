@@ -1,0 +1,126 @@
+displayName: CacheUsers
+get:
+  is: [ paginator, groups, segments, fields, ordering]
+  securedBy: [oauth_2_0]
+  description: Get users collection. 
+  responses:
+    200:
+      body: !include data/schemas/user_schema.raml   
+    500:
+      body: !include data/schemas/error_500_schema.raml
+    404:
+      body: !include data/schemas/error_other_schema.raml 
+    400:
+      body: !include data/schemas/error_other_schema.raml    
+/{userId}:
+  get:
+    is: [fields]
+    securedBy: [oauth_2_0]
+    description: Get one user by id.
+    responses:
+      200:
+        body: !include data/schemas/user_schema.raml   
+      500:
+        body: !include data/schemas/error_500_schema.raml
+      404:
+        body: !include data/schemas/error_other_schema.raml 
+      400:
+        body: !include data/schemas/error_other_schema.raml  
+  /friends:
+    get:
+      is: [fields, groups, segments, ordering, paginator]
+      securedBy: [oauth_2_0]
+      description: Get one user's friends.
+      responses:
+        200:
+          body: !include data/schemas/user_schema.raml   
+        500:
+          body: !include data/schemas/error_500_schema.raml
+        404:
+          body: !include data/schemas/error_other_schema.raml 
+        400:
+          body: !include data/schemas/error_other_schema.raml   
+  /segments:
+    get:
+      is: [fields, ordering, paginator]
+      securedBy: [oauth_2_0]
+      description: Get one user's segments.
+      responses:
+        200:
+          body: !include data/schemas/segment_schema.raml   
+        500:
+          body: !include data/schemas/error_500_schema.raml
+        404:
+          body: !include data/schemas/error_other_schema.raml 
+        400:
+          body: !include data/schemas/error_other_schema.raml
+  /groups:
+    get:
+      is: [fields, ordering, paginator]
+      securedBy: [oauth_2_0]
+      description: Get one user's segments.
+      responses:
+        200:
+          body: !include data/schemas/segment_schema.raml   
+        500:
+          body: !include data/schemas/error_500_schema.raml
+        404:
+          body: !include data/schemas/error_other_schema.raml 
+        400:
+          body: !include data/schemas/error_other_schema.raml
+  /achievements:
+    get:
+      is: [fields, ordering, paginator, segments]
+      securedBy: [oauth_2_0]
+      description: Get one user's achievements.
+      responses:
+        200:
+          body: !include data/schemas/achievement_schema.raml   
+        500:
+          body: !include data/schemas/error_500_schema.raml
+        404:
+          body: !include data/schemas/error_other_schema.raml 
+        400:
+          body: !include data/schemas/error_other_schema.raml
+  /history:
+    get:
+      is: [fields, ordering, paginator]
+      securedBy: [oauth_2_0]
+      description: Get one user's history.
+      responses:
+        200:
+          body: !include data/schemas/history_schema.raml   
+        500:
+          body: !include data/schemas/error_500_schema.raml
+        404:
+          body: !include data/schemas/error_other_schema.raml 
+        400:
+          body: !include data/schemas/error_other_schema.raml       
+/segments:
+  get:
+    is: [fields, ordering, paginator]
+    securedBy: [oauth_2_0]
+    description: Get users' segment list.
+    responses:
+     200:
+      body: !include data/schemas/segment_schema.raml   
+     500:
+      body: !include data/schemas/error_500_schema.raml
+     404:
+      body: !include data/schemas/error_other_schema.raml 
+     400:
+      body: !include data/schemas/error_other_schema.raml
+/groups:
+  get:
+    is: [fields, ordering, paginator]
+    securedBy: [oauth_2_0]
+    description: Get users' group list.
+    responses:
+     200:
+      body: !include data/schemas/group_schema.raml   
+     500:
+      body: !include data/schemas/error_500_schema.raml
+     404:
+      body: !include data/schemas/error_other_schema.raml 
+     400:
+      body: !include data/schemas/error_other_schema.raml

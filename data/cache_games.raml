@@ -1,0 +1,28 @@
+displayName: CacheGames
+get:
+  is: [ paginator, fields, ordering, segments]
+  securedBy: [oauth_2_0]
+  description: Get games collection. 
+  responses:
+    200:
+      body: !include data/schemas/game_schema.raml   
+    500:
+      body: !include data/schemas/error_500_schema.raml
+    404:
+      body: !include data/schemas/error_other_schema.raml 
+    400:
+      body: !include data/schemas/error_other_schema.raml    
+/{gameId}:
+  get:
+    is: [fields]
+    securedBy: [oauth_2_0]
+    description: Get one game. 
+    responses:
+      200:
+        body: !include data/schemas/game_schema.raml   
+      500:
+        body: !include data/schemas/error_500_schema.raml
+      404:
+        body: !include data/schemas/error_other_schema.raml 
+      400:
+        body: !include data/schemas/error_other_schema.raml

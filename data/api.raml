@@ -42,108 +42,17 @@ traits:
       type: string
       example: "id,name,description"
 /queue:
- displayName: Queue
- /events:
-  displayName: QueueEvents
-  get:
-   is: [ paginator, fields, ordering]
-   securedBy: [oauth_2_0]
-   description: Get events for a client.
-   responses:
-    200:
-     body:
-      schema: events
-    500:
-     body: !include data/schemas/error_500_schema.raml
-    404:
-     body: !include data/schemas/error_other_schema.raml 
-    400:
-     body: !include data/schemas/error_other_schema.raml
-  post:
-   is: [fields]
-   securedBy: [oauth_2_0]
-   description: Create a new event.
-   body:
-    application/json: !include data/schemas/event_schema.raml
-   responses:
-    200:
-     body: !include data/schemas/url_event_schema.raml
-    500:
-     body: !include data/schemas/error_500_schema.raml
-    404:
-     body: !include data/schemas/error_other_schema.raml 
-    400:
-     body: !include data/schemas/error_other_schema.raml
+  displayName: Queue
+  /events: !include data/queue_events.raml
+  /notifications: !include data/queue_notifications.raml
 /cache:
- displayName: Cache
- /users:
-  displayName: CacheUsers
-  get:
-   is: [ paginator, groups, segments, fields, ordering]
-   securedBy: [oauth_2_0]
-   description: Get users collection. 
-   responses:
-    200:
-     body: !include data/schemas/user_schema.raml   
-    500:
-     body: !include data/schemas/error_500_schema.raml
-    404:
-     body: !include data/schemas/error_other_schema.raml 
-    400:
-     body: !include data/schemas/error_other_schema.raml    
-  /{userId}:
-   get:
-    is: [fields]
-    securedBy: [oauth_2_0]
-    description: Get one user by id.
-    responses:
-     200:
-      body: !include data/schemas/user_schema.raml   
-     500:
-      body: !include data/schemas/error_500_schema.raml
-     404:
-      body: !include data/schemas/error_other_schema.raml 
-     400:
-      body: !include data/schemas/error_other_schema.raml  
-   /friends:
-    get:
-     is: [fields]
-     securedBy: [oauth_2_0]
-     description: Get one user's friends.
-     responses:
-      200:
-       body: !include data/schemas/user_schema.raml   
-      500:
-       body: !include data/schemas/error_500_schema.raml
-      404:
-       body: !include data/schemas/error_other_schema.raml 
-      400:
-       body: !include data/schemas/error_other_schema.raml    
-  /segments:
-   get:
-    is: [fields, ordering, paginator]
-    securedBy: [oauth_2_0]
-    description: Get users' segment list.
-    responses:
-     200:
-      body: !include data/schemas/segment_schema.raml   
-     500:
-      body: !include data/schemas/error_500_schema.raml
-     404:
-      body: !include data/schemas/error_other_schema.raml 
-     400:
-      body: !include data/schemas/error_other_schema.raml
-  /groups:
-   get:
-    is: [fields, ordering, paginator]
-    securedBy: [oauth_2_0]
-    description: Get users' group list.
-    responses:
-     200:
-      body: !include data/schemas/group_schema.raml   
-     500:
-      body: !include data/schemas/error_500_schema.raml
-     404:
-      body: !include data/schemas/error_other_schema.raml 
-     400:
-      body: !include data/schemas/error_other_schema.raml
+  displayName: Cache
+  /users: !include data/cache_users.raml
+  /segments: !include data/cache_segments.raml
+  /notifications: !include data/cache_notifications.raml
+  /leaderboards: !include data/cache_leaderboards.raml
+  /history: !include data/cache_history.raml
+  /groups: !include data/cache_groups.raml
+  /games: !include data/cache_games.raml
+  /events: !include data/cache_events.raml
+  /achievements: !include data/cache_achievements.raml

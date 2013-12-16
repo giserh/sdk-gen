@@ -26,7 +26,11 @@ object Analyser {
 
 		val title = raml.getTitle()
 		pack.addDoc("title", title)
-
+		
+		val oauth = raml.getSecuritySchemes().get(0).get("oauth_2_0").getSettings().get("baseUri").get(0)
+		
+		pack.addDoc("baseOauthUri", oauth)
+		
 		/* @TODO Should be logged*/
 		println(s"Building SDK package for API version ${pack.docs("version")}")
 
@@ -136,9 +140,11 @@ object Analyser {
 		val methods = resource.getActions()
 
 		val name = resource.getDisplayName()
+		
+		
 		var clazz: Clazz = null
-		if (name != null) clazz = new Clazz(url, name)
-		else clazz = new Clazz(url)
+		if (name != null) clazz = new Clazz(url, pack.baseUri, pack.docs("baseOauthUri"), pack.docs("version"), name)
+		else clazz = new Clazz(url,pack.baseUri, pack.docs("baseOauthUri"),pack.docs("version"))
 
 		createMethods(methods, clazz, url, name)
 
@@ -158,6 +164,7 @@ object Analyser {
 		val url = resourceTuple._2.getUri()
 		val resource = resourceTuple._2
 		val methods = resource.getActions()
+		//println(resource.getType())
 
 		createMethods(methods, clazz, url, resource.getDisplayName())
 

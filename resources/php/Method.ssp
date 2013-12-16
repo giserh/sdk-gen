@@ -22,8 +22,8 @@ public function ${methodName}( $${parameters.map(tuple => tuple._1).mkString(", 
 	];
 
 	#if (parameters.contains("body"))
-  		$this->callService( "${url}", "${rtype}",  $array , $body, $callbackFunction)
+  		$this->callService( "${url}", "${rtype}",  $array , $body)
 	#else
-		$this->callService( "${url}", "${rtype}",  $array,  callback = $callbackFunction )
+		$this->callService( "${url}", "${rtype}",  $array)
 	#end	
 	}

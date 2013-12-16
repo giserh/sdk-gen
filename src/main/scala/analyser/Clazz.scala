@@ -1,6 +1,6 @@
 package analyser
 
-class Clazz(val url: String, private var _name : String = null) {
+class Clazz(val url: String, val baseUrl : String, val oauthUrl : String,val version : String, private var _name : String = null) {
 
 	if (_name == null) _name = createName(url)
 	private var _methods : List[Method] = List()

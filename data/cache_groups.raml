@@ -1,0 +1,28 @@
+displayName: CacheGroups
+get:
+  is: [ paginator, fields, ordering]
+  securedBy: [oauth_2_0]
+  description: Get groups collection. 
+  responses:
+    200:
+      body: !include data/schemas/group_schema.raml   
+    500:
+      body: !include data/schemas/error_500_schema.raml
+    404:
+      body: !include data/schemas/error_other_schema.raml 
+    400:
+      body: !include data/schemas/error_other_schema.raml    
+/{groupId}:
+  get:
+    is: [fields]
+    securedBy: [oauth_2_0]
+    description: Get one group. 
+    responses:
+      200:
+        body: !include data/schemas/group_schema.raml   
+      500:
+        body: !include data/schemas/error_500_schema.raml
+      404:
+        body: !include data/schemas/error_other_schema.raml 
+      400:
+        body: !include data/schemas/error_other_schema.raml

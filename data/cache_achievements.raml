@@ -1,0 +1,28 @@
+displayName: CacheAchievements
+get:
+  is: [ paginator, fields, ordering, segments]
+  securedBy: [oauth_2_0]
+  description: Get achievements collection. 
+  responses:
+    200:
+      body: !include data/schemas/achievement_schema.raml   
+    500:
+      body: !include data/schemas/error_500_schema.raml
+    404:
+      body: !include data/schemas/error_other_schema.raml 
+    400:
+      body: !include data/schemas/error_other_schema.raml    
+/{achievementId}:
+  get:
+    is: [fields]
+    securedBy: [oauth_2_0]
+    description: Get one achievement. 
+    responses:
+      200:
+        body: !include data/schemas/achievement_schema.raml   
+      500:
+        body: !include data/schemas/error_500_schema.raml
+      404:
+        body: !include data/schemas/error_other_schema.raml 
+      400:
+        body: !include data/schemas/error_other_schema.raml

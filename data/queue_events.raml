@@ -1,0 +1,72 @@
+displayName: QueueEvents
+get:
+  is: [ paginator, fields, ordering]
+  securedBy: [oauth_2_0]
+  description: Get events for a client.
+  responses:
+    200:
+      body: !include data/schemas/get_event_schema.raml
+    500:
+      body: !include data/schemas/error_500_schema.raml
+    404:
+      body: !include data/schemas/error_other_schema.raml 
+    400:
+      body: !include data/schemas/error_other_schema.raml
+post:
+  is: [fields]
+  securedBy: [oauth_2_0]
+  description: Create a new event.
+  body:
+    application/json: !include data/schemas/post_event_schema.raml
+  responses:
+    201:
+      body: !include data/schemas/url_event_schema.raml
+    500:
+      body: !include data/schemas/error_500_schema.raml
+    404:
+      body: !include data/schemas/error_other_schema.raml 
+    400:
+      body: !include data/schemas/error_other_schema.raml
+/{eventId}:
+  get:
+    is: [ paginator, fields, ordering]
+    securedBy: [oauth_2_0]
+    description: Get one event by Id for a client.
+    responses:
+      200:
+        body: !include data/schemas/get_event_schema.raml
+      500:
+        body: !include data/schemas/error_500_schema.raml
+      404:
+        body: !include data/schemas/error_other_schema.raml 
+      400:
+        body: !include data/schemas/error_other_schema.raml
+/error:
+  displayName: QueueErrorEvents
+  get:
+    is: [ paginator, fields, ordering]
+    securedBy: [oauth_2_0]
+    description: Get error events for a client.
+    responses:
+      200:
+        body: !include data/schemas/get_event_schema.raml
+      500:
+        body: !include data/schemas/error_500_schema.raml
+      404:
+        body: !include data/schemas/error_other_schema.raml 
+      400:
+        body: !include data/schemas/error_other_schema.raml
+  /{eventId}:
+    get:
+      is: [ paginator, fields, ordering]
+      securedBy: [oauth_2_0]
+      description: Get one error event by Id for a client.
+      responses:
+        200:
+          body: !include data/schemas/get_event_schema.raml
+        500:
+          body: !include data/schemas/error_500_schema.raml
+        404:
+          body: !include data/schemas/error_other_schema.raml 
+        400:
+          body: !include data/schemas/error_other_schema.raml

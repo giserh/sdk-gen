@@ -43,11 +43,14 @@ class Method(val restType: RestType.Value, val url: String, private var _name : 
 	private def createName(url: String): String = {
 		val regex = """\{[a-zA-Z0-9,]+\}""".r
 		val urlNew = regex.findFirstIn(url) match{
-			case Some(v) => regex.replaceAllIn(url, "") + "One"
+			case Some(v) => "one" + regex.replaceAllIn(url, "") 
 			case None => url
 		}		
 		
-		urlNew.split("/").toList.map { s => s.capitalize }.mkString("")
+		val names = urlNew.split("/").toList
+		
+		
+		names.map { s => s.capitalize }.mkString("")
 	}
 	
 	private def addIdToQuery(){

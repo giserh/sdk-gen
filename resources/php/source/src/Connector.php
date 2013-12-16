@@ -299,31 +299,44 @@ abstract class Connector {
      * @return string Authentication Token
      */
     public function getAuthentication() {
-        
-        function token(){
-            
-        }
-        $token = "Barer {$token()}";
+
+
+
+        $token = "Barer xxx";
         return trim($token);
     }
-    
+
     /**
      * Get sesssion data
      * 
      * @param type $session_name
      * @param type $session_save_handler
      */
-    public function getSessionData ($session_name = 'PHPSESSID', $session_save_handler = 'files') {
-        $session_data = array();
-        
-        if (array_key_exists($session_name, $_COOKIE)) {
-            
-            $session_id = $_COOKIE[$session_name];
-            $old_session_id = session_id();
-            
-            
+    public function getCookieData($name = null) {
+
+        $cookieData = array();
+        if (array_key_exists($name, $_COOKIE)) {
+            try {
+                $cookieData = (array) json_decode($_COOKIE[$name]);
+            } catch (Exception $exc) {
+                throw new ConnectorException("Cannot read cookie state!");
+            }
         }
-        return $session_data;
+        return $cookieData;
     }
-    
+
+    /**
+     * 
+     * @param type $name
+     */
+    public function setCookieData($name, $access_token, $expires_in, $token_type) {
+        $data = array(
+            "access_token" => $access_token,
+            "expires_in" => $expires_in,
+            "token_type" => $token_type
+        );
+        setcookie($name, json_encode($data), time() + $expires_in);
+        return $data;
+    }
+
 }

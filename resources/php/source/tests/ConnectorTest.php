@@ -75,7 +75,7 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
         /**
          * Set up callback function
          */
-        $callback = function($header, $method, $url, $body = null) use($responder) {
+        $callback = function(array $header, $method, $url, array $body = null) use($responder) {
             //Assert that has been defined keys
             $this->assertArrayHasKey("Authentication", $header);
             $this->assertArrayHasKey("Content-type", $header);

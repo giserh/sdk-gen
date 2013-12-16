@@ -12,7 +12,7 @@ namespace IsaaCloud;
  */
 class Response {
 
-    public function __construct($code, $body, $header) {
+    public function __construct($code, $body, array $header) {
         $this->code = $code;
         $this->header = $header;
         $this->body = $body;
@@ -217,10 +217,6 @@ abstract class Connector {
         return $this->version;
     }
 
-    public function getToken() {
-        return "xxx";
-    }
-
     /**
      * Build and call request with CURL
      * 
@@ -229,8 +225,72 @@ abstract class Connector {
      * @param type $url
      * @param array $body
      */
-    public function curlIt($header, $method, $url, $body = null) {
-        return new Response(200, array(), array());
+    public function curlIt(array $header, $method, $url, array $body = null) {
+        $curl = curl_init($url);
+
+        /**
+         * Check if this setup is valid for our api configuration
+         */
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        /**
+         * For update method
+         */
+        if ("POST" === $method) {
+            curl_setopt($curl, CURLOPT_POST, true); // ?? as like case?
+        } else {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        }
+
+        if (("POST" || "PATH" || "PUT") === $method) {
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        }
+
+        curl_setopt($curl, CURLOPT_HEADER, true);
+
+        /**
+         * Setup header
+         */
+        if ((null != $header) && (count($header) > 0)) {
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+        }
+
+        /**
+         * Setup body
+         */
+        if ((null != $body) && (count($body) > 0)) {
+            $bodyAsJson = json_encode($body);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $bodyAsJson);
+        }
+        /**
+         * Response IT!
+         */
+        $curlResponse = curl_exec($curl);
+        if (curl_error($curl)) {
+            throw new ConnectorException("There are error(s) while invoking remote resource: {$method} {$url}");
+        }
+        /**
+         * Close connection
+         */
+        curl_close($curl);
+        /**
+         * Build response object
+         */
+        if ($curlResponse === null) {
+            throw new ConnectorException("The response is empty, and cannot be parse!");
+        } else {
+            try {
+                list($curlResponseHeader, $curlBody) = explode("\r\n\r\n", $curlResponse, 2);
+                list($curlHttpCode) = explode("\r", $curlResponseHeader, 2);
+
+                $jsonCurlBody = json_decode($curlBody);
+                $response = new Response($curlHttpCode, $jsonCurlBody, $curlResponseHeader);
+                return $response;
+            } catch (Exception $exc) {
+                throw new ConnectorException("Error while parsing remote response!");
+            }
+        }
     }
 
     /**

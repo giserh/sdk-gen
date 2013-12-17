@@ -5,6 +5,7 @@
  */
 class ConnectorTest extends PHPUnit_Framework_TestCase {
 
+
     public function constructorValidProvider() {
         $dataProvider = array(
             array(
@@ -200,13 +201,51 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
         $this->assertNotNull($mergedString);
         $this->assertEquals($mergedString, $expected);
     }
+
     /**
      * Test get session mechanism
      */
-    public function testGetSessionData(){
-        
-    }
-    
+    public function testGetSessionData() {
+        $args = array(
+            "https://api.isaacloud.com",
+            "https://oauth.isaacloud.com",
+            "1.0.0",
+            array(
+                "clientId" => 123,
+                "secret" => 123
+        ));
+        /**
+         * Prepare session and cookie
+         */
+        /**
+         * Build mock object
+         */
+        $stub = $this->getMockBuilder("IsaaCloud\Connector")
+                ->setConstructorArgs($args)
+                ->getMockForAbstractClass();
 
+        $cookieName = "test";
+        $mockArray = array(
+            "access_token" => "token_3432",
+            "expires_in" => 3600,
+            "token_type" => 45465334
+        );
+        /**
+         * Setup cookie
+         */
+        //setcookie("test", json_encode($mockArray), time() + 3600);
+        $_COOKIE[$cookieName]= json_encode($mockArray);
+
+
+        $sessionData = $stub->getCookieData($cookieName);
+
+        $this->assertNotNull($sessionData);
+
+        $this->assertArrayHasKey("access_token", $sessionData, "There is not defined access_token");
+        $this->assertArrayHasKey("expires_in", $sessionData, "There is not defined expires_in");
+        $this->assertArrayHasKey("token_type", $sessionData, "There is not defined token_type");
+
+        $this->assertGreaterThan(0, $sessionData["expires_in"]);
+    }
 
 }

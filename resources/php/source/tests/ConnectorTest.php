@@ -5,7 +5,6 @@
  */
 class ConnectorTest extends PHPUnit_Framework_TestCase {
 
-
     public function constructorValidProvider() {
         $dataProvider = array(
             array(
@@ -233,7 +232,7 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
         /**
          * Setup cookie, only in global variable!
          */
-        $_COOKIE[$cookieName]= json_encode($mockArray);
+        $_COOKIE[$cookieName] = json_encode($mockArray);
 
 
         $sessionData = $stub->getCookieData($cookieName);
@@ -245,6 +244,158 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
         $this->assertArrayHasKey("token_type", $sessionData, "There is not defined token_type");
 
         $this->assertGreaterThan(0, $sessionData["expires_in"]);
+    }
+
+    public function testIsValidToken() {
+        $args = array(
+            "https://api.isaacloud.com",
+            "https://oauth.isaacloud.com",
+            "1.0.0",
+            array(
+                "clientId" => 123,
+                "secret" => 123
+        ));
+        /**
+         * Prepare session and cookie
+         */
+        /**
+         * Build mock object
+         */
+        $mock = $this->getMockBuilder("IsaaCloud\Connector")
+                ->setConstructorArgs($args)
+                ->getMockForAbstractClass();
+
+        /**
+         * Prepare cookie data
+         */
+        $validCookieData = array(
+            "access_token" => "token_3432",
+            "expires_in" => 3600,
+            "token_type" => 45465334
+        );
+        $response = $mock->isValidCookieData($validCookieData);
+        $this->assertTrue($response);
+    }
+
+    public function testBuildTokenByCookie() {
+        $args = array(
+            "https://api.isaacloud.com",
+            "https://oauth.isaacloud.com",
+            "1.0.0",
+            array(
+                "clientId" => 123,
+                "secret" => 123
+        ));
+        /**
+         * Prepare session and cookie
+         */
+        /**
+         * Build mock object
+         */
+        $mock = $this->getMockBuilder("IsaaCloud\Connector")
+                ->setConstructorArgs($args)
+                ->getMockForAbstractClass();
+
+        $validCookieData = array(
+            "access_token" => "token_3432",
+            "expires_in" => 3600,
+            "token_type" => 45465334
+        );
+
+        $result = $mock->buildTokenByCookie($validCookieData);
+
+        $this->assertNotNull($result);
+    }
+
+    /**
+     * 
+     */
+    public function testSetCookieData() {
+        
+    }
+
+    public function credentialProvider() {
+        $data = array(
+            array(
+                "123",
+                "password",
+                "MTIzOnBhc3N3b3Jk"
+            ),
+            array(
+                "123456790",
+                "password",
+                "MTIzNDU2NzkwOnBhc3N3b3Jk"
+            ),
+            array(
+                "123456790",
+                "password",
+                "MTIzNDU2NzkwOnBhc3N3b3Jk"
+            ),
+            array(
+                "123456790",
+                "!t6qggR%{yYTd",
+                "MTIzNDU2NzkwOiF0NnFnZ1Ile3lZVGQ"
+            )
+        );
+        return $data;
+    }
+
+    /**
+     * @dataProvider credentialProvider
+     */
+    public function testEncodeCredential($clientId, $secret, $encoded) {
+        $args = array(
+            "https://api.isaacloud.com",
+            "https://oauth.isaacloud.com",
+            "1.0.0",
+            array(
+                "clientId" => 123,
+                "secret" => 123
+        ));
+        /**
+         * Prepare session and cookie
+         */
+        $mock = $this->getMockBuilder("IsaaCloud\Connector")
+                ->setConstructorArgs($args)
+                ->getMockForAbstractClass();
+        /**
+         * Build mock object
+         */
+        $encodedString = $mock->encodeCredential($clientId, $secret);
+
+        $this->assertEquals($encodedString, $encoded, "encoded string is invalid!");
+    }
+
+    public function testDecodePaginator() {
+        $args = array(
+            "https://api.isaacloud.com",
+            "https://oauth.isaacloud.com",
+            "1.0.0",
+            array(
+                "clientId" => 123,
+                "secret" => 123
+        ));
+        /**
+         * Prepare session and cookie
+         */
+        $mock = $this->getMockBuilder("IsaaCloud\Connector")
+                ->setConstructorArgs($args)
+                ->getMockForAbstractClass();
+        
+        $pgr = array(
+            "limit"=>10,
+            "offset"=>20,
+            "total"=>100,
+            "page"=>10,
+            "pages"=>10
+        );
+        
+        /**
+         * 
+         */
+        $paginator = $mock->decodePaginator(json_encode($pgr));
+        
+        
     }
 
 }

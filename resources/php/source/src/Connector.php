@@ -312,6 +312,36 @@ abstract class Connector {
     }
 
     /**
+     * Encode credintial into valid base64 string
+     * 
+     * @param type $clientId
+     * @param type $secret
+     * @return type
+     * @throws ConnectorException
+     */
+    public function encodeCredential($clientId, $secret) {
+        if (is_numeric($clientId) && !is_null($secret)) {
+            //Combine client id and secret
+            $cobinedString = $clientId . ":" . $secret;
+
+            //Encode into base64
+            $result = base64_encode($cobinedString);
+
+            return $result;
+        } else {
+            throw new ConnectorException("Client Id or secret are invalid!");
+        }
+    }
+
+    public function decodePaginator($paginator) {
+        if (is_string($paginator)) {
+            
+        } else {
+            throw new ConnectorException("Invalid paginator!");
+        }
+    }
+
+    /**
      * Get sesssion data @todo Refactor this method with better secure protection!
      * 
      * @param type $session_name
@@ -352,6 +382,7 @@ abstract class Connector {
     public function buildTokenByCookie(array $cookieData) {
         return trim(ucfirst($cookieData["token_type"]) . " " . $cookieData["access_token"]);
     }
+
     /**
      * 
      * @param array $cookieData

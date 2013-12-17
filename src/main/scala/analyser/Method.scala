@@ -1,6 +1,7 @@
 package analyser
 
 import org.raml.model.SecurityReference
+import org.raml.model.parameter.QueryParameter
 
 /**Color strategy*/
 object RestType extends Enumeration {
@@ -65,35 +66,15 @@ class Method(val restType: RestType.Value, val url: String, private var _name : 
 	}
 
 	/**
-	 * @TODO make it generic
 	 * Check the traits that are available for this method
 	 */
-	def setupTraits(traits: List[String]) {
-		traits match {
-			case "paginator" :: tail => {
-				addQueryParameter("limit", "Long")
-				addQueryParameter("offset", "Long")
-				setupTraits(tail)
-			}
-			case "ordering" :: tail => {
-				addQueryParameter("order", "List[(String, String)]]")
-				setupTraits(tail)
-			}
-			case "fields" :: tail => {
-				addQueryParameter("fields", "List[String]]")
-				setupTraits(tail)
-			}
-			case "groups" :: tail => {
-				addQueryParameter("groups", "List[Long]]")
-				setupTraits(tail)
-			}
-			case "segments" :: tail => {
-				addQueryParameter("segments", "List[Long]")
-				setupTraits(tail)
-			}
-			case Nil =>
-			case e => throw new NoSuchFieldException("Unexpected trait name : " + e)
+	def setupTraits(traits: Map[String,QueryParameter]) {
+		
+		traits.foreach{
+			param => addQueryParameter(param._1 , param._2.getType().toString)
 		}
+				
+			
 
 	}
 

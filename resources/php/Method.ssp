@@ -13,7 +13,7 @@
 * @param ${param._1} : ${param._2}
 #end 
  */ 
-public function ${methodName}( $${parameters.map(tuple => tuple._1).mkString(", $")} , $callbackFunction) { 
+public function ${methodName}( $${parameters.map(tuple => tuple._1).mkString(", $")} ) { 
 
 	$array = [
     #for(param <- parameters.filter(_._1 != "body"))

@@ -35,7 +35,7 @@ object Analyser {
 		println(s"Building SDK package for API version ${pack.docs("version")}")
 
 		/* @TODO we should be able to use this traits, not have them written manually in Method class */
-		val traits = analyseTraits(raml.getTraits())
+		//val traits = analyseTraits(raml.getTraits())
 
 		for { child <- raml.getResources().asScala } {
 			analyseResource(child, pack)
@@ -89,9 +89,10 @@ object Analyser {
 					val action = action_tuple._2
 				
 					val m = new Method(mapRestType(actionType), url, displayName, action.getSecuredBy().asScala.toList)
-					m.setupTraits(action.getIs().asScala.toList)
+					m.setupTraits(action.getQueryParameters().asScala.toMap)
 
-					m.addDoc("", action.getDescription())
+					m.addDoc("", action.getDescription()) 
+					
 					
 					val body=action.getBody
 					

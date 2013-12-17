@@ -300,14 +300,19 @@ abstract class Connector {
      */
     public function getAuthentication() {
 
-
-
+        $cookieData = $this->getCookieData();
         $token = "Barer xxx";
-        return trim($token);
+
+        if (is_array($cookieData) && $this->isValidCookieData($cookieData)) {
+            $token = $this->buildTokenByCookie($cookieData);
+        } else {
+            //Request into OAuth server and get
+        }
+        return $token;
     }
 
     /**
-     * Get sesssion data
+     * Get sesssion data @todo Refactor this method with better secure protection!
      * 
      * @param type $session_name
      * @param type $session_save_handler
@@ -337,6 +342,30 @@ abstract class Connector {
         );
         setcookie($name, json_encode($data), time() + $expires_in);
         return $data;
+    }
+
+    /**
+     * 
+     * @param array $cookieData array of cookie data
+     * @return type authentication string
+     */
+    public function buildTokenByCookie(array $cookieData) {
+        return trim(ucfirst($cookieData["token_type"]) . " " . $cookieData["access_token"]);
+    }
+    /**
+     * 
+     * @param array $cookieData
+     * @return boolean
+     */
+    public function isValidCookieData(array $cookieData) {
+        if ((count($cookieData) > 0) &&
+                isset($cookieData["access_token"]) &&
+                isset($cookieData["expires_in"]) &&
+                isset($cookieData["token_type"])) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

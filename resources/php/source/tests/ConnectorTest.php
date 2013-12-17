@@ -231,9 +231,8 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
             "token_type" => 45465334
         );
         /**
-         * Setup cookie
+         * Setup cookie, only in global variable!
          */
-        //setcookie("test", json_encode($mockArray), time() + 3600);
         $_COOKIE[$cookieName]= json_encode($mockArray);
 
 

@@ -1,0 +1,34 @@
+{
+   "$schema":"http://json-schema.org/draft-03/schema",
+   "description":"A representation of an achievement",
+   "type":"object",
+   "properties":{
+      "id":{
+         "required":false,
+         "type":"integer"
+      },
+      "createdAt":{
+         "required":false,
+         "type":"integer"
+      },
+      "updatedAt":{
+         "required":false,
+         "type":"integer"
+      },
+      "name":{
+         "required":false,
+         "type":"string"
+      },
+      "description":{
+         "required":false,
+         "type":"string"
+      },
+      "segments":{
+         "type":"array",
+         "items":{
+            "type":"integer"
+         },
+         "required":false
+      }
+   }
+}

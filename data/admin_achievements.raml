@@ -1,0 +1,147 @@
+displayName: CacheAchievements
+type : commonErrors
+post:
+  description: Create new achievement. 
+  body:
+    application/json: 
+      schema: !include schemas/achievement.json
+get:
+  is: [fields, ordering, segments, groups, paginator]
+  description: Get a list of achievements.
+  responses:
+      200:
+        body: !include schemas/achievements_list_schema.raml  
+/{achievementId}:
+  type : commonErrors
+  get:
+    is: [fields]
+    description: Get one achievement. 
+    responses:
+      200:
+        body: !include schemas/achievement_schema.raml
+  put:    
+    description: Update one achievement. 
+    body:
+      application/json: 
+        schema: !include schemas/achievement.json
+  delete:
+    description: Delete one achievement. 
+    responses:
+      200:
+        body: 
+  /segments:
+    /{childId}:
+      type : commonErrors
+      put:    
+        description: Add segment to achievement. 
+      delete:    
+        description: Delete segment from achievement. 
+/categories:
+  type: commonErrors
+  post:
+    description: Create new category. 
+    body:
+      application/json: 
+        schema: !include schemas/category.json
+  get:
+    description: Get list of categories.
+    is: [fields, ordering, paginator]
+    responses:
+      200:
+        body:
+          schema: !include schemas/category_list.json
+  /doc:
+    description: Get a pseudo schema for category.
+  /{id}:
+    type: commonErrors
+    get:
+      description: Get one category.
+      responses:
+        200:
+          body:
+            schema: !include schemas/category.json
+    put:
+      description: Update achievement category. 
+      body:
+        application/json: 
+          schema: !include schemas/category.json
+    delete:
+      description: Delete one achievements category.
+    /achievements:
+      /{childId}:
+        put:
+          description: Add one achievement to achievements category.
+        delete:
+          description: Delete one achievement from achievements category. 
+/groups:
+  type: commonErrors
+  post:
+    description: Create new achievement group.
+    body:
+      application/json: 
+        schema: !include schemas/achievement_group.json
+  get:
+    description: Get a list achievement groups. 
+    is: [fields, ordering, paginator]
+    responses:
+        200:
+          body:
+            schema: !include schemas/achievement_group_list.json
+  /doc:
+    type: commonErrors
+    description: Get a pseudo schema for group.
+  /{id}:
+    type: commonErrors
+    get:
+      description: Get one achievement group. 
+      is: [fields]
+      responses:
+        200:
+          body:
+            schema: !include schemas/achievement_group_list.json
+    put:
+      description: Update an achievement group.
+      body:
+        application/json: 
+          schema: !include schemas/achievement_group.json
+    delete:
+      description: Delete an achievement group.
+    /achievements:
+      /{childId}:
+        put:
+          description: Add one achievement to achievements group.
+        delete:
+          description: Delete one achievement from achievements group.
+/progress:
+  type: commonErrors
+  post:
+    description: Create new achievement progress.
+    body:
+      application/json: 
+        schema: !include schemas/achievement_progress.json
+  get:
+    description: Get achievement progress list. 
+    is: [fields, ordering, paginator]
+    responses:
+        200:
+          body:
+            schema: !include schemas/achievement_progress_list.json
+  /doc:
+    type: commonErrors
+    description: Get a pseudo schema for progress.
+  /{id}:
+    type: commonErrors
+    get:
+      description: Get one achievement progress. 
+      is: [fields]
+      responses:
+        200:
+          body:
+            schema: !include schemas/achievement_progress_list.json
+    put:
+      description: Update an achievement progress.
+      body:
+        application/json: 
+          schema: !include schemas/achievement_progress.json
+    delete:
+      description: Delete an achievement progress.

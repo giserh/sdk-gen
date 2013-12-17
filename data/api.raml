@@ -7,21 +7,51 @@ baseUri: api.isaacloud.com
 mediaType:  application/json
 resourceTypes:
   - commonErrors:
-    get?:
-      responses:
-        500:
-          body: !include data/schemas/error_500_schema.raml
-        404:
-          body: !include data/schemas/error_other_schema.raml 
-        400:
-          body: !include data/schemas/error_other_schema.raml    
+      get?:
+        responses:
+          500:
+            body: !include schemas/error_500_schema.raml
+          404:
+            body: !include schemas/error_other_schema.raml 
+          400:
+            body: !include schemas/error_other_schema.raml    
+      patch?:
+        responses:
+          500:
+            body: !include schemas/error_500_schema.raml
+          404:
+            body: !include schemas/error_other_schema.raml 
+          400:
+            body: !include schemas/error_other_schema.raml
+      put?:
+        responses:
+          500:
+            body: !include schemas/error_500_schema.raml
+          404:
+            body: !include schemas/error_other_schema.raml 
+          400:
+            body: !include schemas/error_other_schema.raml
+      delete?:
+        responses:
+          500:
+            body: !include schemas/error_500_schema.raml
+          404:
+            body: !include schemas/error_other_schema.raml 
+          400:
+            body: !include schemas/error_other_schema.raml      
+      post?:
+        responses:
+          500:
+            body: !include schemas/error_500_schema.raml
+          400:
+            body: !include schemas/error_other_schema.raml  
 securitySchemes:
   - oauth_2_0:
       description: |
         In authentication case we use OAuth2 serwer implementation, is an open standard provides a method for clients to access server resources on behalf of a resource owner.
       type: OAuth 2.0
       settings:
-        requestTokenUri: oauth.isaacloud.com/token
+        accessTokenUri: oauth.isaacloud.com/token
         authorizationUri: oauth.isaacloud.com/authorize
         baseUri: oauth.isaacloud.com
 securedBy: [oauth_2_0]
@@ -62,16 +92,19 @@ traits:
       example: "id,name,description"
 /queue:
   displayName: Queue
-  /events: !include data/queue_events.raml
-  /notifications: !include data/queue_notifications.raml
+  /events: !include queue_events.raml
+  /notifications: !include queue_notifications.raml
 /cache:
   displayName: Cache
-  /users: !include data/cache_users.raml
-  /segments: !include data/cache_segments.raml
-  /notifications: !include data/cache_notifications.raml
-  /leaderboards: !include data/cache_leaderboards.raml
-  /history: !include data/cache_history.raml
-  /groups: !include data/cache_groups.raml
-  /games: !include data/cache_games.raml
-  /events: !include data/cache_events.raml
-  /achievements: !include data/cache_achievements.raml
+  /users: !include cache_users.raml
+  /segments: !include cache_segments.raml
+  /notifications: !include cache_notifications.raml
+  /leaderboards: !include cache_leaderboards.raml
+  /history: !include cache_history.raml
+  /groups: !include cache_groups.raml
+  /games: !include cache_games.raml
+  /events: !include cache_events.raml
+  /achievements: !include cache_achievements.raml
+/admin:
+  displayName: Admin
+  /achievements: !include admin_achievements.raml

@@ -51,8 +51,7 @@ securedBy: [oauth_2_0]
   }
 
   test("analyze subresource") {
-	  val resource = new Resource()
-	  
+	  val resource = new Resource()	  
   }
 
   

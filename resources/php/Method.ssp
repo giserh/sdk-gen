@@ -9,9 +9,6 @@
 #for(doc <- docs)
 * ${doc._1} ${doc._2}
 #end 
-#for(param <- parameters)
-* @param ${param._1} : ${param._2}
-#end 
  */ 
 public function ${methodName}( $${parameters.map(tuple => tuple._1).mkString(", $")} ) { 
 

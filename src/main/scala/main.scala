@@ -1,18 +1,15 @@
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.security.InvalidParameterException
-
 import scala.io.BufferedSource
 import scala.io.Source
-
 import org.raml.model.Raml
 import org.raml.parser.visitor.RamlDocumentBuilder
-
 import com.typesafe.config.ConfigFactory
-
 import generator.CodeContext
 import generator.Generator
 import generator.PhpSDKGenerator
+import java.io.File
 
 object Main {
 
@@ -86,7 +83,7 @@ object Main {
 			if( options.contains("include") )
 				includePath = options("include").asInstanceOf[String]
 			
-			var raml: Raml = new RamlDocumentBuilder().build(source)
+			var raml: Raml = new RamlDocumentBuilder().build(new File(ramlFile))
 
 			/**Invoke code generator*/
 			var composer: CodeContext = new CodeContext()

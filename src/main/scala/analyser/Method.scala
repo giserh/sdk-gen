@@ -3,18 +3,20 @@ package analyser
 import org.raml.model.SecurityReference
 import org.raml.model.parameter.QueryParameter
 
-/**Color strategy*/
+
 object RestType extends Enumeration {
     val PUT = Value("put")
     val POST = Value("post")
     val GET = Value("get")
     val PATCH = Value("patch")
     val DELETE = Value("delete")
+    val TRACE = Value("trace")
+    val OPTIONS = Value("options")
+    val HEAD = Value("head")
   }
 
 class Method(val restType: RestType.Value, val url: String, private var _name : String = null, val securedBy : List[SecurityReference]) {
 
-	/* @TODO add One to method name if display name was given*/
 	if (_name == null) _name = restType + createName(url)
 	else _name = restType.toString() + _name	
 	
@@ -30,10 +32,16 @@ class Method(val restType: RestType.Value, val url: String, private var _name : 
 	def body_= (value:String): Unit = _body = Some(value)
 	def docs = _docs
 	
+	/**
+	 * Add documentation to method.
+	 */
 	def addDoc(name: String, description: String) {
 		_docs += (name -> description)
 	}
 
+	/**
+	 * Add additional parameter to method.
+	 */
 	def addQueryParameter(key: String, value: String) {
 		_query = query + (key -> value)
 	}
@@ -72,9 +80,8 @@ class Method(val restType: RestType.Value, val url: String, private var _name : 
 		
 		traits.foreach{
 			param => addQueryParameter(param._1 , param._2.getType().toString)
-		}
-				
-			
+			addDoc(param._1 , "- " + param._2.getDescription())
+		}			
 
 	}
 

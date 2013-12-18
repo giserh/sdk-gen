@@ -1,0 +1,22 @@
+{
+   "$schema":"http://json-schema.org/draft-03/schema",
+   "description":"A representation of a category",
+   "type" : "array",
+   "items" :{
+      "type":"object",
+      "required":false,
+      "properties":{
+         "name":{
+            "required":false,
+            "type":"integer"
+         },
+         "members":{
+            "required":false,
+            "type":"array",
+            "items":{
+               "type":"integer"
+            }
+         }
+      }
+   }
+}

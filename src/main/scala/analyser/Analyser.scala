@@ -31,11 +31,9 @@ object Analyser {
 		
 		pack.addDoc("baseOauthUri", oauth)
 		
+		
 		/* @TODO Should be logged*/
 		println(s"Building SDK package for API version ${pack.docs("version")}")
-
-		/* @TODO we should be able to use this traits, not have them written manually in Method class */
-		//val traits = analyseTraits(raml.getTraits())
 
 		for { child <- raml.getResources().asScala } {
 			analyseResource(child, pack)
@@ -43,26 +41,7 @@ object Analyser {
 
 		pack
 	}
-
-	/**
-	 * Analyses traits, @TODO : get all the info about traits
-	 */
-	private def analyseTraits(traits: java.util.List[java.util.Map[String, org.raml.model.Template]]): Map[String, Any] = {
-
-		var map: Map[String, Any] = Map()
-
-		if (traits != null) {
-			traits.asScala.foreach {
-				m =>
-					m.asScala.foreach {
-						kv => map += (kv._2.getDisplayName() -> classOf[String])
-					}
-			}
-		}
-		map
-
-	}
-
+	
 	/**
 	 * Maps raml REST method type to the one used by the analyser
 	 */
@@ -73,11 +52,14 @@ object Analyser {
 			case ActionType.PUT => RestType.PUT
 			case ActionType.PATCH => RestType.PATCH
 			case ActionType.DELETE => RestType.DELETE
+			case ActionType.HEAD => RestType.HEAD
+			case ActionType.OPTIONS => RestType.OPTIONS
+			case ActionType.TRACE => RestType.TRACE
 		}
 	}
 
 	/**
-	 *  Adds Method's to clazz object
+	 *  Adds Method's to clazz object @TODO generalize the way to add docs
 	 */
 	def createMethods(methods: java.util.Map[ActionType, Action], clazz: Clazz, url: String, displayName: String) {
 
@@ -90,7 +72,7 @@ object Analyser {
 				
 					val m = new Method(mapRestType(actionType), url, displayName, action.getSecuredBy().asScala.toList)
 					m.setupTraits(action.getQueryParameters().asScala.toMap)
-
+					
 					m.addDoc("", action.getDescription()) 
 					
 					
@@ -106,8 +88,10 @@ object Analyser {
 							}
 							
 						}
-						m.addQueryParameter("body", gatherBodyTypes.mkString(" | ") )
+						m.addQueryParameter("body", gatherBodyTypes.mkString("\n OR ") )
+						m.addDoc("body", gatherBodyTypes.mkString("\n OR "))
 					}
+					
 					
 					val responses = action.getResponses() 
 					if (!responses.isEmpty()){
@@ -120,12 +104,10 @@ object Analyser {
 								gatherReturn = response._1 + " : " + typeSchema :: gatherReturn 
 							}
 						}
-						m.addDoc("@return", gatherReturn.mkString(" | "))
+						m.addDoc("@return", gatherReturn.mkString("\n* OR "))
 					}	
 					
-					
-					// @TODO get secured by
-					
+										
 					clazz.add(m)
 				}
 		}
@@ -140,8 +122,7 @@ object Analyser {
 		val resource = resourceTuple._2
 		val methods = resource.getActions()
 
-		val name = resource.getDisplayName()
-		
+		val name = resource.getDisplayName()		
 		
 		var clazz: Clazz = null
 		if (name != null) clazz = new Clazz(url, pack.baseUri, pack.docs("baseOauthUri"), pack.docs("version"), name)
@@ -158,15 +139,18 @@ object Analyser {
 	}
 
 	/**
-	 * Analyses subresources and adds it to Clazz class object
+	 * Analyses subresources and adds it to Clazz class object.
 	 */
 	private def analyzeSubresource(resourceTuple: (String, Resource), clazz: Clazz) {
-
+		
+		/* base uri*/
 		val url = resourceTuple._2.getUri()
+		
+		/* actual resource */
 		val resource = resourceTuple._2
+		
+		/* actions for a uri */
 		val methods = resource.getActions()
-		//println(resource.getType())
-
 		createMethods(methods, clazz, url, resource.getDisplayName())
 
 		for { child <- resource.getResources().asScala } {

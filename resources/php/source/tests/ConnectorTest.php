@@ -381,21 +381,67 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
         $mock = $this->getMockBuilder("IsaaCloud\Connector")
                 ->setConstructorArgs($args)
                 ->getMockForAbstractClass();
-        
+
         $pgr = array(
-            "limit"=>10,
-            "offset"=>20,
-            "total"=>100,
-            "page"=>10,
-            "pages"=>10
+            "limit" => 10,
+            "offset" => 20,
+            "total" => 100,
+            "page" => 10,
+            "pages" => 10
         );
-        
+
         /**
-         * 
+         * Build mock paginator
          */
         $paginator = $mock->decodePaginator(json_encode($pgr));
-        
-        
+
+        /**
+         * Array has key
+         */
+        $this->assertArrayHasKey("limit", $paginator);
+        $this->assertArrayHasKey("total", $paginator);
+        $this->assertArrayHasKey("page", $paginator);
+        $this->assertArrayHasKey("pages", $paginator);
+        $this->assertArrayHasKey("offset", $paginator);
+    }
+
+    public function responseProvider() {
+        $provider = array(
+            array(
+                200,
+                array(),
+                array()
+            ),
+            array(
+                200,
+                array(),
+                array()
+            ),
+            array(
+                200,
+                array(),
+                array()
+            )
+        );
+
+        return $provider;
+    }
+
+    /**
+     * @dataProvider responseProvider
+     */
+    public function testResponse($code, array $body, array $header) {
+         $args = array(
+             $code,
+             $body,
+             $header
+         );
+        /**
+         * Prepare session and cookie
+         */
+        $mock = $this->getMockBuilder("IsaaCloud\Response")
+                ->setConstructorArgs($args)
+                ->getMockForAbstractClass();
     }
 
 }

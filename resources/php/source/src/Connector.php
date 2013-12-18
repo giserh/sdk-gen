@@ -3,16 +3,16 @@
 namespace IsaaCloud;
 
 /**
- * 
- */
-
-/**
  * Response object
  *
  */
 class Response {
 
-    public function __construct($code, $body, array $header) {
+    public function __construct($code, array $body, array $header) {
+        if (!is_numeric($code)) {
+            throw new ConnectorException("Code shoul be valid numeric!");
+        }
+
         $this->code = $code;
         $this->header = $header;
         $this->body = $body;
@@ -21,28 +21,31 @@ class Response {
     private $code;
     private $body;
     private $header;
-    private $paginator;
 
+    /**
+     * 
+     * @return numeric Response Code
+     */
     public function getCode() {
         return $this->code;
     }
 
+    /**
+     * 
+     * @return array Body Array
+     */
     public function getBody() {
         return $this->body;
     }
 
+    /**
+     * 
+     * @return array Header
+     */
     public function getHeader() {
         return $this->header;
     }
 
-}
-
-class NotFoundException extends \Exception {
-    
-}
-
-class AccessDeniedException extends \Exception {
-    
 }
 
 class ConnectorException extends \RuntimeException {
@@ -325,7 +328,7 @@ abstract class Connector {
             $cobinedString = $clientId . ":" . $secret;
 
             //Encode into base64
-            $result = base64_encode($cobinedString);
+            $result = $this->base64url_encode(trim($cobinedString));
 
             return $result;
         } else {
@@ -333,17 +336,22 @@ abstract class Connector {
         }
     }
 
+    public function base64url_encode($data) {
+        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+    }
+
     public function decodePaginator($paginator) {
         if (is_string($paginator)) {
-            $arrayPaginator = json_decode($paginator);
+            $arrayPaginator = (array)json_decode($paginator);
             if (is_array($arrayPaginator) &&
                     (count($arrayPaginator) > 0) &&
-                    isset($arrayPaginator["access_token"]) &&
-                    isset($arrayPaginator["expires_in"]) &&
-                    isset($arrayPaginator["token_type"])) {
+                    isset($arrayPaginator["limit"]) &&
+                    isset($arrayPaginator["total"]) &&
+                    isset($arrayPaginator["page"]) &&
+                    isset($arrayPaginator["pages"]) &&
+                    isset($arrayPaginator["offset"])) {
                 return $arrayPaginator;
-                
-            }else{
+            } else {
                 throw new ConnectorException("Invalid data in paginator!");
             }
         } else {
@@ -375,13 +383,17 @@ abstract class Connector {
      * @param type $name
      */
     public function setCookieData($name, $access_token, $expires_in, $token_type) {
-        $data = array(
-            "access_token" => $access_token,
-            "expires_in" => $expires_in,
-            "token_type" => $token_type
-        );
-        setcookie($name, json_encode($data), time() + $expires_in);
-        return $data;
+        try {
+            $data = array(
+                "access_token" => $access_token,
+                "expires_in" => $expires_in,
+                "token_type" => $token_type
+            );
+            setcookie($name, json_encode($data), time() + $expires_in);
+            return $data;
+        } catch (Exception $exc) {
+            throw new ConnectorException("Error occurred during set cookie");
+        }
     }
 
     /**
@@ -409,4 +421,7 @@ abstract class Connector {
         }
     }
 
+    /**
+     * 
+     */
 }

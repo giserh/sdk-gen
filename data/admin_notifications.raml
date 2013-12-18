@@ -1,0 +1,73 @@
+displayName: AdminNotifications
+type: common
+post:
+  description: Add a notification.
+  body:
+    application/json:
+      schema: !include schemas/TODO.json
+get:
+  is: [fields, paginator, ordering]
+  description: Get a list of notifications.
+  responses:
+    200:
+      body:
+        schema: !include schemas/TODO.json
+/doc:
+  displayName: AdminNotificationsDocs
+  type: common
+  get:
+    description: Get a pseudo schema showing quickly how to make a proper json for notifications.
+/{id}:
+  displayName: OneAdminNotification
+  type: common
+  get:
+    is: [fields]
+    description: Get one notification.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+  put:
+    description: Update a notification.
+    body:
+      application/json:
+        schema: !include schemas/TODO.json
+  delete:
+    description: Delete a notification.
+/types:
+  displayName: AdminNotificationTypes
+  type: common
+  post:
+    description: Add a notification type.
+    body:
+      application/json:
+        schema: !include schemas/TODO.json
+  get:
+    is: [fields, paginator, ordering]
+    description: Get a list of notification types.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+  /doc:
+    displayName: AdminNotificationTypesDocs
+    type: common
+    get:
+      description: Get a pseudo schema showing quickly how to make a proper json for notification types.
+  /{id}:
+    displayName: OneAdminNotificationType
+    type: common
+    get:
+      is: [fields]
+      description: Get a notification type.
+      responses:
+        200:
+          body:
+            schema: !include schemas/TODO.json
+    put:
+      description: Update a notification type
+      body:
+        application/json:
+          schema: !include schemas/TODO.json
+    delete:
+      description: Delete a notification type.

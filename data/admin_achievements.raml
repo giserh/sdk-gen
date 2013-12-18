@@ -1,5 +1,5 @@
 displayName: CacheAchievements
-type : commonErrors
+type : common
 post:
   description: Create new achievement. 
   body:
@@ -12,7 +12,7 @@ get:
       200:
         body: !include schemas/achievements_list_schema.raml  
 /{achievementId}:
-  type : commonErrors
+  type : common
   get:
     is: [fields]
     description: Get one achievement. 
@@ -31,13 +31,13 @@ get:
         body: 
   /segments:
     /{childId}:
-      type : commonErrors
+      type : common
       put:    
         description: Add segment to achievement. 
       delete:    
         description: Delete segment from achievement. 
 /categories:
-  type: commonErrors
+  type: common
   post:
     description: Create new category. 
     body:
@@ -53,7 +53,7 @@ get:
   /doc:
     description: Get a pseudo schema for category.
   /{id}:
-    type: commonErrors
+    type: common
     get:
       description: Get one category.
       responses:
@@ -74,7 +74,7 @@ get:
         delete:
           description: Delete one achievement from achievements category. 
 /groups:
-  type: commonErrors
+  type: common
   post:
     description: Create new achievement group.
     body:
@@ -88,10 +88,10 @@ get:
           body:
             schema: !include schemas/achievement_group_list.json
   /doc:
-    type: commonErrors
+    type: common
     description: Get a pseudo schema for group.
   /{id}:
-    type: commonErrors
+    type: common
     get:
       description: Get one achievement group. 
       is: [fields]
@@ -113,7 +113,7 @@ get:
         delete:
           description: Delete one achievement from achievements group.
 /progress:
-  type: commonErrors
+  type: common
   post:
     description: Create new achievement progress.
     body:
@@ -127,10 +127,10 @@ get:
           body:
             schema: !include schemas/achievement_progress_list.json
   /doc:
-    type: commonErrors
+    type: common
     description: Get a pseudo schema for progress.
   /{id}:
-    type: commonErrors
+    type: common
     get:
       description: Get one achievement progress. 
       is: [fields]

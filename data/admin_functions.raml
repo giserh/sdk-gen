@@ -1,0 +1,36 @@
+displayName: AdminFunctions
+type: common
+post:
+  description: Add a new function.
+  body:
+    application/json:
+      schema: !include schemas/TODO.json
+get:
+  is: [fields, paginator, ordering]
+  description: Get a list of functions.
+  responses:
+    200:
+      body:
+        schema: !include schemas/TODO.json
+/doc:
+  displayName: AdminFunctionsDoc
+  type: common
+  get:
+    description: Get a pseudo schema showing quickly how to make a proper json for functions.
+/{id}:
+  displayName: OneAdminFunction
+  type: common
+  get:
+    is: [fields]
+    description: Get one function.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+  put:
+    description: Add a function.
+    body:
+      application/json:
+        schema: !include schemas/TODO.json
+  delete:
+    description: Delete a function.

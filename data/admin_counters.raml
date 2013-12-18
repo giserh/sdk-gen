@@ -1,0 +1,49 @@
+displayName: AdminCounters
+type: common
+post:
+  description: Add a new counter.
+  body:
+    application/json:
+      schema: !include schemas/TODO.json
+get:
+  is: [paginator, fields, ordering]
+  description: Get one counter.
+  responses:
+    200:
+      body:
+        schema: !include schemas/TODO.json
+/doc:
+  displayName: AdminCountersDoc
+  type: common
+  get:
+    description: Get a pseudo schema showing quickly how to make a proper json for clientscripts.
+/{id}:
+  displayName: OneAdminCounter
+  type: common
+  get:
+    is: [fields]
+    description: Get one counter.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+  put:
+    description: Add a new counter.
+    body:
+      application/json:
+        schema: !include schemas/TODO.json
+  delete:
+    description: Delete one counter.
+  /conditions:
+    displayName: AdminCounterConditions
+    type: common
+    /{childId}:
+      displayName: OneAdminCounterCondition
+      type: common
+      put:
+        description: Add a condition to a counter.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      delete:
+        description: Remove a condition from a counter.

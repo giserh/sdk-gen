@@ -1,0 +1,62 @@
+displayName: AdminGames
+type: common
+post:
+  description: Create a game.
+  body:
+    application/json:
+      schema: !include schemas/TODO.json
+get:
+  is: [fields, paginator, ordering]
+  description: Get a list of games.
+  responses:
+    200:
+      body:
+        schema: !include schemas/TODO.json
+/doc:
+  displayName: AdminGamesDoc
+  type: common
+  get:
+    description: Get a pseudo schema showing quickly how to make a proper json for games.
+/{id}:
+  displayName: OneAdminGame
+  type: common
+  get:
+    is: [fields]
+    description: Get one game.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+  put:
+    description: Update a game.
+    body:
+      application/json:
+        schema: !include schemas/TODO.json
+  delete:
+    description: Delete a game.
+  /notifications:
+    displayName: AdminGameNotifications
+    type: common
+    /{childId}:
+      displayName: OneAdminGameNotification
+      type: common
+      put:
+        description: Add a notification to a game.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      delete:
+        description: Remove a notification from a game.
+  /conditions:
+    displayName: AdminGameConditions
+    type: common
+    /{childId}:
+      displayName: OneAdminGameCondition
+      type: common
+      put:
+        description: Add a condition to a game.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      delete:
+        description: Remove a condition from a game.

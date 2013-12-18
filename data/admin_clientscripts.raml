@@ -1,0 +1,41 @@
+displayName: ClientScripts
+type: common
+post:
+  description: Post a new client script.
+  body:
+    application/json:
+      schema: !include schemas/TODO.json
+get:
+  is: [fields, ordering, paginator]
+  description: Get a list of client scripts.
+  responses:
+    200:
+      body:
+        schema: !include schemas/TODO.json
+/doc:
+  displayName: ClientScriptsDoc
+  type: common
+  get:
+    description: Get a pseudo schema showing quickly how to make a proper json for clientscripts.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+/{id}:
+  displayName: OneClientScript
+  type: common
+  get:
+    is: [fields]
+    description: Get one client script by id.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+  put:
+    description: Change one client script.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+  delete:
+    description: Delete one client script.

@@ -1,0 +1,36 @@
+displayName: AdminSegments
+type: common
+post:
+  description: Add a new segment.
+  body:
+    application/json:
+      schema: !include schemas/TODO.json
+get:
+  is: [fields, paginator, ordering]
+  description: Get a segment list.
+  responses:
+    200:
+      body:
+        schema: !include schemas/TODO.json
+/doc:
+  displayName: AdminSegmentsDocs
+  type: common
+  get:
+    description: Get a pseudo schema showing quickly how to make a proper json for segment.
+/{id}:
+  displayName: AdminSegment
+  type: common
+  get:
+    is: [fields]
+    description: Get a segment.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+  put:
+    description: Update a segment.
+    body:
+      application/json:
+        schema: !include schemas/TODO.json
+  delete:
+    description: Delete a segment.

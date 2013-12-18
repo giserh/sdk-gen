@@ -1,0 +1,49 @@
+displayName: AdminLeaderboards
+type: common
+post:
+  description: Add a new leaderboard.
+  body:
+    application/json:
+      schema: !include schemas/TODO.json
+get:
+  is: [fields, paginator, ordering]
+  description: Get a leaderboard list.
+  responses:
+    200:
+      body:
+        schema: !include schemas/TODO.json
+/doc:
+  displayName: AdminLeaderboardsDocs
+  type: common
+  get:
+    description: Get a pseudo schema showing quickly how to make a proper json for leaderboards.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+/{id}:
+  displayName: OneAdminLeaderboard
+  type: common
+  get:
+    is: [fields]
+    description: Get a leaderboard.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+  put:
+    description: Add a leaderboard.
+    body:
+      application/json:
+        schema: !include schemas/TODO.json
+  delete:
+    description: Remove a leaderboard.
+  /recalculate:
+    displayName:  OneAdminLeaderboardRecalculate
+    type: common
+    get:
+      description: Recalculate a leaderboard
+      responses:
+        200:
+          body:
+            schema: !include schemas/TODO.json

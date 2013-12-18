@@ -1,0 +1,49 @@
+displayName: AdminTransactionSources
+type: common
+post:
+  description: Add a transaction source.
+  body:
+    application/json:
+      schema: !include schemas/TODO.json
+get:
+  is: [fields, paginator, ordering]
+  description: Get a list of transaction sources.
+  responses:
+    200:
+      body:
+        schema: !include schemas/TODO.json
+/doc:
+  displayName: AdminTransactionSourcesDocs
+  type: common
+  get:
+    description: Get a pseudo schema showing quickly how to make a proper json for transaction source.
+/{id}:
+  displayName: OneAdminTransactionSource
+  type: common
+  get:
+    is: [fields]
+    description: Get a transaction source.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+  put:
+    description: Update a transaction source.
+    body:
+      application/json:
+        schema: !include schemas/TODO.json
+  delete:
+    description: Delete a transaction source.
+  /function:
+    displayName: AdminTransactionSourceFunctions
+    type: common
+    /{childId}:
+      displayName: OneAdminTransactionSourceFunction
+      type: common
+      put:
+        description: Add a transaction source function.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      delete:
+        description: Delete a transaction source function.

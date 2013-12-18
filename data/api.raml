@@ -6,9 +6,11 @@ protocols: [ HTTPS ]
 baseUri: api.isaacloud.com
 mediaType:  application/json
 resourceTypes:
-  - commonErrors:
+  - common:
       get?:
         responses:
+          200:
+            description: Success!
           500:
             body: !include schemas/error_500_schema.raml
           404:
@@ -17,6 +19,8 @@ resourceTypes:
             body: !include schemas/error_other_schema.raml    
       patch?:
         responses:
+          200:
+            description: Success!
           500:
             body: !include schemas/error_500_schema.raml
           404:
@@ -25,6 +29,8 @@ resourceTypes:
             body: !include schemas/error_other_schema.raml
       put?:
         responses:
+          200:
+            description: Success!
           500:
             body: !include schemas/error_500_schema.raml
           404:
@@ -33,6 +39,8 @@ resourceTypes:
             body: !include schemas/error_other_schema.raml
       delete?:
         responses:
+          200:
+            description: Success!
           500:
             body: !include schemas/error_500_schema.raml
           404:
@@ -41,6 +49,8 @@ resourceTypes:
             body: !include schemas/error_other_schema.raml      
       post?:
         responses:
+          200:
+            description: Success!
           500:
             body: !include schemas/error_500_schema.raml
           400:
@@ -108,3 +118,12 @@ traits:
 /admin:
   displayName: Admin
   /achievements: !include admin_achievements.raml
+  /clientscripts: !include admin_clientscripts.raml
+  /conditions: !include admin_conditions.raml
+  /counters: !include admin_counters.raml
+  /functions: !include admin_functions.raml
+  /games: !include admin_games.raml
+  /leaderboards: !include admin_leaderboards.raml
+  /notifications: !include admin_notifications.raml
+  /segments: !include admin_segments.raml
+  /transactionsources: !include admin_transactionsources.raml

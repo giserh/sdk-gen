@@ -335,9 +335,19 @@ abstract class Connector {
 
     public function decodePaginator($paginator) {
         if (is_string($paginator)) {
-            
+            $arrayPaginator = json_decode($paginator);
+            if (is_array($arrayPaginator) &&
+                    (count($arrayPaginator) > 0) &&
+                    isset($arrayPaginator["access_token"]) &&
+                    isset($arrayPaginator["expires_in"]) &&
+                    isset($arrayPaginator["token_type"])) {
+                return $arrayPaginator;
+                
+            }else{
+                throw new ConnectorException("Invalid data in paginator!");
+            }
         } else {
-            throw new ConnectorException("Invalid paginator!");
+            throw new ConnectorException("Paginator should be a string!");
         }
     }
 

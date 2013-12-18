@@ -10,9 +10,10 @@ class Response {
 
     public function __construct($code, array $body, array $header) {
         if (!is_numeric($code)) {
-            throw new ConnectorException("Code shoul be valid numeric!");
+            throw new ConnectorException("Code should be valid numeric!");
         }
 
+        
         $this->code = $code;
         $this->header = $header;
         $this->body = $body;
@@ -336,13 +337,18 @@ abstract class Connector {
         }
     }
 
+    /**
+     * Encode base64url
+     * @param type $data
+     * @return type
+     */
     public function base64url_encode($data) {
         return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
     }
 
     public function decodePaginator($paginator) {
         if (is_string($paginator)) {
-            $arrayPaginator = (array)json_decode($paginator);
+            $arrayPaginator = (array) json_decode($paginator);
             if (is_array($arrayPaginator) &&
                     (count($arrayPaginator) > 0) &&
                     isset($arrayPaginator["limit"]) &&
@@ -421,7 +427,4 @@ abstract class Connector {
         }
     }
 
-    /**
-     * 
-     */
 }

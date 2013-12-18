@@ -431,17 +431,11 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
      * @dataProvider responseProvider
      */
     public function testResponse($code, array $body, array $header) {
-         $args = array(
-             $code,
-             $body,
-             $header
-         );
-        /**
-         * Prepare session and cookie
-         */
-        $mock = $this->getMockBuilder("IsaaCloud\Response")
-                ->setConstructorArgs($args)
-                ->getMockForAbstractClass();
+        $mock = new \IsaaCloud\Response($code,$body,$header);
+        
+        $this->assertEquals($mock->getCode(), $code);
+        $this->assertEquals($mock->getBody(), $body);
+        $this->assertEquals($mock->getHeader(), $header);
     }
 
 }

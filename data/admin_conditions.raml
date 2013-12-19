@@ -1,4 +1,4 @@
-displayName: AdminConditions
+displayName: Conditions
 type: common
 post:
   description: Add a new condition.
@@ -7,13 +7,13 @@ post:
       schema: !include schemas/TODO.json
 get:
   is: [fields, paginator, ordering]
-  description: Get one condition.
+  description: Get a list of conditions.
   responses:
     200:
       body:
         schema: !include schemas/TODO.json
 /doc:
-  displayName: AdminConditionsDoc
+  displayName: ConditionsDoc
   type: common
   get:
     description: Get a pseudo schema showing quickly how to make a proper json for clientscripts.
@@ -22,7 +22,7 @@ get:
         body:
           schema: !include schemas/TODO.json
 /{id}:
-  displayName: OneAdminCondition
+  displayName: OneCondition
   type: common
   get:
     is: [fields]
@@ -39,10 +39,10 @@ get:
   delete:
     description: Delete one condition.
   /counters:
-    displayName: AdminConditionCounters
+    displayName: ConditionCounters
     type: common
     /{childId}:
-      displayName: OneAdminConditionCounter
+      displayName: OneConditionCounter
       type: common
       put:
         description: Add a counter.

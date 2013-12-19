@@ -1,17 +1,18 @@
-displayName: CacheGames
-type: commonErrors
+displayName: Games
+type: common
 get:
   is: [ paginator, fields, ordering, segments]
-  securedBy: [oauth_2_0]
   responses:
     200:
-      body: !include data/schemas/game_schema.raml     
+      body: 
+        schema: !include schemas/game_schema.json     
 /{gameId}:
-  type: commonErrors
+  type: common
+  displayName: OneGame
   get:
     is: [fields]
-    securedBy: [oauth_2_0]
     description: Get one game. 
     responses:
       200:
-        body: !include data/schemas/game_schema.raml
+        body: 
+          schema: !include schemas/game_schema.json

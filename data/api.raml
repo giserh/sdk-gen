@@ -12,49 +12,49 @@ resourceTypes:
           200:
             description: Success!
           500:
-            body: !include schemas/error_500_schema.raml
+            body: !include schemas/error_500_schema.json
           404:
-            body: !include schemas/error_other_schema.raml 
+            body: !include schemas/error_other_schema.json 
           400:
-            body: !include schemas/error_other_schema.raml    
+            body: !include schemas/error_other_schema.json    
       patch?:
         responses:
           200:
             description: Success!
           500:
-            body: !include schemas/error_500_schema.raml
+            body: !include schemas/error_500_schema.json
           404:
-            body: !include schemas/error_other_schema.raml 
+            body: !include schemas/error_other_schema.json 
           400:
-            body: !include schemas/error_other_schema.raml
+            body: !include schemas/error_other_schema.json
       put?:
         responses:
           200:
             description: Success!
           500:
-            body: !include schemas/error_500_schema.raml
+            body: !include schemas/error_500_schema.json
           404:
-            body: !include schemas/error_other_schema.raml 
+            body: !include schemas/error_other_schema.json 
           400:
-            body: !include schemas/error_other_schema.raml
+            body: !include schemas/error_other_schema.json
       delete?:
         responses:
           200:
             description: Success!
           500:
-            body: !include schemas/error_500_schema.raml
+            body: !include schemas/error_500_schema.json
           404:
-            body: !include schemas/error_other_schema.raml 
+            body: !include schemas/error_other_schema.json 
           400:
-            body: !include schemas/error_other_schema.raml      
+            body: !include schemas/error_other_schema.json      
       post?:
         responses:
           200:
             description: Success!
           500:
-            body: !include schemas/error_500_schema.raml
+            body: !include schemas/error_500_schema.json
           400:
-            body: !include schemas/error_other_schema.raml  
+            body: !include schemas/error_other_schema.json 
 securitySchemes:
   - oauth_2_0:
       description: |
@@ -127,3 +127,8 @@ traits:
   /notifications: !include admin_notifications.raml
   /segments: !include admin_segments.raml
   /transactionsources: !include admin_transactionsources.raml
+  /transactiontypes: !include admin_transactiontypes.raml
+  /users: !include admin_users.raml
+/system:
+  displayName: System
+  /clients: !include system_clients.raml

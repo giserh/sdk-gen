@@ -1,4 +1,4 @@
-displayName: AdminNotifications
+displayName: Notifications
 type: common
 post:
   description: Add a notification.
@@ -13,12 +13,12 @@ get:
       body:
         schema: !include schemas/TODO.json
 /doc:
-  displayName: AdminNotificationsDocs
+  displayName: NotificationsDocs
   type: common
   get:
     description: Get a pseudo schema showing quickly how to make a proper json for notifications.
 /{id}:
-  displayName: OneAdminNotification
+  displayName: OneNotification
   type: common
   get:
     is: [fields]
@@ -35,7 +35,7 @@ get:
   delete:
     description: Delete a notification.
 /types:
-  displayName: AdminNotificationTypes
+  displayName: NotificationTypes
   type: common
   post:
     description: Add a notification type.
@@ -50,12 +50,12 @@ get:
         body:
           schema: !include schemas/TODO.json
   /doc:
-    displayName: AdminNotificationTypesDocs
+    displayName: NotificationTypesDocs
     type: common
     get:
       description: Get a pseudo schema showing quickly how to make a proper json for notification types.
   /{id}:
-    displayName: OneAdminNotificationType
+    displayName: OneNotificationType
     type: common
     get:
       is: [fields]

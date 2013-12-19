@@ -1,4 +1,4 @@
-displayName: AdminFunctions
+displayName: Functions
 type: common
 post:
   description: Add a new function.
@@ -13,12 +13,12 @@ get:
       body:
         schema: !include schemas/TODO.json
 /doc:
-  displayName: AdminFunctionsDoc
+  displayName: FunctionsDoc
   type: common
   get:
     description: Get a pseudo schema showing quickly how to make a proper json for functions.
 /{id}:
-  displayName: OneAdminFunction
+  displayName: OneFunction
   type: common
   get:
     is: [fields]

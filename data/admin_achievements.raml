@@ -1,43 +1,47 @@
-displayName: CacheAchievements
+displayName: Achievements
 type : common
 post:
   description: Create new achievement. 
   body:
     application/json: 
-      schema: !include schemas/achievement.json
+      schema: !include schemas/achievement_schema.json
 get:
   is: [fields, ordering, segments, groups, paginator]
   description: Get a list of achievements.
   responses:
       200:
-        body: !include schemas/achievements_list_schema.raml  
+        body: 
+          schema: !include schemas/achievements_list.json  
 /{achievementId}:
   type : common
+  displayName: OneAchievement
   get:
     is: [fields]
     description: Get one achievement. 
     responses:
       200:
-        body: !include schemas/achievement_schema.raml
+        body: 
+          schema: !include schemas/achievement_schema.json
   put:    
     description: Update one achievement. 
     body:
       application/json: 
-        schema: !include schemas/achievement.json
+        schema: !include schemas/achievement_schema.json
   delete:
     description: Delete one achievement. 
-    responses:
-      200:
-        body: 
   /segments:
+    type: common
+    displayName: AchievementSegments
     /{childId}:
       type : common
+      displayName: OneAchievementSegment
       put:    
         description: Add segment to achievement. 
       delete:    
         description: Delete segment from achievement. 
 /categories:
   type: common
+  displayName: AchievementsCategories
   post:
     description: Create new category. 
     body:
@@ -51,9 +55,13 @@ get:
         body:
           schema: !include schemas/category_list.json
   /doc:
-    description: Get a pseudo schema for category.
+    type: common
+    displayName: AchievementsCategoriesDoc    
+    get:
+      description: Get a pseudo schema for category.
   /{id}:
     type: common
+    displayName: AchievementsCategory
     get:
       description: Get one category.
       responses:
@@ -68,13 +76,18 @@ get:
     delete:
       description: Delete one achievements category.
     /achievements:
+      type: common
+      displayName: CategoryAchievements
       /{childId}:
+        type: common
+        displayName: OneCategoryAchievement
         put:
           description: Add one achievement to achievements category.
         delete:
           description: Delete one achievement from achievements category. 
 /groups:
   type: common
+  displayName: AchievementsGroups
   post:
     description: Create new achievement group.
     body:
@@ -89,8 +102,11 @@ get:
             schema: !include schemas/achievement_group_list.json
   /doc:
     type: common
-    description: Get a pseudo schema for group.
+    displayName: AchievementsGroupsDoc
+    get:
+      description: Get a pseudo schema for group.
   /{id}:
+    displayName: OneAchievementsGroup
     type: common
     get:
       description: Get one achievement group. 
@@ -107,13 +123,18 @@ get:
     delete:
       description: Delete an achievement group.
     /achievements:
+      type: common
+      displayName: GroupAchievements
       /{childId}:
+        type: common
+        displayName: OneGroupAchievement
         put:
           description: Add one achievement to achievements group.
         delete:
           description: Delete one achievement from achievements group.
 /progress:
   type: common
+  displayName: AchievementsProgresses
   post:
     description: Create new achievement progress.
     body:
@@ -128,8 +149,11 @@ get:
             schema: !include schemas/achievement_progress_list.json
   /doc:
     type: common
-    description: Get a pseudo schema for progress.
+    displayName: AchievementsProgressesDoc
+    get:
+      description: Get a pseudo schema for progress.
   /{id}:
+    displayName: OneAchievementsProgress
     type: common
     get:
       description: Get one achievement progress. 

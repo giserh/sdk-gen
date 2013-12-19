@@ -10,8 +10,11 @@
 * ${doc._1} ${doc._2}
 #end 
  */ 
+ #if (!parameters.isEmpty())
 public function ${methodName}( $${parameters.map(tuple => tuple._1).mkString(", $")} ) { 
-
+#else
+public function ${methodName}() { 
+#end
 	$array = [
     #for(param <- parameters.filter(_._1 != "body"))
 	"${param._1}" => $${param._1},
@@ -19,8 +22,8 @@ public function ${methodName}( $${parameters.map(tuple => tuple._1).mkString(", 
 	];
 
 	#if (parameters.contains("body"))
-  		$this->callService( "${url}", "${rtype}",  $array , $body)
+  		return $this->callService( "${url}", "${rtype}",  $array , $body);
 	#else
-		$this->callService( "${url}", "${rtype}",  $array)
+		return $this->callService( "${url}", "${rtype}",  $array);
 	#end	
 	}

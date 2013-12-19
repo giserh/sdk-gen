@@ -1,4 +1,4 @@
-displayName: AdminSegments
+displayName: Segments
 type: common
 post:
   description: Add a new segment.
@@ -13,12 +13,12 @@ get:
       body:
         schema: !include schemas/TODO.json
 /doc:
-  displayName: AdminSegmentsDocs
+  displayName: SegmentsDocs
   type: common
   get:
     description: Get a pseudo schema showing quickly how to make a proper json for segment.
 /{id}:
-  displayName: AdminSegment
+  displayName: Segment
   type: common
   get:
     is: [fields]

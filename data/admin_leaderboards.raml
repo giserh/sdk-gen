@@ -1,4 +1,4 @@
-displayName: AdminLeaderboards
+displayName: Leaderboards
 type: common
 post:
   description: Add a new leaderboard.
@@ -13,7 +13,7 @@ get:
       body:
         schema: !include schemas/TODO.json
 /doc:
-  displayName: AdminLeaderboardsDocs
+  displayName: LeaderboardsDocs
   type: common
   get:
     description: Get a pseudo schema showing quickly how to make a proper json for leaderboards.
@@ -22,7 +22,7 @@ get:
         body:
           schema: !include schemas/TODO.json
 /{id}:
-  displayName: OneAdminLeaderboard
+  displayName: OneLeaderboard
   type: common
   get:
     is: [fields]
@@ -39,7 +39,7 @@ get:
   delete:
     description: Remove a leaderboard.
   /recalculate:
-    displayName:  OneAdminLeaderboardRecalculate
+    displayName:  OneLeaderboardRecalculate
     type: common
     get:
       description: Recalculate a leaderboard

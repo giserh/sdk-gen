@@ -1,0 +1,19 @@
+{
+   "$schema":"http://json-schema.org/draft-03/schema",
+   "description":"A representation of a game",
+   "type":"object",
+   "properties":{
+      "id":{
+         "required":false,
+         "type":"integer"
+      },
+      "createdAt":{
+         "required":false,
+         "type":"integer"
+      },
+      "updatedAt":{
+         "required":false,
+         "type":"integer"
+      }
+   }
+}

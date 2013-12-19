@@ -1,4 +1,4 @@
-displayName: AdminTransactionSources
+displayName: TransactionSources
 type: common
 post:
   description: Add a transaction source.
@@ -13,12 +13,12 @@ get:
       body:
         schema: !include schemas/TODO.json
 /doc:
-  displayName: AdminTransactionSourcesDocs
+  displayName: TransactionSourcesDocs
   type: common
   get:
     description: Get a pseudo schema showing quickly how to make a proper json for transaction source.
 /{id}:
-  displayName: OneAdminTransactionSource
+  displayName: OneTransactionSource
   type: common
   get:
     is: [fields]
@@ -35,10 +35,10 @@ get:
   delete:
     description: Delete a transaction source.
   /function:
-    displayName: AdminTransactionSourceFunctions
+    displayName: TransactionSourceFunctions
     type: common
     /{childId}:
-      displayName: OneAdminTransactionSourceFunction
+      displayName: OneTransactionSourceFunction
       type: common
       put:
         description: Add a transaction source function.

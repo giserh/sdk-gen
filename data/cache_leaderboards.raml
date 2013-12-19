@@ -1,61 +1,54 @@
-displayName: CacheLeaderboards
+displayName: Leaderboards
+type: common
 /{leaderboardId}:
+  displayName: OneLeaderboard
+  type: common
   get:
     is: [fields, segments, paginator, groups, ordering]
-    securedBy: [oauth_2_0]
     description: Get users with one of the leaderboards. 
     responses:
       200:
-        body: !include data/schemas/leaderboard_schema.raml   
-      500:
-        body: !include data/schemas/error_500_schema.raml
-      404:
-        body: !include data/schemas/error_other_schema.raml 
-      400:
-        body: !include data/schemas/error_other_schema.raml
+        body: 
+          schema: !include schemas/leaderboard_schema.json
   /users:
+    displayName: LeaderboardUsers
+    type: common
     /{userId}:
+      displayName: OneLeaderboardUser
+      type: common
       /friends:
+        type: common
+        displayName: LeaderboardUserFriends
         get:
           is: [fields, segments, paginator, groups, ordering]
-          securedBy: [oauth_2_0]
           description: Get user's friends with one of the leaderboards. 
           responses:
             200:
-              body: !include data/schemas/leaderboard_schema.raml   
-            500:
-              body: !include data/schemas/error_500_schema.raml
-            404:
-              body: !include data/schemas/error_other_schema.raml 
-            400:
-              body: !include data/schemas/error_other_schema.raml
+              body: 
+                schema: !include schemas/leaderboard_schema.json   
   /segments:
+    type: common
+    displayName: LeaderboardSegments
     /{segmentId}:
+      type: common
+      displayName: OneLeaderboardSegment
       get:
         is: [fields, segments, paginator, groups, ordering]
-        securedBy: [oauth_2_0]
         description: Get user's with a segment Id in one of the leaderboards. 
         responses:
           200:
-            body: !include data/schemas/leaderboard_schema.raml   
-          500:
-            body: !include data/schemas/error_500_schema.raml
-          404:
-            body: !include data/schemas/error_other_schema.raml 
-          400:
-            body: !include data/schemas/error_other_schema.raml
+            body: 
+              schema: !include schemas/leaderboard_schema.json 
   /groups:
+    type: common
+    displayName: LeaderboardGroups
     /{groupId}:
+      type: common
+      displayName: OneLeaderboardGroup
       get:
         is: [fields, segments, paginator, groups, ordering]
-        securedBy: [oauth_2_0]
         description: Get user's with a group Id in one of the leaderboards. 
         responses:
           200:
-            body: !include data/schemas/leaderboard_schema.raml   
-          500:
-            body: !include data/schemas/error_500_schema.raml
-          404:
-            body: !include data/schemas/error_other_schema.raml 
-          400:
-            body: !include data/schemas/error_other_schema.raml
+            body: 
+              schema: !include schemas/leaderboard_schema.json   

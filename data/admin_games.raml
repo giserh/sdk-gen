@@ -1,4 +1,4 @@
-displayName: AdminGames
+displayName: Games
 type: common
 post:
   description: Create a game.
@@ -13,12 +13,12 @@ get:
       body:
         schema: !include schemas/TODO.json
 /doc:
-  displayName: AdminGamesDoc
+  displayName: GamesDoc
   type: common
   get:
     description: Get a pseudo schema showing quickly how to make a proper json for games.
 /{id}:
-  displayName: OneAdminGame
+  displayName: OneGame
   type: common
   get:
     is: [fields]
@@ -35,10 +35,10 @@ get:
   delete:
     description: Delete a game.
   /notifications:
-    displayName: AdminGameNotifications
+    displayName: GameNotifications
     type: common
     /{childId}:
-      displayName: OneAdminGameNotification
+      displayName: OneGameNotification
       type: common
       put:
         description: Add a notification to a game.
@@ -48,10 +48,10 @@ get:
       delete:
         description: Remove a notification from a game.
   /conditions:
-    displayName: AdminGameConditions
+    displayName: GameConditions
     type: common
     /{childId}:
-      displayName: OneAdminGameCondition
+      displayName: OneGameCondition
       type: common
       put:
         description: Add a condition to a game.

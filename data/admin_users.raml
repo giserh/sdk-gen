@@ -1,0 +1,437 @@
+displayName: Users
+type: common
+post:
+  description: Add a user.
+  body:
+    application/json:
+      schema: !include schemas/TODO.json
+get:
+  is: [fields, paginator, ordering, groups, segments]
+  description: Get a list of users.
+  responses:
+    200:
+      body:
+        schema: !include schemas/TODO.json
+/groups:
+  displayName: UserGroups
+  type: common
+  post:
+    description: Add a user group.
+    body:
+      application/json:
+        schema: !include schemas/TODO.json
+  get:
+    is: [fields, paginator, ordering, segments]
+    description: Get a list of user groups.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+  /doc:
+    displayName: UserGroupsDoc
+    type: common
+    get:
+      description: Get a pseudo schema showing quickly how to make a proper json for user group.
+  /{id}:
+    displayName: OneUserGroup
+    type: common
+    get:
+      description: Get a user group.
+      responses:
+        200:
+          body:
+            schema: !include schemas/TODO.json
+    put:
+      description: Update a user group.
+      body:
+        application/json:
+          schema: !include schemas/TODO.json
+    delete:
+      description: Delete a user group.
+    /externalids:
+      displayName: UserGroupExternalIds
+      type: common
+      post:
+        description: Add an external group id.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      get:
+        is: [fields, ordering, paginator]
+        description: Get a list of external ids.
+        responses:
+          200:
+            body:
+              schema: !include schemas/TODO.json
+      /{childId}:
+        displayName: OneUserGroupExternalId
+        type: common
+        get:
+          description: Get an external group id.
+          responses:
+            200:
+              body:
+                schema: !include schemas/TODO.json
+        put:
+          description: Update an external group id.
+          body:
+            application/json:
+              schema: !include schemas/TODO.json
+        delete:
+          description: Remove an external group id.
+      /doc:
+        displayName: UserGroupExternalIdsDocs
+        type: common
+        get:
+          description: Get a pseudo schema showing quickly how to make a proper json for user group external ids.
+    /users:
+      displayName: UserGroupFriends
+      type: common
+      /{childId}:
+        displayName: OneUserGroupFriend
+        type: common
+        put:
+          description: Add a friend to user group.
+          body:
+            application/json:
+              schema: !include schemas/TODO.json
+        delete:
+          description: Delete a friend from user group.
+    /gainedachievements:
+      displayName: UserGroupGainedAchievements
+      type: common
+      post:
+        description: Create a gained achievement for a group.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      get:
+        is: [fields, paginator, ordering]
+        description: Get a list of gained achievements for a group.
+        responses:
+          200:
+            body:
+              schema: !include schemas/TODO.json
+      /{childId}:
+        displayName: OneUserGroupGainedAchievement
+        type: common
+        get:
+          description: Get a gained achievement for a group by id.
+          responses:
+            200:
+              body:
+                schema: !include schemas/TODO.json
+        put:
+          description: Update a gained achievement for a group by id.
+          body:
+            application/json:
+              schema: !include schemas/TODO.json
+        delete:
+          description: Delete a gained achievement for a group by id.
+      /doc:
+        displayName: UserGroupGainedAchievementDocs
+        type: common
+        get:
+          description: Get a pseudo schema showing quickly how to make a proper json for user group gained achivements.
+    /wongames:
+      displayName: UserGroupWonGames
+      type: common
+      post:
+        description: Create a won game for user group.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      get:
+        is: [fields, paginator, ordering]
+        description: Get a list of user group won games.
+        responses:
+          200:
+            body:
+              schema: !include schemas/TODO.json
+      /{childId}:
+        displayName: OneUserGroupWonGame
+        type: common
+        get:
+          description: Get a won game for user group by id.
+          responses:
+            200:
+              body:
+                schema: !include schemas/TODO.json
+        put:
+          description: Update a won game for user group by id.
+          body:
+            application/json:
+              schema: !include schemas/TODO.json
+        delete:
+          description: Delete a won game for user group by id.
+      /doc:
+        displayName: UserGroupWonGameDoc
+        type: common
+        get:
+          description: Get a pseudo schema showing quickly how to make a proper json for user group won games.
+    /segments:
+      displayName: UserGroupSegments
+      type: common
+      /{childId}:
+        displayName: OneUserGroupSegment
+        type: common
+        put:
+          description: Add a segment to a user group.
+          body:
+            application/json:
+              schema: !include schemas/TODO.json
+        delete:
+          description: Remove a segment from a user group.
+    /countervalues:
+      displayName: UserGroupCounterValues
+      type: common
+      post:
+        description: Create a new counter value.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      get:
+        is: [fields, paginator, ordering]
+        description: Get a list of counter values fro a user group.
+        responses:
+          200:
+            body:
+              schema: !include schemas/TODO.json
+      /{childId}:
+        displayName: OneUserGroupCounterValue
+        type: common
+        get:
+          description: Get one counter value for a user group.
+          responses:
+            200:
+              body:
+                schema: !include schemas/TODO.json
+        put:
+          description: Update one counter value for a user group.
+          body:
+            application/json:
+              schema: !include schemas/TODO.json
+        delete:
+          description: Remove one counter value from a user group.
+      /doc:
+        displayName: OneUserGroupCounterValueDoc
+        type: common
+        get:
+          description: Get a pseudo schema showing quickly how to make a proper json for user group counter value.
+/doc:
+  displayName: UsersDoc
+  type: common
+  get:
+    description: Get a pseudo schema showing quickly how to make a proper json for users.
+/{id}:
+  displayName: OneUser
+  type: common
+  get:
+    description: Get one user by id.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+  put:
+    description: Update one user by id.
+    body:
+      application/json:
+        schema: !include schemas/TODO.json
+  delete:
+    description: Delete one user
+  /externalids:
+    displayName: UserExternalIds
+    type: common
+    post:
+      description: Create a new external id.
+      body:
+        application/json:
+          schema: !include schemas/TODO.json
+    get:
+      is: [fields, paginator, ordering]
+      description: Get a list of external ids.
+      responses:
+        200:
+          body:
+            schema: !include schemas/TODO.json
+    /{childId}:
+      displayName: OneUserExternalId
+      type: common
+      get:
+        description: Get one external id for a user.
+        responses:
+          200:
+            body:
+              schema: !include schemas/TODO.json
+      put:
+        description: Update one external id for a user.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      delete:
+        description: Delete one external id for a user.
+    /doc:
+      displayName: UserExternalIdsDoc
+      type: common
+      get:
+        description: Get a pseudo schema showing quickly how to make a proper json for user external ids.
+  /gainedachievements:
+    displayName: UserGainedAchievements
+    type: common
+    post:
+      description: Create a new gained achievement for a user.
+      body:
+        application/json:
+          schema: !include schemas/TODO.json
+    get:
+      is: [paginator, ordering, fields]
+      description: Get a list of gained achievements for a user.
+      responses:
+        200:
+          body:
+            schema: !include schemas/TODO.json
+    /{childId}:
+      displayName: OneUserGainedAchievement
+      type: common
+      get:
+        description: Get one user gained achievement.
+        responses:
+          200:
+            body:
+              schema: !include schemas/TODO.json
+      put:
+        description: Update one user gained achievement.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      delete:
+        description: Update one user gained achievement.
+    /doc:
+      displayName:  OneUserGainedAchievementsDoc
+      type: common
+      get:
+        description: Get a pseudo schema showing quickly how to make a proper json for user gained achievement.
+  /wongames:
+    displayName: UserWonGames
+    type: common
+    post:
+      description: Create a new won game for a user.
+      body:
+        application/json:
+          schema: !include schemas/TODO.json
+    get:
+      is: [paginator, ordering, fields]
+      description: Get a list of won games for a user.
+      responses:
+        200:
+          body:
+            schema: !include schemas/TODO.json
+    /{childId}:
+      displayName: OneUserWonGame
+      type: common
+      get:
+        description: Get one won game for a user.
+        responses:
+          200:
+            body:
+              schema: !include schemas/TODO.json
+      put:
+        description: Update one won game for a user.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      delete:
+        description: Delete one won game for a user.
+    /doc:
+      displayName: UserWonGamesDoc
+      type: common
+      get:
+        description: Get a pseudo schema showing quickly how to make a proper json for user won game.
+  /segments:
+    displayName: UserSegments
+    type: common
+    /{childId}:
+      displayName: OneUserSegment
+      type: common
+      put:
+        description: Add a segment to a user.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      delete:
+        description: Delete a segment from a user.
+  /countervalues:
+    displayName: UserCounterValues
+    type: common
+    post:
+      description: Create a new counter value for a user.
+      body:
+        application/json:
+          schema: !include schemas/TODO.json
+    get:
+      is: [paginator, fields, ordering]
+      description: Get a list of counter values for a user.
+      responses:
+        200:
+          body:
+            schema: !include schemas/TODO.json
+    /{childId}:
+      displayName: OneUserCounterValue
+      type: common
+      get:
+        description: Get one user counter value.
+        responses:
+          200:
+            body:
+              schema: !include schemas/TODO.json
+      put:
+        description: Update one user counter value.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      delete:
+        description: Delete one user counter value.
+    /doc:
+      displayName: UserCounterValueDoc
+      type: common
+      get:
+        description: Get a pseudo schema showing quickly how to make a proper json for user counter values.
+  /groups:
+    displayName: GroupUser
+    type: common
+    /{childId}:
+      displayName: OneGroupUser
+      type: common
+      put:
+        description: Add a group to user.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      delete:
+        description: Remove a group from user.
+  /customfields:
+    displayName: UserCustomFields
+    type: common
+    put:
+      description: Create a new custom field for user.
+      body:
+        application/json:
+          schema: !include schemas/TODO.json
+    /{key}:
+      displayName: UserCustomField
+      type: common
+      delete:
+        description: Delete a custom field by key.
+  /friends:
+    displayName: UserFriends
+    type: common
+    /{childId}:
+      displayName: OneUserFriend
+      type: common
+      put:
+        description: Add a friend to user.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      delete:
+        description: Remove a friend from user.

@@ -1,28 +1,18 @@
-displayName: CacheEvents
+displayName: Events
+type: common
 get:
   is: [ paginator, fields, ordering]
-  securedBy: [oauth_2_0]
   description: Get done events collection. 
   responses:
     200:
-      body: !include data/schemas/get_event_schema.raml   
-    500:
-      body: !include data/schemas/error_500_schema.raml
-    404:
-      body: !include data/schemas/error_other_schema.raml 
-    400:
-      body: !include data/schemas/error_other_schema.raml    
+      body: 
+        schema: !include schemas/event_schema.json    
 /{eventId}:
+  displayName: OneEvent
   get:
     is: [fields]
-    securedBy: [oauth_2_0]
     description: Get one done event. 
     responses:
       200:
-        body: !include data/schemas/get_event_schema.raml   
-      500:
-        body: !include data/schemas/error_500_schema.raml
-      404:
-        body: !include data/schemas/error_other_schema.raml 
-      400:
-        body: !include data/schemas/error_other_schema.raml
+        body: 
+          schema: !include schemas/event_schema.json   

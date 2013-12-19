@@ -1,0 +1,28 @@
+{
+   "$schema":"http://json-schema.org/draft-03/schema",
+   "description":"A representation of a user",
+   "type":"object",
+   "properties":{
+      "lb":{
+         "type":"array",
+         "items":{
+            "type":"object",
+            "properties":{
+               "sc":{
+                  "type":"integer",
+                  "required":true
+               },
+               "i":{
+                  "type":"integer",
+                  "required":true
+               },
+               "id":{
+                  "type":"integer",
+                  "required":true
+               }
+            }
+         },
+         "required":true
+      }
+   }
+}

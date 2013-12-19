@@ -1,72 +1,48 @@
-displayName: QueueEvents
+displayName: Events
+type: common
 get:
   is: [ paginator, fields, ordering]
-  securedBy: [oauth_2_0]
-  description: Get events for a client.
+  description: Get a list of events for a client.
   responses:
     200:
-      body: !include data/schemas/get_event_schema.raml
-    500:
-      body: !include data/schemas/error_500_schema.raml
-    404:
-      body: !include data/schemas/error_other_schema.raml 
-    400:
-      body: !include data/schemas/error_other_schema.raml
+      body:
+        schema: !include schemas/event_schema.json
 post:
-  is: [fields]
-  securedBy: [oauth_2_0]
   description: Create a new event.
   body:
-    application/json: !include data/schemas/post_event_schema.raml
+    application/json: 
+      schema: !include schemas/create_event_schema.json
   responses:
     201:
-      body: !include data/schemas/url_event_schema.raml
-    500:
-      body: !include data/schemas/error_500_schema.raml
-    404:
-      body: !include data/schemas/error_other_schema.raml
-    400:
-      body: !include data/schemas/error_other_schema.raml
+      body:
+        schema: !include schemas/url_event_schema.json
 /{eventId}:
+  type: common
+  displayName: OneEvent
   get:
     is: [ paginator, fields, ordering]
-    securedBy: [oauth_2_0]
     description: Get one event by Id for a client.
     responses:
       200:
-        body: !include data/schemas/get_event_schema.raml
-      500:
-        body: !include data/schemas/error_500_schema.raml
-      404:
-        body: !include data/schemas/error_other_schema.raml 
-      400:
-        body: !include data/schemas/error_other_schema.raml
+        body: 
+          schema: !include schemas/event_schema.json
 /error:
-  displayName: QueueErrorEvents
+  displayName: ErrorEvents
+  type: common
   get:
     is: [ paginator, fields, ordering]
-    securedBy: [oauth_2_0]
     description: Get error events for a client.
     responses:
       200:
-        body: !include data/schemas/get_event_schema.raml
-      500:
-        body: !include data/schemas/error_500_schema.raml
-      404:
-        body: !include data/schemas/error_other_schema.raml 
-      400:
-        body: !include data/schemas/error_other_schema.raml
+        body: 
+          schema: !include schemas/event_schema.json
   /{eventId}:
+    type: common
+    displayName: OneErrorEvent
     get:
       is: [ paginator, fields, ordering]
-      securedBy: [oauth_2_0]
-      description: Get one error event by Id for a client.
+      description: Get one error event by id for a client.
       responses:
         200:
-          body: !include data/schemas/get_event_schema.raml
-        500:
-          body: !include data/schemas/error_500_schema.raml
-        404:
-          body: !include data/schemas/error_other_schema.raml 
-        400:
-          body: !include data/schemas/error_other_schema.raml
+          body: 
+            schema: !include schemas/event_schema.json

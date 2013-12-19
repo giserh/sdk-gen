@@ -1,0 +1,49 @@
+displayName: TransactionTypes
+type: common
+post:
+  description: Add a transaction type.
+  body:
+    application/json:
+      schema: !include schemas/TODO.json
+get:
+  is: [fields, paginator, ordering]
+  description: Get a list of transaction types.
+  responses:
+    200:
+      body:
+        schema: !include schemas/TODO.json
+/doc:
+  displayName: TransactionTypesDocs
+  type: common
+  get:
+    description: Get a pseudo schema showing quickly how to make a proper json for transaction types.
+/{id}:
+  displayName: OneTransactionType
+  type: common
+  get:
+    is: [fields]
+    description: Get a transaction type.
+    responses:
+      200:
+        body:
+          schema: !include schemas/TODO.json
+  put:
+    description: Update a transaction type.
+    body:
+      application/json:
+        schema: !include schemas/TODO.json
+  delete:
+    description: Remove a transaction type.
+  /conditions:
+    displayName: TransactionTypesConditions
+    type: common
+    /{childId}:
+      displayName: OneTransactionTypesCondition
+      type: common
+      put:
+        description: Update a condition for transaction type.
+        body:
+          application/json:
+            schema: !include schemas/TODO.json
+      delete:
+        description: Delete a condition for transaction type.

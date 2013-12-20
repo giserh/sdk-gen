@@ -6,9 +6,11 @@ import java.nio.channels.FileChannel
 import java.io.File
 import java.util.Date
 
-
 class CodeWorkerException(message: String = null, cause: Throwable = null) extends Exception(message, cause)
 
+/**
+ * Class used to setup all the needed operations.
+ */
 class CodeWorker(context: Context) {
 
 	/**All operations need to be done in context of */
@@ -18,23 +20,26 @@ class CodeWorker(context: Context) {
 	var tmpDir: File = null
 	var outputDir: File = null
 
-	/** Prepare temporary and output directories */
-	prepareTmp()
-	prepareOutput()
+	def run() {
+		
+		/** Prepare temporary and output directories */
+		prepareTmp()
+		prepareOutput()
 
-	/**Invoke adapter*/
-	generator.generate(raml, resourcePath, context.baseUrl, tmpDir.getAbsolutePath())
+		/**Invoke adapter*/
+		generator.generate(raml, resourcePath, context.baseUrl, tmpDir.getAbsolutePath())
 
-	/**Copy tmp file to new output location*/
-	copyDir(tmpDir, outputDir)
-	copyDir(new File(context.includePath), outputDir)
-	/**Remove old files */
-	removeTmp()
-
+		/**Copy tmp file to new output location*/
+		copyDir(tmpDir, outputDir)
+		copyDir(new File(context.includePath), outputDir)
+		/**Remove old files */
+		removeTmp()
+	}
+	
 	private def copyDir(source: File, dest: File): Unit = {
-		
+
 		val files = source.listFiles();
-		
+
 		for { file <- files } {
 			if (file.isDirectory()) {
 				copyDir(file, new File(dest, file.getName()));
@@ -52,7 +57,7 @@ class CodeWorker(context: Context) {
 			destChannel = new FileOutputStream(dest).getChannel();
 			destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
 		} catch {
-			case e : Throwable => e.printStackTrace()
+			case e: Throwable => e.printStackTrace()
 		} finally {
 			sourceChannel.close();
 			destChannel.close();
@@ -94,17 +99,17 @@ class CodeWorker(context: Context) {
 	private def deleteDir(toDelete: File): Boolean = {
 		val files = toDelete.listFiles();
 		var deleted = true
-		
+
 		for { file <- files } {
 			if (file.isDirectory()) {
 				val ne = deleteDir(file)
-				if (!ne) deleted = false 
-				
+				if (!ne) deleted = false
+
 			} else {
 				val ne = deleteFile(file)
-				if (!ne) deleted = false 
+				if (!ne) deleted = false
 			}
-		}	
+		}
 		if (!toDelete.delete()) deleted = false
 		deleted
 	}

@@ -87,7 +87,7 @@ object Main {
 
 			/**Invoke code generator*/
 			var composer: CodeContext = new CodeContext()
-			composer.withBaseUrl(baseUrl)
+			val worker = composer.withBaseUrl(baseUrl)
 				.withGenerator(codeGenerator)
 				.withOutputDirectory(outputDirectory)
 				.withRaml(raml)
@@ -95,6 +95,8 @@ object Main {
 				.withTempDirectory(tempDirectory)
 				.withIncludePath(includePath)
 				.compose
+				
+			worker.run()
 
 		} else {
 			/**there are no parameters*/

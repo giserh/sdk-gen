@@ -11,7 +11,7 @@ include 'Connector.php';
 #end 
  */ 
  
-namespace IsaaCloudSDK;
+namespace IsaaCloud;
 #for (clazz<- classes)
 	${clazz}
 #end

@@ -9,7 +9,7 @@ import org.raml.model.SecurityReference
 import org.raml.model.Action
 
 /**
- * Object used to extract datat from raml objects and creating sdk packages.
+ * Object used to extract data from raml objects and creating sdk packages.
  */
 object Analyser {
 
@@ -24,17 +24,15 @@ object Analyser {
 		val mediaType = raml.getMediaType()
 		val securedBy = raml.getSecuredBy().get(0)
 
-		val pack = new Package(baseUri, mediaType, securedBy)
+		val oauth = raml.getSecuritySchemes().get(0).get("oauth_2_0").getSettings().get("baseUri").get(0)
+			
+		val pack = new Package(baseUri, mediaType, securedBy, oauth)
 
 		val version = raml.getVersion()
 		pack.addDoc("version", version)
 
 		val title = raml.getTitle()
-		pack.addDoc("title", title)
-		
-		val oauth = raml.getSecuritySchemes().get(0).get("oauth_2_0").getSettings().get("baseUri").get(0)
-		
-		pack.addDoc("baseOauthUri", oauth)
+		pack.addDoc("title", title)		
 		
 		
 		/* @TODO Should be logged*/
@@ -72,7 +70,7 @@ object Analyser {
 	 *  @param resourceUrl : url of the resource containing the methods in map
 	 *  @param resourceName : name of the resource containing the methods in map
 	 */
-	def createMethods(methods: java.util.Map[ActionType, Action], clazz: Clazz, resourceUrl : String, resourceName: String) {
+	private def createMethods(methods: java.util.Map[ActionType, Action], clazz: Clazz, resourceUrl : String, resourceName: String) {
 
 		/** We check each method*/
 		methods.asScala.foreach {
@@ -132,14 +130,14 @@ object Analyser {
 	/**
 	 * Analyses resources and adds it to Package class object
 	 * @param resourceTuple : tuple containing url of the resource and the resource class
-	 * @param pack : PAckage to add all the classes to
+	 * @param pack : Package to add all the classes to
 	 */
 	private def analyseResource(resourceTuple: (String, Resource), pack: Package) {
 
-		/* base uri*/
+		/*Base uri*/
 		val url = resourceTuple._2.getUri()
 		
-		/* actual resource*/
+		/*Actual resource*/
 		val resource = resourceTuple._2
 		
 		val methods = resource.getActions()
@@ -147,8 +145,8 @@ object Analyser {
 		
 		/** create a new clazz object*/
 		var clazz: Clazz = null
-		if (name != null) clazz = new Clazz(url, pack.baseUri, pack.docs("baseOauthUri"), pack.docs("version"), name)
-		else clazz = new Clazz(url,pack.baseUri, pack.docs("baseOauthUri"),pack.docs("version"))
+		if (name != null) clazz = new Clazz(url, pack.baseUri, pack.baseOauthUri, pack.docs("version"), name)
+		else clazz = new Clazz(url,pack.baseUri, pack.baseOauthUri, pack.docs("version"))
 
 		createMethods(methods, clazz , url ,name)
 

@@ -50,16 +50,22 @@ class Method(val restType: RestType.Value, val url: String, private var _name : 
 	 * Creates name from url
 	 */
 	private def createName(url: String): String = {
+		
+		val regexEnds = """\{[a-zA-Z0-9,]+\}$""".r
 		val regex = """\{[a-zA-Z0-9,]+\}""".r
-		val urlNew = regex.findFirstIn(url) match{
-			case Some(v) => "one" + regex.replaceAllIn(url, "") 
-			case None => url
-		}		
+		val urlNew = regexEnds.findFirstIn(url) match{
+			case Some(v) => "one" + regex.replaceAllIn(url, "#") 
+			case None => regex.replaceAllIn(url, "#") 
+		}				
 		
-		val names = urlNew.split("/").toList
+		def singularize(list : List[String], remove : Boolean) : String = list match{
+			case head::tail if (remove && head.endsWith("s")) => singularize(tail, false) +  head.substring(0,head.length()-1).toString().capitalize
+			case "#"::tail => singularize(tail,true)
+			case Nil => ""
+			case head::tail => singularize(tail, false) + head.capitalize 
+		}
+		singularize(urlNew.split("/").toList.reverse,false)
 		
-		
-		names.map { s => s.capitalize }.mkString("")
 	}
 	
 	private def addIdToQuery(){

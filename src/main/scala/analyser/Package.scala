@@ -10,7 +10,8 @@ import org.raml.model.SecurityReference
 class Package(
 	val baseUri: String,
 	val mediaType: String,
-	val securedBy: SecurityReference
+	val securedBy: SecurityReference,
+	val baseOauthUri : String
 ) {
 
 	private var _docs: Map[String, String] = Map()

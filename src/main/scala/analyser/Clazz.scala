@@ -18,11 +18,26 @@ class Clazz(val url: String, val baseUrl : String, val oauthUrl : String,val ver
 		_docs += (name -> description)
 	}
 	
+	/**
+	 * Creates name from url
+	 */
 	private def createName(url: String): String = {
+		
+		val regexEnds = """\{[a-zA-Z0-9,]+\}$""".r
 		val regex = """\{[a-zA-Z0-9,]+\}""".r
-		val urlNew = regex.replaceAllIn(url, "One")
-		 urlNew.split("/").toList.map { s => s.capitalize }.mkString("")		
-
+		val urlNew = regexEnds.findFirstIn(url) match{
+			case Some(v) => "one" + regex.replaceAllIn(url, "#") 
+			case None => regex.replaceAllIn(url, "#") 
+		}				
+		
+		def singularize(list : List[String], remove : Boolean) : String = list match{
+			case head::tail if (remove && head.endsWith("s")) => singularize(tail, false) +  head.substring(0,head.length()-1).toString().capitalize
+			case "#"::tail => singularize(tail,true)
+			case Nil => ""
+			case head::tail => singularize(tail, false) + head.capitalize 
+		}
+		singularize(urlNew.split("/").toList.reverse,false)
+		
 	}
 	
 	override def toString = name

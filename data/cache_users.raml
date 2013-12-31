@@ -78,13 +78,22 @@ get:
       body: 
         schema: !include schemas/segment_schema.json 
 /groups:
+  displayName: Groups
   type: common
-  displayName: UsersGroups
   get:
-    is: [fields, ordering, paginator]
-    securedBy: [oauth_2_0]
-    description: Get users' group list.
+    is: [ paginator, fields, ordering]
+    description: Get groups collection. 
     responses:
-     200:
-      body: 
-        schema: !include schemas/group_schema.json   
+      200:
+        body: 
+          schema: !include schemas/group_schema.json     
+  /{groupId}:
+    type: common
+    displayName: OneGroup
+    get:
+      is: [fields]
+      description: Get one group. 
+      responses:
+        200:
+          body: 
+            schema: !include schemas/group_schema.json  

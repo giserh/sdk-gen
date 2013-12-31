@@ -14,7 +14,10 @@ import org.mockito.Matchers._
 import analyser.Method
 import analyser.RestType
 import collection.JavaConverters._
+import org.scalatest.junit.JUnitRunner
+import org.junit.runner.RunWith
 
+@RunWith(classOf[JUnitRunner])
 class AnalyzerTest extends FunSuite with Matchers  with MockitoSugar {
 	
 val simpleRaml = 

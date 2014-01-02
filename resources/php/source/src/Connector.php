@@ -163,9 +163,10 @@ abstract class Connector {
          */
         $header = array(
             "Content-type" => $this->contentType,
-            "Authentication" => $this->getAuthentication()
+            "Authorization" => $this->getAuthentication()
         );
-
+	
+	
         if (in_array($method, array("GET", "DELETE"))) {
             $body = null;
         }
@@ -174,12 +175,14 @@ abstract class Connector {
          * Build url address to call
          */
         $url = $this->merge($this->baseApiUrl . $uri, $parameters);
-
+	
+	
         /**
          * Responder data object
          */
         $response = $this->curlIt($header, $method, $url, $body);
 
+	
         /**
          * Callback if was defined
          */
@@ -230,6 +233,7 @@ abstract class Connector {
      * @param array $body
      */
     public function curlIt(array $header, $method, $url, array $body = null) {
+	
         $curl = curl_init($url);
 
         /**
@@ -305,8 +309,8 @@ abstract class Connector {
     public function getAuthentication() {
 
         $cookieData = $this->getCookieData();
-        $token = "Barer xxx";
-
+        $token = "Bearer 6edcd1bd25e0b798ccc8523f7e3e9c5e";
+	
         if (is_array($cookieData) && $this->isValidCookieData($cookieData)) {
             $token = $this->buildTokenByCookie($cookieData);
         } else {

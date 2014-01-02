@@ -15,7 +15,7 @@ class ${className} extends Connector{
 
 	public function __construct($config)
     {
-        parent::__construct( "https://${baseUrl}", "https://${baseOauthUrl}", "${version}", $config);
+        parent::__construct( "http://${baseUrl}", "http://${baseOauthUrl}", "${version}", $config);
     }
 
 	#for (method<- methods)

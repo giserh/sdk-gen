@@ -13,5 +13,4 @@ $foo = new \IsaaCloud\Cache($config);
 
 $foo->getUsers();
 
-echo "Ended";
 ?>

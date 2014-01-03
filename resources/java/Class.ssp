@@ -1,13 +1,25 @@
+<% escapeMarkup = false %>
 <%@ var className:String %>
-<%@ var methodNames: List[String] %>
+<%@ var docs:Map[String,String] %>
+<%@ var methods: List[String] %>
+<%@ var baseUrl: String %>
+<%@ var baseOauthUrl: String %>
+<%@ var version: String %>
 
-class ${className}{
+/**
+#for(doc <- docs)
+* @${doc._1} ${doc._2}
+#end 
+ */ 
+class ${className} extends Connector{
 
-	#for (name <- methodNames)
-String ${name}() { 
-		return "";
- 	}
-	#end
- 
+	public ${className}(Map<String,String> config)
+    {
+        super( "http://${baseUrl}", "http://${baseOauthUrl}", "${version}", config);
+    }
+
+	#for (method<- methods)
+		${method}
+	#end 
  
  } 

@@ -10,6 +10,7 @@ import generator.CodeContext
 import generator.Generator
 import generator.PhpSDKGenerator
 import java.io.File
+import generator.JavaSDKGenerator
 
 object Main {
 
@@ -23,6 +24,7 @@ object Main {
 			case ("--generator" | "-g") :: value :: tail => value match {
 				/** @TODO add new generators */
 				case "php" => Map("generator" -> new PhpSDKGenerator) ++ nextOption(tail)
+				case "java" => Map("generator" -> new JavaSDKGenerator) ++ nextOption(tail)
 				case _ => throw new InvalidParameterException(s"Not found generator: $value")
 			}
 			case ("--output" | "-o") :: value :: tail => {
@@ -56,7 +58,7 @@ object Main {
 			/**Create options map*/
 			val options: Map[String, Any] = nextOption(args.toList)
 
-			if (!options.contains("generator")) throw new InvalidParameterException("Generator are not defined!")
+			if (!options.contains("generator")) throw new InvalidParameterException("Generator is not defined!")
 			if (!options.contains("output")) throw new InvalidParameterException("Output directory are not defined!")
 			if (!options.contains("raml")) throw new InvalidParameterException("RAML files are not defined!")
 
@@ -91,7 +93,7 @@ object Main {
 				.withGenerator(codeGenerator)
 				.withOutputDirectory(outputDirectory)
 				.withRaml(raml)
-				.withResourcePath(resourcePath)
+				.withResourcePath("resources/java")
 				.withTempDirectory(tempDirectory)
 				.withIncludePath(includePath)
 				.compose

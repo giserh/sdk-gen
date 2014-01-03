@@ -13,12 +13,12 @@
 public String ${methodName}( ${parameters.map(tuple => tuple._2 + " " + tuple._1 ).mkString(", ")} ) { 
 	Map<String,Object> array = new HashMap<String,Object>();
     #for(param <- parameters.filter(_._1 != "body"))
-	array.put("${param._1}",${param._1})
+	array.put("${param._1}",${param._1});
 	#end 
 	
 	#if (parameters.contains("body"))
   		return this.callService( "${url}", "${rtype}",  array , body);
 	#else
-		return this.callService( "${url}", "${rtype}",  array);
+		return this.callService( "${url}", "${rtype}",  array, null);
 	#end	
 	}

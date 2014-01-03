@@ -1,7 +1,7 @@
 <% escapeMarkup = false %>
 <%@ var classes: List[String] %>
 <%@ var docs: Map[String,String] %>
-package isaacloud
+package isaacloud;
 import java.util.Map;
 import java.util.HashMap;
 

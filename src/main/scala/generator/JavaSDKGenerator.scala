@@ -7,11 +7,44 @@ import org.fusesource.scalate.DefaultRenderContext
 import org.fusesource.scalate.TemplateEngine
 import analyser.Method
 import analyser.Package
+import org.raml.model.Raml
+import analyser.Analyser
+import java.io.File
 
 class JavaSDKGenerator extends SourceGenerator(".java"){
 	
 
 	val engine : TemplateEngine = new TemplateEngine
+	
+	/**
+	 * Creates the sdk based on Raml
+	 * @param raml - output from raml parser
+	 * @param resourcePath - path to templates
+	 * @param baseUrl - url to api
+	 * @param tempDirectory - temporary directory
+	 * @return whether SDK was generated
+	 */
+	override def generate(raml:Raml,resourcePath: String, baseUrl: String, tempDirectory: String): Boolean = {
+		val pack : Package = Analyser.analyseRaml(raml)
+		
+		val classes : List[(String,String)] = pack.clazzes.map{
+			clazz => (clazz.name,generateClass(clazz, resourcePath + "/Class.ssp", clazz.methods.map{
+				m => generateMethod(m, resourcePath + "/Method.ssp")
+				}))
+			}
+		
+		classes.foreach{
+			tpl => {
+				val dest = new PrintWriter(new File(tempDirectory + "/" + tpl._1 +".java"))
+				dest.print(tpl._2)
+				dest.flush()
+			}
+		}
+	
+		
+		
+		true
+	}
 	
 	/**
 	 * Generates the package for sdk based on a template for package in a language and previously generated classes 
@@ -63,6 +96,7 @@ class JavaSDKGenerator extends SourceGenerator(".java"){
 		result.toString()	
 	}
 	
+	
 	/**
 	 * Generates method based on method template
 	 * @param method - Method object representing the sdk method
@@ -70,6 +104,13 @@ class JavaSDKGenerator extends SourceGenerator(".java"){
 	 * @return generated method in a string
 	 */
 	override def generateMethod(method : Method, methodFile : String): String = {
+		
+		def nameChanger( name : String) : String = name match{
+			case "STRING" => "String"
+			case "NUMBER" => "Long"	
+			case other => other
+		}
+		
 		val templ = engine.load(methodFile)
 		
 		val result = new StringWriter()
@@ -77,7 +118,9 @@ class JavaSDKGenerator extends SourceGenerator(".java"){
 		val context = new DefaultRenderContext("/", engine, buffer)
 		
 		val tmp=method.query.map{tuple => tuple._1}.toList
-		context.attributes("parameters") = method.query
+		context.attributes("parameters") = method.query.map{
+			tpl => (tpl._1,nameChanger(tpl._2))
+		}
 		context.attributes("docs") = method.docs
 		context.attributes("methodName") = method.name
 		context.attributes("url") = method.url

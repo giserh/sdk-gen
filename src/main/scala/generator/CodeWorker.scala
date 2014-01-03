@@ -31,7 +31,8 @@ class CodeWorker(context: Context) {
 
 		/**Copy tmp file to new output location*/
 		copyDir(tmpDir, outputDir)
-		//copyDir(new File(context.includePath), outputDir)
+		
+		copyDir(new File(context.includePath), outputDir)
 		/**Remove old files */
 		removeTmp()
 	}

@@ -30,6 +30,9 @@ object Main {
 			case ("--output" | "-o") :: value :: tail => {
 				Map("output" -> value) ++ nextOption(tail)
 			}
+			case ("--resources" | "-r") :: value :: tail => {
+				Map("resources" -> value) ++ nextOption(tail)
+			}
 			case ("--include" | "-i") :: value :: tail => {
 				Map("include" -> value) ++ nextOption(tail)
 			}
@@ -59,7 +62,7 @@ object Main {
 			val options: Map[String, Any] = nextOption(args.toList)
 
 			if (!options.contains("generator")) throw new InvalidParameterException("Generator is not defined!")
-			if (!options.contains("output")) throw new InvalidParameterException("Output directory are not defined!")
+			if (!options.contains("output")) throw new InvalidParameterException("Output directory is not defined!")
 			if (!options.contains("raml")) throw new InvalidParameterException("RAML files are not defined!")
 
 			/**from command line -g --generator, -o --output raml */
@@ -78,10 +81,14 @@ object Main {
 
 			/** Get data from configuration*/
 			val baseUrl = application.getString("baseUrl")
-			val resourcePath = application.getString("resourcePath")
+			var resourcePath = application.getString("resourcePath")
+			
+			if( options.contains("resources") )
+				resourcePath = options("resources").asInstanceOf[String]
+			
 			val tempDirectory = application.getString("tempDirectory")
 
-			var includePath = resourcePath + "/include"
+			var includePath = resourcePath + "/source"
 			if( options.contains("include") )
 				includePath = options("include").asInstanceOf[String]
 			
@@ -93,7 +100,7 @@ object Main {
 				.withGenerator(codeGenerator)
 				.withOutputDirectory(outputDirectory)
 				.withRaml(raml)
-				.withResourcePath("resources/java")
+				.withResourcePath(resourcePath)
 				.withTempDirectory(tempDirectory)
 				.withIncludePath(includePath)
 				.compose

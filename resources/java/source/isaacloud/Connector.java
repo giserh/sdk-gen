@@ -51,7 +51,7 @@ public class Connector {
 	 */
 	public Connector(String baseUrl, String oauthUrl, String version,
 			Map<String, String> config) {
-		this.baseUrl=baseUrl;
+		this.baseUrl=baseUrl; 
 		this.oauthUrl=oauthUrl;
 		this.setVersion(version);
 
@@ -59,13 +59,13 @@ public class Connector {
 			this.clientId = config.get("clientId");
 
 		} else {
-			System.out.println("You did not set clientId");
+			System.out.println("Did not define clientId");
 		}
 
 		if (config.containsKey("secret")) {
 			this.clientSecret = config.get("secret");
 		} else {
-			System.out.println("You did not set secret");
+			System.out.println("Did not define secret");
 		}
 
 	}
@@ -148,9 +148,8 @@ public class Connector {
 	 * @throws IOException
 	 * @throws ClientProtocolException
 	 */
-	public String invokeMethod(String methodName, String uri,
-			Map<String, Object> parameters, String body)
-			throws ClientProtocolException, IOException, Exception {
+	public String callService(String uri, String methodName,
+			Map<String, Object> parameters, String body){
 
 		String wholeUri = this.baseUrl + uri;
 
@@ -172,23 +171,22 @@ public class Connector {
 		if (!parameters.isEmpty())
 			wholeUri = wholeUri + "?";
 		for (Entry<String, Object> entry : parameters.entrySet()) {
-			wholeUri = wholeUri + entry.getKey() + "=" + entry.getValue();
+			if(entry.getValue() != null) wholeUri = wholeUri + entry.getKey() + "=" + entry.getValue();
 		}
 
 		HttpUriRequest method = null;
-
-		if ("GET".equals(methodName)) {
+		if ("get".equals(methodName)) {
 			method = new HttpGet(wholeUri);
-		} else if ("DELETE".equals(methodName)) {
+		} else if ("delete".equals(methodName)) {
 			method = new HttpDelete(wholeUri);
-		} else if ("PUT".equals(methodName)) {
+		} else if ("put".equals(methodName)) {
 			method = new HttpPut(wholeUri);
-		} else if ("POST".equals(methodName)) {
+		} else if ("post".equals(methodName)) {
 			method = new HttpPost(wholeUri);
-		} else if ("PATCH".equals(methodName)) {
+		} else if ("patch".equals(methodName)) {
 			method = new HttpPatch(wholeUri);
 		} else
-			throw new Exception("Method not supported");
+			return "Method not supported";
 
 		method.addHeader("Authorization", this.getAuthentication());
 		method.addHeader("Content-Type", "application/json charset=utf-8");

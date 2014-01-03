@@ -102,7 +102,7 @@ object Analyser {
 							
 						}
 						/** Just to show that we use body */
-						m.addQueryParameter("body", "body")
+						m.addQueryParameter("body", "STRING")
 						m.addDoc("body", gatherBodyTypes.mkString("\n OR "))
 					}
 					

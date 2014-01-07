@@ -35,12 +35,13 @@ import org.json.JSONObject;
 public class Connector {
 
 	private String baseUrl;
-	private String oauthUrl;
 	private String version;
-	private String clientId;
-	private String clientSecret;
-	private long currentTokenTime = new Date().getTime();
-	private String currentToken = "";
+	
+	private static String oauthUrl;
+	private static String clientId;
+	private static String clientSecret;
+	private static long currentTokenTime = new Date().getTime()-1;
+	private static String currentToken = "";
 
 	/**
 	 * 
@@ -52,18 +53,18 @@ public class Connector {
 	public Connector(String baseUrl, String oauthUrl, String version,
 			Map<String, String> config) {
 		this.baseUrl=baseUrl; 
-		this.oauthUrl=oauthUrl;
+		Connector.oauthUrl=oauthUrl;
 		this.setVersion(version);
 
 		if (config.containsKey("clientId")) {
-			this.clientId = config.get("clientId");
+			Connector.clientId = config.get("clientId");
 
 		} else {
 			System.out.println("Did not define clientId");
 		}
 
 		if (config.containsKey("secret")) {
-			this.clientSecret = config.get("secret");
+			Connector.clientSecret = config.get("secret");
 		} else {
 			System.out.println("Did not define secret");
 		}
@@ -77,18 +78,18 @@ public class Connector {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	private String getAuthentication() {
+	protected static String getAuthentication() {
 		// Check the time
 		long currentTime = new Date().getTime();
 
-		if (currentTime > this.currentTokenTime) {
+		if (currentTime > Connector.currentTokenTime) {
 
-			HttpPost method = new HttpPost(this.oauthUrl + "/token");
+			HttpPost method = new HttpPost(Connector.oauthUrl + "/token");
 			method.addHeader(
 					"Authorization",
 					"Basic "
-							+ new String(Base64.encodeBase64((this.clientId
-									+ ":" + this.clientSecret).getBytes())));
+							+ new String(Base64.encodeBase64((Connector.clientId
+									+ ":" + Connector.clientSecret).getBytes())));
 
 			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 			urlParameters.add(new BasicNameValuePair("grant_type",
@@ -99,10 +100,33 @@ public class Connector {
 				e.printStackTrace();
 			}
 
-			String result = makeRequest(method);
-			JSONObject obj = new JSONObject(result);
+			CloseableHttpClient client = HttpClients.createDefault();
+			
+			StringBuffer result = new StringBuffer();
+			
+			try {
 
-			this.currentToken = obj.get("access_token").toString();
+				CloseableHttpResponse response = client.execute(method);
+
+				HttpEntity entity1 = response.getEntity();
+
+				BufferedReader rd = new BufferedReader(new InputStreamReader(
+						entity1.getContent()));
+
+				String line = "";
+				while ((line = rd.readLine()) != null) {
+					result.append(line);
+				}
+
+				EntityUtils.consume(entity1);
+				response.close();
+			} catch (Exception e) {
+				// log
+			}
+
+			JSONObject obj = new JSONObject(result.toString());
+
+			Connector.currentToken = obj.get("access_token").toString();
 		}
 		return "Bearer " + currentToken;
 	}
@@ -188,7 +212,7 @@ public class Connector {
 		} else
 			return "Method not supported";
 
-		method.addHeader("Authorization", this.getAuthentication());
+		method.addHeader("Authorization", Connector.getAuthentication());
 		method.addHeader("Content-Type", "application/json charset=utf-8");
 
 		if (body != null) {

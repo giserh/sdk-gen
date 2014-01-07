@@ -54,19 +54,7 @@ class JavaSDKGenerator extends SourceGenerator(".java"){
 	 * @return generated package in a string
 	 */
 	override def generatePackage(pack : Package, packageFile : String, clazzes : List[String]) : String ={
-		val templ = engine.load(packageFile)
-		
-		val result = new StringWriter()
-		val buffer = new PrintWriter(result)
-		val context = new DefaultRenderContext("/", engine, buffer)
-		
-		context.attributes("classes") = clazzes
-		context.attributes("docs") = pack.docs
-		
-		templ.render(context)
-		
-		buffer.flush()
-		result.toString()	
+		""
 	}
 	
 	/**

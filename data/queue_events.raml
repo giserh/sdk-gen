@@ -20,7 +20,6 @@ post:
   type: common
   displayName: OneEvent
   get:
-    is: [ paginator, fields, ordering]
     description: Get one event by Id for a client.
     responses:
       200:
@@ -40,7 +39,6 @@ post:
     type: common
     displayName: OneErrorEvent
     get:
-      is: [ paginator, fields, ordering]
       description: Get one error event by id for a client.
       responses:
         200:

@@ -32,16 +32,12 @@ public class Queue extends Connector{
 * fields - The fields we want to show in our result
 * limit - Starting position
  */ 
-public String patchOneErrorNotification( String notificationId, long offset, String order, String fields, long limit ) { 
+public String patchOneErrorNotification( String notificationId, String fields ) { 
 	Map<String,Object> array = new HashMap<String,Object>();
     	array.put("notificationId",notificationId);
-		array.put("offset",offset);
-		array.put("order",order);
 		array.put("fields",fields);
-		array.put("limit",limit);
-		
 	
-		return this.callService( "/queue/notifications/error/{notificationId}", "patch",  array, null);
+		return this.callService( "/queues/notifications/error/{notificationId}", "patch",  array, null);
 		}
 
 			/**
@@ -108,16 +104,13 @@ public String patchOneErrorNotification( String notificationId, long offset, Str
 * fields - The fields we want to show in our result
 * limit - Starting position
  */ 
-public String getOneErrorNotification( String notificationId, long offset, String order, String fields, long limit ) { 
+public String getOneErrorNotification( String notificationId, String fields ) { 
 	Map<String,Object> array = new HashMap<String,Object>();
     	array.put("notificationId",notificationId);
-		array.put("offset",offset);
-		array.put("order",order);
 		array.put("fields",fields);
-		array.put("limit",limit);
 		
 	
-		return this.callService( "/queue/notifications/error/{notificationId}", "get",  array, null);
+		return this.callService( "/queues/notifications/error/{notificationId}", "get",  array, null);
 		}
 
 			/**
@@ -192,7 +185,7 @@ public String getErrorNotifications( long offset, long limit, String fields, Str
 		array.put("order",order);
 		
 	
-		return this.callService( "/queue/notifications/error", "get",  array, null);
+		return this.callService( "/queues/notifications/error", "get",  array, null);
 		}
 
 			/**
@@ -215,16 +208,12 @@ public String getErrorNotifications( long offset, long limit, String fields, Str
 * fields - The fields we want to show in our result
 * limit - Starting position
  */ 
-public String patchOneNotification( String notificationId, long offset, String order, String fields, long limit ) { 
+public String patchOneNotification( String notificationId,String fields ) { 
 	Map<String,Object> array = new HashMap<String,Object>();
     	array.put("notificationId",notificationId);
-		array.put("offset",offset);
-		array.put("order",order);
 		array.put("fields",fields);
-		array.put("limit",limit);
-		
 	
-		return this.callService( "/queue/notifications/{notificationId}", "patch",  array, null);
+		return this.callService( "/queues/notifications/{notificationId}", "patch",  array, null);
 		}
 
 			/**
@@ -291,16 +280,13 @@ public String patchOneNotification( String notificationId, long offset, String o
 * fields - The fields we want to show in our result
 * limit - Starting position
  */ 
-public String getOneNotification( String notificationId, long offset, String order, String fields, long limit ) { 
+public String getOneNotification( String notificationId, String fields ) { 
 	Map<String,Object> array = new HashMap<String,Object>();
     	array.put("notificationId",notificationId);
-		array.put("offset",offset);
-		array.put("order",order);
 		array.put("fields",fields);
-		array.put("limit",limit);
 		
 	
-		return this.callService( "/queue/notifications/{notificationId}", "get",  array, null);
+		return this.callService( "/queues/notifications/{notificationId}", "get",  array, null);
 		}
 
 			/**
@@ -375,7 +361,7 @@ public String getNotifications( long offset, long limit, String fields, String o
 		array.put("order",order);
 		
 	
-		return this.callService( "/queue/notifications", "get",  array, null);
+		return this.callService( "/queues/notifications", "get",  array, null);
 		}
 
 			/**
@@ -446,16 +432,12 @@ public String getNotifications( long offset, long limit, String fields, String o
 * fields - The fields we want to show in our result
 * limit - Starting position
  */ 
-public String getOneEvent( String eventId, long offset, String order, String fields, long limit ) { 
+public String getOneEvent( String eventId) { 
 	Map<String,Object> array = new HashMap<String,Object>();
     	array.put("eventId",eventId);
-		array.put("offset",offset);
-		array.put("order",order);
-		array.put("fields",fields);
-		array.put("limit",limit);
 		
 	
-		return this.callService( "/queue/events/{eventId}", "get",  array, null);
+		return this.callService( "/queues/events/{eventId}", "get",  array, null);
 		}
 
 			/**
@@ -535,7 +517,7 @@ public String getOneErrorEvent( String eventId, long offset, String order, Strin
 		array.put("limit",limit);
 		
 	
-		return this.callService( "/queue/events/error/{eventId}", "get",  array, null);
+		return this.callService( "/queues/events/error/{eventId}", "get",  array, null);
 		}
 
 			/**
@@ -614,7 +596,7 @@ public String getErrorEvents( long offset, long limit, String fields, String ord
 		array.put("order",order);
 		
 	
-		return this.callService( "/queue/events/error", "get",  array, null);
+		return this.callService( "/queues/events/error", "get",  array, null);
 		}
 
 			/**
@@ -667,7 +649,7 @@ public String postEvents( String body ) {
 	Map<String,Object> array = new HashMap<String,Object>();
     	
 	
-  		return this.callService( "/queue/events", "post",  array , body);
+  		return this.callService( "/queues/events", "post",  array , body);
 		}
 
 			/**
@@ -746,7 +728,7 @@ public String getEvents( long offset, long limit, String fields, String order ) 
 		array.put("order",order);
 		
 	
-		return this.callService( "/queue/events", "get",  array, null);
+		return this.callService( "/queues/events", "get",  array, null);
 		}
 
 	 

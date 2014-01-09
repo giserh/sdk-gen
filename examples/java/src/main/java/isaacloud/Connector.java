@@ -194,10 +194,10 @@ public class Connector {
 			}
 		}
 
-		if (!parameters.isEmpty())
-			wholeUri = wholeUri + "?";
+		String and="?";
 		for (Entry<String, Object> entry : parameters.entrySet()) {
-			if(entry.getValue() != null) wholeUri = wholeUri + entry.getKey() + "=" + entry.getValue();
+			if(entry.getValue() != null) wholeUri = wholeUri +and+ entry.getKey() + "=" + entry.getValue();
+			and ="&";
 		}
 
 		HttpUriRequest method = null;
@@ -215,9 +215,10 @@ public class Connector {
 			return "Method not supported";
 
 		method.addHeader("Authorization", Connector.getAuthentication());
-		method.addHeader("Content-Type", "application/json charset=utf-8");
-
+		
 		if (body != null) {
+			method.addHeader("Content-Type", "application/json charset=utf-8");
+
 			((HttpEntityEnclosingRequestBase) method)
 					.setEntity(new StringEntity(body,
 							ContentType.APPLICATION_JSON));

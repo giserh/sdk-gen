@@ -25,6 +25,7 @@ object Build extends Build {
           "-encoding", "utf8",
           "-Ywarn-adapted-args"))
 
+
   lazy val root = Project("root",
     file("."),
     settings = defaultSettings ++ Seq(
@@ -35,7 +36,9 @@ object Build extends Build {
         "junit" % "junit" % "4.11",
         "org.scalatest" % "scalatest_2.10" % "2.0",
         "com.typesafe" % "config" % "1.0.2",
-        "com.github.scopt" %% "scopt" % "3.2.0"
+        "com.github.scopt" %% "scopt" % "3.2.0",
+        "org.apache.httpcomponents" % "httpclient" % "4.3.1",
+        "org.json" % "json" % "20131018"
         )))
     .dependsOn(raml)
 

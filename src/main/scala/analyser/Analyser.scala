@@ -118,7 +118,7 @@ object Analyser {
 								gatherReturn = response._1 + " : " + typeSchema :: gatherReturn 
 							}
 						}
-						m.addDoc("return value", gatherReturn.mkString("\n* OR "),DocType.RETURN)
+						m.addDoc("return value", gatherReturn.mkString("\n* or "),DocType.RETURN)
 					}	
 					
 										

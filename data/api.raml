@@ -69,37 +69,37 @@ traits:
  - paginator:
     queryParameters:
      offset:
-      description: Number of returning items
+      description: Number of returned items.
       type: number
       minLength: 1
      limit:
-      description: Starting position
+      description: Starting position.
       type: number
       minLength: 1
  - groups:
     queryParameters:
      groups:
-      description: The groups we want to narrow down our search to
+      description: The groups we want to narrow down our search to.
       type: string
-      example: 1,2,4,5
+      example: "1,2,4,5"
  - segments:
     queryParameters:
      segments:
       description: The segments we want to narrow down our search to.
       type: string
-      example: 1,2,4,5
+      example: "1,2,4,5"
  - fields:
     queryParameters:
      fields:
-      description: The fields we want to show in our result
+      description: The fields we want to show in our result.
       type: string
-      example: id,name,description
+      example: "id,name,description"
  - ordering:
     queryParameters:
      order:
       description: The fields we want to order by and the type of ordering.
       type: string
-      example: "id,name,description"
+      example: "id:DESC"
 /queues:
   displayName: Queue
   /events: !include queue_events.raml

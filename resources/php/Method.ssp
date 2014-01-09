@@ -5,7 +5,7 @@
 <%@ var url : String %>
 <%@ var rtype : String %>
 /**
-* Accessible at url : ${url}
+* Accessible at url : ${url}. 
 #for(doc <- docs)
 * ${doc._1} ${doc._2}
 #end 

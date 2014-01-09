@@ -10,6 +10,7 @@ import analyser.Package
 import org.raml.model.Raml
 import analyser.Analyser
 import java.io.File
+import analyser.DocType
 
 class JavaSDKGenerator extends SourceGenerator(".java"){
 	
@@ -109,7 +110,16 @@ class JavaSDKGenerator extends SourceGenerator(".java"){
 		context.attributes("parameters") = method.query.map{
 			tpl => (tpl._1,nameChanger(tpl._2))
 		}
-		context.attributes("docs") = method.docs
+		context.attributes("docs") = method.docs.map{
+			tpl =>{
+				val attr = tpl._2
+				if (attr._1 == DocType.OTHER){
+					(tpl._1,attr._2)
+				}else{
+					("@"+attr._1+" "+tpl._1,attr._2)
+				}
+			}
+		}
 		context.attributes("methodName") = method.name
 		context.attributes("url") = method.url
 		context.attributes("rtype") = method.restType.toString()

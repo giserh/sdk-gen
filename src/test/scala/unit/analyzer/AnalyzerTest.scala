@@ -108,7 +108,7 @@ traits:
 	  val meth = clazz.methods(0)
 	  assert(meth.restType == RestType.GET)
 	  assert(meth.url == "/queue/events")
-	  assert(meth.docs("").contains("Get events for a client"))
+	  assert(meth.docs("")._2.contains("Get events for a client"))
 	  assert(meth.query.contains("fields"))
 	  assert(meth.query.contains("limit"))
 	  assert(meth.query.contains("offset"))

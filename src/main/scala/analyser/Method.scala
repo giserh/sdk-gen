@@ -3,7 +3,9 @@ package analyser
 import org.raml.model.SecurityReference
 import org.raml.model.parameter.QueryParameter
 
-
+/**
+ * Type of REST method.
+ */
 object RestType extends Enumeration {
     val PUT = Value("put")
     val POST = Value("post")
@@ -15,18 +17,35 @@ object RestType extends Enumeration {
     val HEAD = Value("head")
   }
 
+/**
+ * Represents the type of documentation
+ */
+object DocType extends Enumeration {
+    val PARAM = Value("param")
+    val RETURN = Value("return")
+    val OTHER = Value("")
+  }
+
+/**
+ * Represents a method to be generated.
+ */
 class Method(val restType: RestType.Value, val url: String, private var _name : String = null, val securedBy : List[SecurityReference]) {
 
+	// Create a simple name
 	if (_name == null) _name = restType + createName(url)
 	else _name = restType.toString() + _name	
 	
-	private var _docs: Map[String, String] = Map()
+	// Documents representing description of the method.
+	private var _docs: Map[String, (DocType.Value,String)] = Map()
+	// Optional body to be sent with the request.
 	private var _body: Option[String] = None
+	// All needed query parameters
 	private var _query: Map[String, String] = Map()
 
+	// check url for ids and then add to query parameters
 	addIdToQuery()
 	
-	def name = _name
+	def name = _name	
 	def query = _query
 	def body = _body
 	def body_= (value:String): Unit = _body = Some(value)
@@ -35,8 +54,9 @@ class Method(val restType: RestType.Value, val url: String, private var _name : 
 	/**
 	 * Add documentation to method.
 	 */
-	def addDoc(name: String, description: String) {
-		_docs += (name -> description)
+	def addDoc(docName: String, description: String, docType : DocType.Value ) {
+		val add = (docType, description)
+		_docs += ( docName -> add)
 	}
 
 	/**
@@ -86,7 +106,7 @@ class Method(val restType: RestType.Value, val url: String, private var _name : 
 		
 		traits.foreach{
 			param => addQueryParameter(param._1 , param._2.getType().toString)
-			addDoc(param._1 , "- " + param._2.getDescription())
+			addDoc(param._1 ,  param._2.getDescription(),DocType.PARAM)
 		}			
 
 	}

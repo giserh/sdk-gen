@@ -25,7 +25,7 @@ class PhpGeneratorTest extends FunSuite {
 		val generator = new PhpSDKGenerator
 		val ret = generator.generateClass(new Clazz("/events", "api.isaacloud.com", "oauth.isaacloud.com", "0.1", "Events"), "resources/php/Class.ssp", List())
 		assert(ret.contains("public function __construct($config)"))
-		assert(ret.contains("""parent::__construct( "https://api.isaacloud.com", "https://oauth.isaacloud.com", "0.1", $config);"""))
+		assert(ret.contains("""parent::__construct( "http://api.isaacloud.com", "http://oauth.isaacloud.com", "0.1", $config);"""))
 	}
 
 	test("generate package") {

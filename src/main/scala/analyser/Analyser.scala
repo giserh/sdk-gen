@@ -86,7 +86,7 @@ object Analyser {
 					m.setupTraits(action.getQueryParameters().asScala.toMap)
 					
 					/** Add basic doc */
-					m.addDoc("", action.getDescription()) 
+					m.addDoc("", action.getDescription(),DocType.OTHER) 
 					
 					
 					/** Analyse the possible values for body **/
@@ -103,7 +103,7 @@ object Analyser {
 						}
 						/** Just to show that we use body */
 						m.addQueryParameter("body", "STRING")
-						m.addDoc("body", gatherBodyTypes.mkString("\n OR "))
+						m.addDoc("body", gatherBodyTypes.mkString("\n OR "),DocType.PARAM)
 					}
 					
 					/** Analyse the possible values for responses **/
@@ -118,7 +118,7 @@ object Analyser {
 								gatherReturn = response._1 + " : " + typeSchema :: gatherReturn 
 							}
 						}
-						m.addDoc("@return", gatherReturn.mkString("\n* OR "))
+						m.addDoc("return value", gatherReturn.mkString("\n* OR "),DocType.RETURN)
 					}	
 					
 										

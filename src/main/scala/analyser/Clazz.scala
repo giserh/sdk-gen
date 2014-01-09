@@ -1,7 +1,11 @@
 package analyser
 
+/**
+ * Class containing all needed information to create a class.
+ */
 class Clazz(val url: String, val baseUrl : String, val oauthUrl : String,val version : String, private var _name : String = null) {
 
+	//create a name for generated class
 	if (_name == null) _name = createName(url)
 	private var _methods : List[Method] = List()
 	private var _docs: Map[String,String] = Map()

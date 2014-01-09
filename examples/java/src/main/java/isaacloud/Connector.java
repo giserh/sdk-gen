@@ -36,11 +36,11 @@ public class Connector {
 
 	private String baseUrl;
 	private String version;
-	
+
 	private static String oauthUrl;
 	private static String clientId;
 	private static String clientSecret;
-	private static long currentTokenTime = new Date().getTime()-1;
+	private static long currentTokenTime = new Date().getTime() - 1;
 	private static String currentToken = "";
 
 	/**
@@ -52,8 +52,8 @@ public class Connector {
 	 */
 	public Connector(String baseUrl, String oauthUrl, String version,
 			Map<String, String> config) {
-		this.baseUrl=baseUrl; 
-		Connector.oauthUrl=oauthUrl;
+		this.baseUrl = baseUrl;
+		Connector.oauthUrl = oauthUrl;
 		this.setVersion(version);
 
 		if (config.containsKey("clientId")) {
@@ -90,8 +90,10 @@ public class Connector {
 			method.addHeader(
 					"Authorization",
 					"Basic "
-							+ new String(Base64.encodeBase64((Connector.clientId
-									+ ":" + Connector.clientSecret).getBytes())));
+							+ new String(
+									Base64.encodeBase64((Connector.clientId
+											+ ":" + Connector.clientSecret)
+											.getBytes())));
 
 			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 			urlParameters.add(new BasicNameValuePair("grant_type",
@@ -103,9 +105,9 @@ public class Connector {
 			}
 
 			CloseableHttpClient client = HttpClients.createDefault();
-			
+
 			StringBuffer result = new StringBuffer();
-			
+
 			try {
 
 				CloseableHttpResponse response = client.execute(method);
@@ -135,6 +137,7 @@ public class Connector {
 
 	/**
 	 * Make a request and write the string
+	 * 
 	 * @param method
 	 * @return
 	 */
@@ -175,7 +178,7 @@ public class Connector {
 	 * @throws ClientProtocolException
 	 */
 	public String callService(String uri, String methodName,
-			Map<String, Object> parameters, String body){
+			Map<String, Object> parameters, String body) {
 
 		String wholeUri = this.baseUrl + uri;
 
@@ -194,10 +197,12 @@ public class Connector {
 			}
 		}
 
-		String and="?";
+		String and = "?";
 		for (Entry<String, Object> entry : parameters.entrySet()) {
-			if(entry.getValue() != null) wholeUri = wholeUri +and+ entry.getKey() + "=" + entry.getValue();
-			and ="&";
+			if (entry.getValue() != null)
+				wholeUri = wholeUri + and + entry.getKey() + "="
+						+ entry.getValue();
+			and = "&";
 		}
 
 		HttpUriRequest method = null;
@@ -215,7 +220,7 @@ public class Connector {
 			return "Method not supported";
 
 		method.addHeader("Authorization", Connector.getAuthentication());
-		
+
 		if (body != null) {
 			method.addHeader("Content-Type", "application/json charset=utf-8");
 
@@ -236,6 +241,5 @@ public class Connector {
 	public void setVersion(String version) {
 		this.version = version;
 	}
-	
 
 }

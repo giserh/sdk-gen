@@ -4,14 +4,14 @@ post:
   description: Create new achievement. 
   body:
     application/json: 
-      schema: !include schemas/achievement_schema.json
+      schema: !include schemas/admin_achievement_schema.json
 get:
   is: [fields, ordering, segments, groups, paginator]
   description: Get a list of achievements.
   responses:
       200:
         body: 
-          schema: !include schemas/achievements_list.json  
+          schema: !include schemas/admin_achievement_schema.json
 /{achievementId}:
   type : common
   displayName: OneAchievement
@@ -21,12 +21,12 @@ get:
     responses:
       200:
         body: 
-          schema: !include schemas/achievement_schema.json
+          schema: !include schemas/admin_achievement_schema.json
   put:    
     description: Update one achievement. 
     body:
       application/json: 
-        schema: !include schemas/achievement_schema.json
+        schema: !include schemas/admin_achievement_schema.json
   delete:
     description: Delete one achievement. 
   /segments:
@@ -46,14 +46,14 @@ get:
     description: Create new category. 
     body:
       application/json: 
-        schema: !include schemas/category.json
+        schema: !include schemas/category_schema.json
   get:
     description: Get list of categories.
     is: [fields, ordering, paginator]
     responses:
       200:
         body:
-          schema: !include schemas/category_list.json
+          schema: !include schemas/category_schema.json
   /doc:
     type: common
     displayName: AchievementsCategoriesDoc    
@@ -67,12 +67,12 @@ get:
       responses:
         200:
           body:
-            schema: !include schemas/category.json
+            schema: !include schemas/category_schema.json
     put:
       description: Update achievement category. 
       body:
         application/json: 
-          schema: !include schemas/category.json
+          schema: !include schemas/category_schema.json
     delete:
       description: Delete one achievements category.
     /achievements:
@@ -92,14 +92,14 @@ get:
     description: Create new achievement group.
     body:
       application/json: 
-        schema: !include schemas/achievement_group.json
+        schema: !include schemas/achievement_group_schema.json
   get:
     description: Get a list achievement groups. 
     is: [fields, ordering, paginator]
     responses:
         200:
           body:
-            schema: !include schemas/achievement_group_list.json
+            schema: !include schemas/achievement_group_schema.json
   /doc:
     type: common
     displayName: AchievementsGroupsDoc
@@ -114,12 +114,12 @@ get:
       responses:
         200:
           body:
-            schema: !include schemas/achievement_group_list.json
+            schema: !include schemas/achievement_group_schema.json
     put:
       description: Update an achievement group.
       body:
         application/json: 
-          schema: !include schemas/achievement_group.json
+          schema: !include schemas/achievement_group_schema.json
     delete:
       description: Delete an achievement group.
     /achievements:
@@ -139,14 +139,14 @@ get:
     description: Create new achievement progress.
     body:
       application/json: 
-        schema: !include schemas/achievement_progress.json
+        schema: !include schemas/achievement_progress_schema.json
   get:
     description: Get achievement progress list. 
     is: [fields, ordering, paginator]
     responses:
         200:
           body:
-            schema: !include schemas/achievement_progress_list.json
+            schema: !include schemas/achievement_progress_schema.json
   /doc:
     type: common
     displayName: AchievementsProgressesDoc
@@ -161,11 +161,11 @@ get:
       responses:
         200:
           body:
-            schema: !include schemas/achievement_progress_list.json
+            schema: !include schemas/achievement_progress_schema.json
     put:
       description: Update an achievement progress.
       body:
         application/json: 
-          schema: !include schemas/achievement_progress.json
+          schema: !include schemas/achievement_progress_schema.json
     delete:
       description: Delete an achievement progress.

@@ -1,20 +1,8 @@
 {
    "$schema":"http://json-schema.org/draft-03/schema",
-   "description":"A representation of a segment",
+   "description":"A representation of a transaction source",
    "type":"object",
    "properties":{
-      "id":{
-         "required":false,
-         "type":"integer"
-      },
-      "createdAt":{
-         "required":false,
-         "type":"integer"
-      },
-      "updatedAt":{
-         "required":false,
-         "type":"integer"
-      },
       "name":{
          "required":false,
          "type":"string"
@@ -23,9 +11,13 @@
          "required":false,
          "type":"string"
       },
-      "status":{
+      "endpoint":{
          "required":false,
          "type":"string"
+      },
+      "functions":{
+         "required":false,
+         "type":"id_array"
       }
    }
 }

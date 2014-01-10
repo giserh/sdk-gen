@@ -16,7 +16,7 @@ public class Queue extends Connector {
 	 * Access to url : /queues/notifications/error/{notificationId}. Update
 	 * status for an error notification.
 	 * 
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 : application/json :
+	 * @return return value 400 : or 404 : or 500 : or 200 : application/json :
 	 *         { "$schema":"http://json-schema.org/draft-03/schema",
 	 *         "properties":{ "status":{ "type":"string", "required":false } } }
 	 */
@@ -32,7 +32,7 @@ public class Queue extends Connector {
 	 * Access to url : /queues/notifications/error/{notificationId}. Get error
 	 * notification for a client.
 	 * 
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 : application/json :
+	 * @return return value 400 : or 404 : or 500 : or 200 : application/json :
 	 *         { "$schema":"http://json-schema.org/draft-03/schema",
 	 *         "properties":{ "clientId":{ "type":"integer", "required":false },
 	 *         "priority":{ "type":"string", "required":false }, "status":{
@@ -59,8 +59,8 @@ public class Queue extends Connector {
 	 * a client.
 	 * 
 	 * @param offset
-	 *            Number of returning items
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 : application/json :
+	 *            Number of returned items.
+	 * @return return value 400 : or 404 : or 500 : or 200 : application/json :
 	 *         { "$schema":"http://json-schema.org/draft-03/schema",
 	 *         "properties":{ "clientId":{ "type":"integer", "required":false },
 	 *         "priority":{ "type":"string", "required":false }, "status":{
@@ -76,9 +76,9 @@ public class Queue extends Connector {
 	 * @param order
 	 *            The fields we want to order by and the type of ordering.
 	 * @param limit
-	 *            Starting position
+	 *            Starting position.
 	 * @param fields
-	 *            The fields we want to show in our result
+	 *            The fields we want to show in our result.
 	 */
 	public String getErrorNotifications(Long offset, Long limit, String fields,
 			String order) {
@@ -96,7 +96,7 @@ public class Queue extends Connector {
 	 * Access to url : /queues/notifications/{notificationId}. Update status for
 	 * a notification.
 	 * 
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 : application/json :
+	 * @return return value 400 : or 404 : or 500 : or 200 : application/json :
 	 *         { "$schema":"http://json-schema.org/draft-03/schema",
 	 *         "properties":{ "status":{ "type":"string", "required":false } } }
 	 */
@@ -112,7 +112,7 @@ public class Queue extends Connector {
 	 * Access to url : /queues/notifications/{notificationId}. Get notification
 	 * for a client and set its status to IN_PROGRESS.
 	 * 
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 : application/json :
+	 * @return return value 400 : or 404 : or 500 : or 200 : application/json :
 	 *         { "$schema":"http://json-schema.org/draft-03/schema",
 	 *         "properties":{ "clientId":{ "type":"integer", "required":false },
 	 *         "priority":{ "type":"string", "required":false }, "status":{
@@ -138,8 +138,8 @@ public class Queue extends Connector {
 	 * Access to url : /queues/notifications. Get notifications for a client.
 	 * 
 	 * @param offset
-	 *            Number of returning items
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 : application/json :
+	 *            Number of returned items.
+	 * @return return value 400 : or 404 : or 500 : or 200 : application/json :
 	 *         { "$schema":"http://json-schema.org/draft-03/schema",
 	 *         "properties":{ "clientId":{ "type":"integer", "required":false },
 	 *         "priority":{ "type":"string", "required":false }, "status":{
@@ -155,9 +155,9 @@ public class Queue extends Connector {
 	 * @param order
 	 *            The fields we want to order by and the type of ordering.
 	 * @param limit
-	 *            Starting position
+	 *            Starting position.
 	 * @param fields
-	 *            The fields we want to show in our result
+	 *            The fields we want to show in our result.
 	 */
 	public String getNotifications(Long offset, Long limit, String fields,
 			String order) {
@@ -174,7 +174,7 @@ public class Queue extends Connector {
 	 * Access to url : /queues/events/{eventId}. Get one event by Id for a
 	 * client.
 	 * 
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 : application/json :
+	 * @return return value 400 : or 404 : or 500 : or 200 : application/json :
 	 *         { "$schema":"http://json-schema.org/draft-03/schema",
 	 *         "properties":{ "body":{ "type":"object", "required":false },
 	 *         "subjectId":{ "type":"integer", "required":false },
@@ -200,7 +200,7 @@ public class Queue extends Connector {
 	 * Access to url : /queues/events/error/{eventId}. Get one error event by id
 	 * for a client.
 	 * 
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 : application/json :
+	 * @return return value 400 : or 404 : or 500 : or 200 : application/json :
 	 *         { "$schema":"http://json-schema.org/draft-03/schema",
 	 *         "properties":{ "body":{ "type":"object", "required":false },
 	 *         "subjectId":{ "type":"integer", "required":false },
@@ -227,8 +227,8 @@ public class Queue extends Connector {
 	 * Access to url : /queues/events/error. Get error events for a client.
 	 * 
 	 * @param offset
-	 *            Number of returning items
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 : application/json :
+	 *            Number of returned items.
+	 * @return return value 400 : or 404 : or 500 : or 200 : application/json :
 	 *         { "$schema":"http://json-schema.org/draft-03/schema",
 	 *         "properties":{ "body":{ "type":"object", "required":false },
 	 *         "subjectId":{ "type":"integer", "required":false },
@@ -245,9 +245,9 @@ public class Queue extends Connector {
 	 * @param order
 	 *            The fields we want to order by and the type of ordering.
 	 * @param limit
-	 *            Starting position
+	 *            Starting position.
 	 * @param fields
-	 *            The fields we want to show in our result
+	 *            The fields we want to show in our result.
 	 */
 	public String getErrorEvents(Long offset, Long limit, String fields,
 			String order) {
@@ -272,7 +272,7 @@ public class Queue extends Connector {
 	 *            "sourceId":{ "type":"integer", "required":true }, "priority":{
 	 *            "type":"string", "required":true }, "type":{ "type":"string",
 	 *            "required":true } } }
-	 * @return return value 400 : OR 500 : OR 200 : OR 201 : application/json :
+	 * @return return value 400 : or 500 : or 200 : or 201 : application/json :
 	 *         { "$schema":"http://json-schema.org/draft-03/schema",
 	 *         "properties":{ "url":{ "type":"string", "required":true } } }
 	 */
@@ -286,8 +286,8 @@ public class Queue extends Connector {
 	 * Access to url : /queues/events. Get a list of events for a client.
 	 * 
 	 * @param offset
-	 *            Number of returning items
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 : application/json :
+	 *            Number of returned items.
+	 * @return return value 400 : or 404 : or 500 : or 200 : application/json :
 	 *         { "$schema":"http://json-schema.org/draft-03/schema",
 	 *         "properties":{ "body":{ "type":"object", "required":false },
 	 *         "subjectId":{ "type":"integer", "required":false },
@@ -304,9 +304,9 @@ public class Queue extends Connector {
 	 * @param order
 	 *            The fields we want to order by and the type of ordering.
 	 * @param limit
-	 *            Starting position
+	 *            Starting position.
 	 * @param fields
-	 *            The fields we want to show in our result
+	 *            The fields we want to show in our result.
 	 */
 	public String getEvents(Long offset, Long limit, String fields, String order) {
 		Map<String, Object> array = new HashMap<String, Object>();

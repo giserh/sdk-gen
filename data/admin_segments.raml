@@ -4,14 +4,14 @@ post:
   description: Add a new segment.
   body:
     application/json:
-      schema: !include schemas/TODO.json
+      schema: !include schemas/admin_segment_schema.json
 get:
   is: [fields, paginator, ordering]
   description: Get a segment list.
   responses:
     200:
       body:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/admin_segment_schema.json
 /doc:
   displayName: SegmentsDocs
   type: common
@@ -26,11 +26,11 @@ get:
     responses:
       200:
         body:
-          schema: !include schemas/TODO.json
+          schema: !include schemas/admin_segment_schema.json
   put:
     description: Update a segment.
     body:
       application/json:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/admin_segment_schema.json
   delete:
     description: Delete a segment.

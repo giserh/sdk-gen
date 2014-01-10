@@ -4,14 +4,14 @@ post:
   description: Add a transaction type.
   body:
     application/json:
-      schema: !include schemas/TODO.json
+      schema: !include schemas/transactiontype_schema.json
 get:
   is: [fields, paginator, ordering]
   description: Get a list of transaction types.
   responses:
     200:
       body:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/transactiontype_schema.json
 /doc:
   displayName: TransactionTypesDocs
   type: common
@@ -26,12 +26,12 @@ get:
     responses:
       200:
         body:
-          schema: !include schemas/TODO.json
+          schema: !include schemas/transactiontype_schema.json
   put:
     description: Update a transaction type.
     body:
       application/json:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/transactiontype_schema.json
   delete:
     description: Remove a transaction type.
   /conditions:
@@ -41,9 +41,6 @@ get:
       displayName: OneTransactionTypesCondition
       type: common
       put:
-        description: Update a condition for transaction type.
-        body:
-          application/json:
-            schema: !include schemas/TODO.json
+        description: Add a condition for a transaction type.
       delete:
         description: Delete a condition for transaction type.

@@ -60,7 +60,7 @@ public class AdminTest {
 
 		String result = admin.deleteOneUser("2");
 
-		System.out.println("Deleted " + result);
+		System.out.println("Deleted user from admin:" + result);
 	}
 
 	/**
@@ -69,9 +69,9 @@ public class AdminTest {
 	@Test
 	public void testGetUsers() {
 
-		String result = admin.getUsers("1,2", 0l, "id:DESC", "firstName,lastName,gender","12,23,22", 10l);
+		String result = admin.getUsers(null, 0l, null, "firstName,lastName,gender",null, 10l);
 
-		System.out.println("Got list "+result);
+		System.out.println("Got list from admin :  "+result);
 	}
 	
 	/**
@@ -91,7 +91,7 @@ public class AdminTest {
 	@Test
 	public void testPutUserFriend() {
 
-		String result = admin.putOneUserFriend("1", "4", "{}");
+		String result = admin.putOneUserFriend("1", "4");
 
 		System.out.println("Added friend "+result);
 	}

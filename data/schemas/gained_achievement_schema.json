@@ -1,0 +1,35 @@
+{
+   "$schema":"http://json-schema.org/draft-03/schema",
+   "description":"A representation of a gained achievement",
+   "type":"object",
+   "properties":{
+      "achievement":{
+         "required":true,
+         "type":"id"
+      },
+      "status":{
+         "required":false,
+         "type":"string",
+         "allowed":{
+            "0":"INACTIVE",
+            "1":"ACTIVE",
+            "2":"REVOKED"
+         },
+         "default":"INACTIVE"
+      },
+      "origin":{
+         "required":false,
+         "type":"string",
+         "allowed":{
+            "0":"AUTO",
+            "1":"MANUAL"
+         },
+         "default":"AUTO"
+      },
+      "amount":{
+         "required":false,
+         "type":"long",
+         "default":"1"
+      }
+   }
+}

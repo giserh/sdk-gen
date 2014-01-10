@@ -4,14 +4,14 @@ post:
   description: Add a notification.
   body:
     application/json:
-      schema: !include schemas/TODO.json
+      schema: !include schemas/admin_notification_schema.json
 get:
   is: [fields, paginator, ordering]
   description: Get a list of notifications.
   responses:
     200:
       body:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/admin_notification_schema.json
 /doc:
   displayName: NotificationsDocs
   type: common
@@ -26,12 +26,12 @@ get:
     responses:
       200:
         body:
-          schema: !include schemas/TODO.json
+          schema: !include schemas/admin_notification_schema.json
   put:
     description: Update a notification.
     body:
       application/json:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/admin_notification_schema.json
   delete:
     description: Delete a notification.
 /types:
@@ -41,14 +41,14 @@ get:
     description: Add a notification type.
     body:
       application/json:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/admin_notification_type_schema.json
   get:
     is: [fields, paginator, ordering]
     description: Get a list of notification types.
     responses:
       200:
         body:
-          schema: !include schemas/TODO.json
+          schema: !include schemas/admin_notification_type_schema.json
   /doc:
     displayName: NotificationTypesDocs
     type: common
@@ -63,11 +63,11 @@ get:
       responses:
         200:
           body:
-            schema: !include schemas/TODO.json
+            schema: !include schemas/admin_notification_type_schema.json
     put:
       description: Update a notification type
       body:
         application/json:
-          schema: !include schemas/TODO.json
+          schema: !include schemas/admin_notification_type_schema.json
     delete:
       description: Delete a notification type.

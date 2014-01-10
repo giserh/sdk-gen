@@ -1,0 +1,44 @@
+{
+   "$schema":"http://json-schema.org/draft-03/schema",
+   "description":"A representation of a user group",
+   "type":"object",
+   "properties":{
+      "name":{
+         "required":true,
+         "type":"string",
+         "constraint":"unique"
+      },
+      "users":{
+         "required":false,
+         "type":"id_array"
+      },
+      "segments":{
+         "required":false,
+         "type":"id_array"
+      },
+      "gainedAchievements":{
+         "required":false,
+         "type":"id_array"
+      },
+      "wonGames":{
+         "required":false,
+         "type":"id_array"
+      },
+      "counterValues":{
+         "required":false,
+         "type":"id_array"
+      },
+      "externalIds":{
+         "required":false,
+         "type":"id_array"
+      },
+      "createdAt":{
+          "type":"integer",
+          "required":false
+       },
+       "updatedAt":{
+          "type":"integer",
+          "required":false
+       }
+   }
+}

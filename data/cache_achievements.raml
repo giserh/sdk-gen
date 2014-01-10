@@ -6,7 +6,17 @@ get:
   responses:
     200:
       body: 
-        schema: !include schemas/achievements_list.json   
+        schema: !include schemas/admin_achievement_schema.json   
+/segments:
+  displayName: AchievementSegments
+  type: common
+  get:
+    is: [paginator, fields, ordering]
+    description: Get segments.
+    responses:
+      200:
+        body: 
+          schema: !include schemas/TODO.json
 /{achievementId}:
   displayName: OneAchievement
   type: common
@@ -16,4 +26,16 @@ get:
     responses:
       200:
         body: 
-          schema: !include schemas/achievement_schema.json   
+          schema: !include schemas/admin_achievement_schema.json     
+  /segments:
+    displayName: OneAchievementSegments
+    type: common
+    get:
+      is: [paginator, fields, ordering]
+      description: Get one achievement's segments.
+      responses:
+        200:
+          body: 
+            schema: !include schemas/TODO.json
+        
+      

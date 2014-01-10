@@ -4,14 +4,14 @@ post:
   description: Add a new function.
   body:
     application/json:
-      schema: !include schemas/TODO.json
+      schema: !include schemas/function_schema.json
 get:
   is: [fields, paginator, ordering]
   description: Get a list of functions.
   responses:
     200:
       body:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/function_schema.json
 /doc:
   displayName: FunctionsDoc
   type: common
@@ -26,11 +26,11 @@ get:
     responses:
       200:
         body:
-          schema: !include schemas/TODO.json
+          schema: !include schemas/function_schema.json
   put:
-    description: Add a function.
+    description: Replace a function.
     body:
       application/json:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/function_schema.json
   delete:
     description: Delete a function.

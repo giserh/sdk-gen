@@ -46,7 +46,7 @@ get:
       responses:
         200:
           body: 
-            schema: !include schemas/group_schema.json   
+            schema: !include schemas/user_group_schema.json   
   /achievements:
     type: common
     displayName: UserAchievements
@@ -86,7 +86,7 @@ get:
     responses:
       200:
         body: 
-          schema: !include schemas/group_schema.json     
+          schema: !include schemas/user_group_schema.json     
   /{groupId}:
     type: common
     displayName: OneGroup
@@ -96,4 +96,4 @@ get:
       responses:
         200:
           body: 
-            schema: !include schemas/group_schema.json  
+            schema: !include schemas/user_group_schema.json  

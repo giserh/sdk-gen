@@ -1,0 +1,19 @@
+{
+   "$schema":"http://json-schema.org/draft-03/schema",
+   "description":"A representation of a transaction source",
+   "type":"object",
+   "properties":{
+      "name":{
+         "required":false,
+         "type":"string"
+      },
+      "transactionSource":{
+         "required":false,
+         "type":"long"
+      },
+      "conditions":{
+         "required":false,
+         "type":"id_array"
+      }
+   }
+}

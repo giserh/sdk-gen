@@ -4,14 +4,14 @@ post:
   description: Create a game.
   body:
     application/json:
-      schema: !include schemas/TODO.json
+      schema: !include schemas/game_schema.json
 get:
   is: [fields, paginator, ordering]
   description: Get a list of games.
   responses:
     200:
       body:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/game_schema.json
 /doc:
   displayName: GamesDoc
   type: common
@@ -26,12 +26,12 @@ get:
     responses:
       200:
         body:
-          schema: !include schemas/TODO.json
+          schema: !include schemas/game_schema.json
   put:
     description: Update a game.
     body:
       application/json:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/game_schema.json
   delete:
     description: Delete a game.
   /notifications:
@@ -42,9 +42,6 @@ get:
       type: common
       put:
         description: Add a notification to a game.
-        body:
-          application/json:
-            schema: !include schemas/TODO.json
       delete:
         description: Remove a notification from a game.
   /conditions:
@@ -55,8 +52,5 @@ get:
       type: common
       put:
         description: Add a condition to a game.
-        body:
-          application/json:
-            schema: !include schemas/TODO.json
       delete:
         description: Remove a condition from a game.

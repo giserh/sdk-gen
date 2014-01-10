@@ -1,0 +1,28 @@
+{
+   "$schema":"http://json-schema.org/draft-03/schema",
+   "description":"A representation of a leaderboard",
+   "type":"object",
+   "properties":{
+      "active":{
+         "required":false,
+         "type":"boolean",
+         "default":"false"
+      },
+      "name":{
+         "required":true,
+         "type":"string"
+      },
+      "description":{
+         "required":false,
+         "type":"string"
+      },
+      "cron":{
+         "required":true,
+         "type":"string"
+      },
+      "script":{
+         "required":true,
+         "type":"long"
+      }
+   }
+}

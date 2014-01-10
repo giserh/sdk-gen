@@ -16,7 +16,7 @@ public class SystemApi extends Connector {
 	 * Access to url : /system/clients/doc. Get a pseudo schema showing quickly
 	 * how to make a proper json for clients.
 	 * 
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 :
+	 * @return return value 400 : or 404 : or 500 : or 200 :
 	 */
 	public String getClientsDoc() {
 		Map<String, Object> array = new HashMap<String, Object>();
@@ -28,7 +28,7 @@ public class SystemApi extends Connector {
 	 * Access to url : /system/clients/{id}/apps/doc. Get a pseudo schema
 	 * showing quickly how to make a proper json for client apps.
 	 * 
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 :
+	 * @return return value 400 : or 404 : or 500 : or 200 :
 	 */
 	public String getClientAppsDoc(String id) {
 		Map<String, Object> array = new HashMap<String, Object>();
@@ -42,7 +42,7 @@ public class SystemApi extends Connector {
 	 * Access to url : /system/clients/{id}/apps/{appId}. Delete one client app
 	 * by id.
 	 * 
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 :
+	 * @return return value 400 : or 404 : or 500 : or 200 :
 	 */
 	public String deleteOneClientApp(String id, String appId) {
 		Map<String, Object> array = new HashMap<String, Object>();
@@ -59,7 +59,7 @@ public class SystemApi extends Connector {
 	 * 
 	 * @param body
 	 *            application/json schema : {}
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 :
+	 * @return return value 400 : or 404 : or 500 : or 200 :
 	 */
 	public String putOneClientApp(String id, String appId, String body) {
 		Map<String, Object> array = new HashMap<String, Object>();
@@ -74,7 +74,7 @@ public class SystemApi extends Connector {
 	 * Access to url : /system/clients/{id}/apps/{appId}. Get one client app by
 	 * id.
 	 * 
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 : application/json :
+	 * @return return value 400 : or 404 : or 500 : or 200 : application/json :
 	 *         {}
 	 */
 	public String getOneClientApp(String id, String appId) {
@@ -91,7 +91,7 @@ public class SystemApi extends Connector {
 	 * 
 	 * @param body
 	 *            application/json schema : {}
-	 * @return return value 400 : OR 500 : OR 200 :
+	 * @return return value 400 : or 500 : or 200 :
 	 */
 	public String postClientApps(String id, String body) {
 		Map<String, Object> array = new HashMap<String, Object>();
@@ -104,7 +104,7 @@ public class SystemApi extends Connector {
 	/**
 	 * Access to url : /system/clients/{id}. Delete one client by id.
 	 * 
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 :
+	 * @return return value 400 : or 404 : or 500 : or 200 :
 	 */
 	public String deleteOneClient(String id) {
 		Map<String, Object> array = new HashMap<String, Object>();
@@ -118,7 +118,7 @@ public class SystemApi extends Connector {
 	 * 
 	 * @param body
 	 *            application/json schema : {}
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 :
+	 * @return return value 400 : or 404 : or 500 : or 200 :
 	 */
 	public String putOneClient(String id, String body) {
 		Map<String, Object> array = new HashMap<String, Object>();
@@ -130,7 +130,7 @@ public class SystemApi extends Connector {
 	/**
 	 * Access to url : /system/clients/{id}. Get one client by id.
 	 * 
-	 * @return return value 400 : OR 404 : OR 500 : OR 200 : application/json :
+	 * @return return value 400 : or 404 : or 500 : or 200 : application/json :
 	 *         {}
 	 */
 	public String getOneClient(String id) {
@@ -145,7 +145,7 @@ public class SystemApi extends Connector {
 	 * 
 	 * @param body
 	 *            application/json schema : {}
-	 * @return return value 400 : OR 500 : OR 200 :
+	 * @return return value 400 : or 500 : or 200 :
 	 */
 	public String postClients(String body) {
 		Map<String, Object> array = new HashMap<String, Object>();

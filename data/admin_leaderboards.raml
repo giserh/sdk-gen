@@ -4,23 +4,19 @@ post:
   description: Add a new leaderboard.
   body:
     application/json:
-      schema: !include schemas/TODO.json
+      schema: !include schemas/admin_leaderboard_schema.json
 get:
   is: [fields, paginator, ordering]
   description: Get a leaderboard list.
   responses:
     200:
       body:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/admin_leaderboard_schema.json
 /doc:
   displayName: LeaderboardsDocs
   type: common
   get:
     description: Get a pseudo schema showing quickly how to make a proper json for leaderboards.
-    responses:
-      200:
-        body:
-          schema: !include schemas/TODO.json
 /{id}:
   displayName: OneLeaderboard
   type: common
@@ -30,20 +26,18 @@ get:
     responses:
       200:
         body:
-          schema: !include schemas/TODO.json
+          schema: !include schemas/admin_leaderboard_schema.json
   put:
-    description: Add a leaderboard.
+    description: Update a leaderboard.
     body:
       application/json:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/admin_leaderboard_schema.json
   delete:
     description: Remove a leaderboard.
   /recalculate:
     displayName:  OneLeaderboardRecalculate
-    type: common
     get:
       description: Recalculate a leaderboard
       responses:
-        200:
-          body:
-            schema: !include schemas/TODO.json
+        202:
+          description: Confirmation

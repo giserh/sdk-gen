@@ -4,14 +4,14 @@ post:
   description: Add a transaction source.
   body:
     application/json:
-      schema: !include schemas/TODO.json
+      schema: !include schemas/transactionsource_schema.json
 get:
   is: [fields, paginator, ordering]
   description: Get a list of transaction sources.
   responses:
     200:
       body:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/transactionsource_schema.json
 /doc:
   displayName: TransactionSourcesDocs
   type: common
@@ -26,12 +26,12 @@ get:
     responses:
       200:
         body:
-          schema: !include schemas/TODO.json
+          schema: !include schemas/transactionsource_schema.json
   put:
     description: Update a transaction source.
     body:
       application/json:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/transactionsource_schema.json
   delete:
     description: Delete a transaction source.
   /function:
@@ -42,8 +42,5 @@ get:
       type: common
       put:
         description: Add a transaction source function.
-        body:
-          application/json:
-            schema: !include schemas/TODO.json
       delete:
         description: Delete a transaction source function.

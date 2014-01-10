@@ -3,17 +3,52 @@
    "description":"A representation of a game",
    "type":"object",
    "properties":{
-      "id":{
+      "active":{
          "required":false,
-         "type":"integer"
+         "type":"boolean",
+         "default":"false"
       },
-      "createdAt":{
-         "required":false,
-         "type":"integer"
+      "name":{
+         "required":true,
+         "type":"string"
       },
-      "updatedAt":{
+      "description":{
          "required":false,
-         "type":"integer"
+         "type":"string"
+      },
+      "expression":{
+         "required":true,
+         "type":"string"
+      },
+      "priority":{
+         "required":false,
+         "type":"int",
+         "default":"1"
+      },
+      "gameType":{
+         "required":false,
+         "type":"string",
+         "allowed":{
+            "0":"ONE_TIME",
+            "1":"GRADUAL"
+         },
+         "default":"ONE_TIME"
+      },
+      "notifications":{
+         "required":false,
+         "type":"id_array"
+      },
+      "conditions":{
+         "required":false,
+         "type":"id_array"
+      },
+      "counter":{
+         "required":false,
+         "type":"id"
+      },
+      "transactionSource":{
+         "required":false,
+         "type":"id"
       }
    }
 }

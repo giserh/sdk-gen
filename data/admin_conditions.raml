@@ -4,23 +4,19 @@ post:
   description: Add a new condition.
   body:
     application/json:
-      schema: !include schemas/TODO.json
+      schema: !include schemas/condition_schema.json
 get:
   is: [fields, paginator, ordering]
   description: Get a list of conditions.
   responses:
     200:
       body:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/condition_schema.json
 /doc:
   displayName: ConditionsDoc
   type: common
   get:
     description: Get a pseudo schema showing quickly how to make a proper json for clientscripts.
-    responses:
-      200:
-        body:
-          schema: !include schemas/TODO.json
 /{id}:
   displayName: OneCondition
   type: common
@@ -30,12 +26,12 @@ get:
     responses:
       200:
         body:
-          schema: !include schemas/TODO.json
+          schema: !include schemas/condition_schema.json
   put:
     description: Change one condition.
     body:
       application/json:
-        schema: !include schemas/TODO.json
+        schema: !include schemas/condition_schema.json
   delete:
     description: Delete one condition.
   /counters:
@@ -46,8 +42,5 @@ get:
       type: common
       put:
         description: Add a counter.
-        body:
-          application/json:
-            schema: !include schemas/TODO.json
       delete:
         description: Remove a counter.

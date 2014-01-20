@@ -1,0 +1,57 @@
+<% escapeMarkup = false %>
+<%@ var methodName : String %>
+<%@ var desc : String %>
+<%@ var methodId : Int %>
+<%@ var headerId : Int %>
+<%@ var url : String %>
+<%@ var response : String %>
+<%@ var queryParameters: List[(String,String,String)] %>
+
+<h2 id="nav-section-${headerId}-${methodId}">${methodName}</h2>
+<p>
+${desc}
+</p>
+<pre>
+<code>
+${url}
+</code>
+</pre>
+<h3>Parameters</h3>
+<p>
+List of all parameters:
+
+<table>
+	<thead>
+		<tr>
+			<th>
+				<div class="tablesorter-header-inner">Name</div>
+			</th>
+			<th>
+				<div class="tablesorter-header-inner">Type</div>
+			</th>
+			<th>
+				<div class="tablesorter-header-inner">Description</div>
+			</th>
+		</tr>
+ 	</thead>
+ 	<tbody class="">
+ 		#for ( p <-queryParameters)
+ 			<tr>
+ 				<td class="confluenceTd"> ${p._1} </td>
+				<td class="confluenceTd"> ${p._2} </td>
+				<td class="confluenceTd"> ${p._3} </td>
+			</tr>
+		#end
+	</tbody>
+</table>
+					
+</p>
+<h3>Responses</h3>
+<p>
+Example response:
+</p>
+<pre>
+<code>
+${response}
+</code>
+</pre>

@@ -6,7 +6,9 @@ get:
   responses:
     200:
       body: 
-        schema: !include schemas/notification_schema.json
+        application/json:
+          schema: !include schemas/notification_schema.json
+          example: !include examples/queue_notification_list_example.json
 /{notificationId}:
   displayName: OneNotification
   type: common
@@ -15,13 +17,17 @@ get:
     responses:
       200:
         body: 
-          schema: !include schemas/notification_schema.json
+          application/json:
+            schema: !include schemas/notification_schema.json
+            example: !include examples/queue_notification_example.json
   patch:
     description: Update status for a notification.
     responses:
       200:
         body: 
-          schema: !include schemas/post_notification_schema.json
+          application/json:
+            schema: !include schemas/post_notification_schema.json
+            example: !include examples/queue_notification_example.json
 /error:
   displayName: ErrorNotifications
   type: common
@@ -31,7 +37,9 @@ get:
     responses:
       200:
         body: 
-          schema: !include schemas/notification_schema.json
+          application/json:
+            example: !include examples/queue_notification_list_example.json
+            schema: !include schemas/notification_schema.json
   /{notificationId}:
     displayName: OneErrorNotification
     type: common
@@ -40,12 +48,16 @@ get:
       responses:
         200:
           body: 
-            schema: !include schemas/notification_schema.json
+            application/json:
+              schema: !include schemas/notification_schema.json
+              example: !include examples/queue_notification_example.json
     patch:
       description: Update status for an error notification.
       responses:
         200:
-          body: 
-            schema: !include schemas/post_notification_schema.json
+          body:
+            application/json: 
+              schema: !include schemas/post_notification_schema.json
+              example: !include examples/queue_notification_example.json
 
 

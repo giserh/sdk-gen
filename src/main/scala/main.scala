@@ -11,6 +11,7 @@ import generator.Generator
 import generator.PhpSDKGenerator
 import java.io.File
 import generator.JavaSDKGenerator
+import generator.DocumentationGenerator
 
 object Main {
 
@@ -25,6 +26,7 @@ object Main {
 				/** @TODO add new generators */
 				case "php" => Map("generator" -> new PhpSDKGenerator) ++ nextOption(tail)
 				case "java" => Map("generator" -> new JavaSDKGenerator) ++ nextOption(tail)
+				case "doc" => Map("generator" -> new DocumentationGenerator) ++ nextOption(tail)
 				case _ => throw new InvalidParameterException(s"Not found generator: $value")
 			}
 			case ("--output" | "-o") :: value :: tail => {
@@ -88,7 +90,7 @@ object Main {
 			
 			val tempDirectory = application.getString("tempDirectory")
 
-			var includePath = resourcePath + "/source"
+			var includePath : String = null
 			if( options.contains("include") )
 				includePath = options("include").asInstanceOf[String]
 			

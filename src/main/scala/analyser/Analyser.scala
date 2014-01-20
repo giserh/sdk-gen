@@ -82,14 +82,15 @@ object Analyser {
 				
 					/** Create new method with all the needed parameters. */
 					val m = new Method(mapRestType(actionType), resourceUrl, resourceName, action.getSecuredBy().asScala.toList)
+					
 					/** Add the traits */
 					m.setupTraits(action.getQueryParameters().asScala.toMap)
 					
-					/** Add basic doc */
+					/** Add basic doc - description*/
 					m.addDoc("", action.getDescription(),DocType.OTHER) 
 					
-					
 					/** Analyse the possible values for body **/
+					
 					val body=action.getBody					
 					
 					if(!body.isEmpty()) {
@@ -97,7 +98,7 @@ object Analyser {
 						body.asScala.foreach{
 							body_type => {
 								/** Add example schema to docs **/
-								gatherBodyTypes =  (body_type._1 + " schema : \n" +body_type._2.getSchema()).replace("\n", "\n*")  :: gatherBodyTypes
+								gatherBodyTypes =  (body_type._1 + " schema : \n" +body_type._2.getSchema())/*.replace("\n", "\n*") */ :: gatherBodyTypes
 							}
 							
 						}
@@ -107,18 +108,43 @@ object Analyser {
 					}
 					
 					/** Analyse the possible values for responses **/
+					
 					val responses = action.getResponses() 
+					
 					if (!responses.isEmpty()){
+						
+						
+						// getting a succesful result - 200
+						val res200 = responses.get("200")
+						if (res200 != null){
+								val example = res200.getBody().get("application/json")
+								if (example != null){
+									if( example.getExample() != null)
+										m.addDoc("example", example.getExample(), DocType.OTHER)
+								}
+						}
+						
+						// getting a succesful result - 201
+						val res201 = responses.get("201")
+						if (res201 != null){
+								val example = res201.getBody().get("application/json")
+								if (example != null){
+									if( example.getExample() != null)
+										m.addDoc("example", example.getExample(), DocType.OTHER)
+								}
+						}
+						
+						// get return values schemas
 						var gatherReturn = List[String]()
 						responses.asScala.foreach{
 							response => {
 								/** Get all mime-types of responses **/
-								val typeSchema = response._2.getBody().asScala.map{ tpl => tpl._1 + " : " + tpl._2.getSchema().replace("\n", "\n *")}.mkString(" | ")
+								val typeSchema = response._2.getBody().asScala.map{ tpl => tpl._1 + " : " + tpl._2.getSchema()/*.replace("\n", "\n *")*/}.mkString(" | ")
 								/** Join all possible responses **/
 								gatherReturn = response._1 + " : " + typeSchema :: gatherReturn 
 							}
 						}
-						m.addDoc("return value", gatherReturn.mkString("\n* or "),DocType.RETURN)
+						m.addDoc("return value", gatherReturn.mkString("\n or "),DocType.RETURN)
 					}	
 					
 										

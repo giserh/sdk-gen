@@ -205,7 +205,6 @@ public class Connector {
 			and = "&";
 		}
 
-		System.out.println(wholeUri);
 		HttpUriRequest method = null;
 		if ("get".equals(methodName)) {
 			method = new HttpGet(wholeUri);

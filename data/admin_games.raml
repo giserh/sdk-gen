@@ -11,7 +11,9 @@ get:
   responses:
     200:
       body:
-        schema: !include schemas/game_schema.json
+        application/json:
+          schema: !include schemas/game_schema.json
+          example: "Halo halo"
 /doc:
   displayName: GamesDoc
   type: common

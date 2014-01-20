@@ -95,6 +95,7 @@ class Method(val restType: RestType.Value, val url: String, private var _name : 
 				var getId = id.replace("{", "")				
 				getId = getId.replace("}", "")
 				addQueryParameter(getId, "String")
+				addDoc(getId, "Id of the object we are interested in.",DocType.PARAM )
 			}
 		}
 	}

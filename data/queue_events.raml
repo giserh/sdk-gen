@@ -6,7 +6,9 @@ get:
   responses:
     200:
       body:
-        schema: !include schemas/event_schema.json
+        application/json:
+          schema: !include schemas/event_schema.json
+          example: !include examples/queue_event_list_example.json
 post:
   description: Create a new event.
   body:
@@ -15,7 +17,9 @@ post:
   responses:
     201:
       body:
-        schema: !include schemas/url_event_schema.json
+        application/json:
+          schema: !include schemas/url_event_schema.json
+          example: !include examples/queue_event_url_example.json
 /{eventId}:
   type: common
   displayName: OneEvent
@@ -24,7 +28,9 @@ post:
     responses:
       200:
         body: 
-          schema: !include schemas/event_schema.json
+          application/json: 
+            schema: !include schemas/event_schema.json
+            example: !include examples/queue_event_example.json
 /error:
   displayName: ErrorEvents
   type: common
@@ -33,8 +39,10 @@ post:
     description: Get error events for a client.
     responses:
       200:
-        body: 
-          schema: !include schemas/event_schema.json
+        body:
+          application/json:  
+            schema: !include schemas/event_schema.json
+            example: !include examples/queue_event_list_example.json
   /{eventId}:
     type: common
     displayName: OneErrorEvent
@@ -43,4 +51,6 @@ post:
       responses:
         200:
           body: 
-            schema: !include schemas/event_schema.json
+            application/json: 
+              schema: !include schemas/event_schema.json
+              example: !include examples/queue_event_example.json

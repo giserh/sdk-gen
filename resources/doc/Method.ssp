@@ -48,8 +48,7 @@ List of all parameters:
 </table>
 #end	
 
-
-#if (! queryParameters.contains("body"))
+#if (request != "example_body")
 <h3>Request</h3>
 <p>
 Example request body:

@@ -6,7 +6,9 @@ get:
   responses:
     200:
       body: 
-        schema: !include schemas/user_schema.json  
+        application/json:
+          example: !include examples/cache/user_list_example.json
+          schema: !include schemas/user_schema.json  
 /{userId}:
   displayName: OneUser
   type: common
@@ -16,7 +18,9 @@ get:
     responses:
       200:
         body: 
-          schema: !include schemas/user_schema.json  
+          application/json:
+            example: !include examples/cache/user_example.json
+            schema: !include schemas/user_schema.json  
   /friends:
     type: common
     displayName: UserFriends
@@ -26,7 +30,9 @@ get:
       responses:
         200:
           body: 
-            schema: !include schemas/user_schema.json  
+            application/json:
+              example: !include examples/cache/user_list_example.json
+              schema: !include schemas/user_schema.json  
   /segments:
     type: common
     displayName: UserSegments
@@ -36,17 +42,21 @@ get:
       responses:
         200:
           body: 
-            schema: !include schemas/segment_schema.json  
+            application/json:
+              example: !include examples/cache/segment_list_example.json
+              schema: !include schemas/segment_schema.json  
   /groups:
     type: common
     displayName: UserGroups
     get:
       is: [fields, ordering, paginator]
-      description: Get one user's segments.
+      description: Get the groups the a particular user belongs to.
       responses:
         200:
           body: 
-            schema: !include schemas/user_group_schema.json   
+            application/json:
+              example: !include examples/cache/usergroup_list_example.json
+              schema: !include schemas/user_group_schema.json   
   /achievements:
     type: common
     displayName: UserAchievements
@@ -56,7 +66,9 @@ get:
       responses:
         200:
           body: 
-            schema: !include schemas/achievement_schema.json
+            application/json:
+              example: !include examples/cache/achievement_list_example.json
+              schema: !include schemas/achievement_schema.json
   /history:
     type: common
     displayName: UserHistory
@@ -66,7 +78,9 @@ get:
       responses:
         200:
           body: 
-            schema: !include schemas/history_schema.json   
+            application/json:
+              example: !include examples/cache/history_example.json
+              schema: !include schemas/history_schema.json   
 /segments:
   type: common
   displayName: UsersSegments
@@ -76,7 +90,9 @@ get:
     responses:
      200:
       body: 
-        schema: !include schemas/segment_schema.json 
+        application/json:
+          example: !include examples/cache/segment_list_example.json
+          schema: !include schemas/segment_schema.json 
 /groups:
   displayName: Groups
   type: common
@@ -86,7 +102,9 @@ get:
     responses:
       200:
         body: 
-          schema: !include schemas/user_group_schema.json     
+          application/json:
+            example: !include examples/cache/usergroup_list_example.json
+            schema: !include schemas/user_group_schema.json     
   /{groupId}:
     type: common
     displayName: OneGroup
@@ -96,4 +114,6 @@ get:
       responses:
         200:
           body: 
-            schema: !include schemas/user_group_schema.json  
+            application/json:
+              example: !include examples/cache/usergroup_example.json
+              schema: !include schemas/user_group_schema.json  

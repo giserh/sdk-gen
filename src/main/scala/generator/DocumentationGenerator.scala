@@ -42,7 +42,8 @@ class DocumentationGenerator extends Generator {
 			key =>
 				{
 					var headerId = -1
-					val headers  = all(key).keys.map {
+					val sortedKeys = all(key).keys.toList//.sortBy( x => x)						
+					val headers  = sortedKeys.map {
 						mkey =>
 							{
 								var methodId = -1
@@ -53,7 +54,7 @@ class DocumentationGenerator extends Generator {
 								generateHeaders(methods,resourcePath + "/Header.ssp",headerId,mkey)
 							}
 					}
-					(key,generatePage(pack,resourcePath +"/Page.ssp",headers.toList))
+					(key,generatePage(pack,resourcePath +"/Page.ssp",headers))
 
 				}
 		}.toMap
@@ -61,7 +62,7 @@ class DocumentationGenerator extends Generator {
 		// write to file
 
 		val dest = new PrintWriter(new File(tempDirectory + "/" + fileName))
-		dest.print(pages("queues"))
+		dest.print(pages("admin"))
 		dest.flush()
 
 		true
@@ -130,13 +131,17 @@ class DocumentationGenerator extends Generator {
 		context.attributes("queryParameters")  = method.query.toList.map{
 			tpl => (tpl._1, tpl._2.toLowerCase(), method.docs(tpl._1)._2)
 		}
-		context.attributes("url") = method.url
+		context.attributes("url") = method.restType.toString().toUpperCase() +" "+method.url
 		
 		if (method.docs.contains("example"))
 			context.attributes("response") = method.docs("example")._2
 		else
 			context.attributes("response") = "example"
 			
+		if (method.docs.contains("example_body"))
+			context.attributes("request") = method.docs("example_body")._2
+		else
+			context.attributes("request") = "example_body"
 
 		templ.render(context)
 

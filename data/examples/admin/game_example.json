@@ -1,0 +1,12 @@
+{
+    "active": false,
+    "name": "Example",
+    "description": "Example description",
+    "expression":"{1} AND ({2} OR {3})",
+    "priority": 1,
+    "gameType": "ONE_TIME",
+    "notifications": [2,4],
+    "conditions": [1,2,3],
+    "counter": 1,
+    "transactionSource": 1
+}

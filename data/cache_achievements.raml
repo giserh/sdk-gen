@@ -6,7 +6,9 @@ get:
   responses:
     200:
       body: 
-        schema: !include schemas/admin_achievement_schema.json   
+        application/json:
+          example: !include examples/cache/achievement_list_example.json
+          schema: !include schemas/admin_achievement_schema.json   
 /segments:
   displayName: AchievementSegments
   type: common
@@ -16,7 +18,9 @@ get:
     responses:
       200:
         body: 
-          schema: !include schemas/admin_segment_schema.json     
+          application/json: 
+            example: !include examples/cache/segment_list_example.json
+            schema: !include schemas/admin_segment_schema.json     
 /{achievementId}:
   displayName: OneAchievement
   type: common
@@ -26,7 +30,9 @@ get:
     responses:
       200:
         body: 
-          schema: !include schemas/admin_achievement_schema.json     
+          application/json:
+            example: !include examples/cache/achievement_example.json 
+            schema: !include schemas/admin_achievement_schema.json     
   /segments:
     displayName: OneAchievementSegments
     type: common
@@ -36,6 +42,29 @@ get:
       responses:
         200:
           body: 
-            schema: !include schemas/TODO.json
-        
+            example: !include examples/cache/segment_list_example.json
+            schema: !include schemas/admin_segment_schema.json
+/categories:
+  type: common
+  displayName: AchievementsCategories
+  get:
+    description: Get list of achievement categories.
+    is: [fields, ordering, paginator]
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/cache/achievementcategory_list_example.json
+            schema: !include schemas/category_schema.json
+  /{id}:
+    type: common
+    displayName: AchievementsCategory
+    get:
+      description: Get one category.
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/cache/achievementcategory_example.json
+              schema: !include schemas/category_schema.json
       

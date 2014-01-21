@@ -1,0 +1,22 @@
+displayName: Counters
+type: common
+get:
+  is: [ paginator, fields, ordering]
+  description: Get a list of counters. 
+  responses:
+    200:
+      body: 
+        application/json:
+          example: !include examples/cache/counter_list_example.json
+          schema: !include schemas/counter_schema.json    
+/{eventId}:
+  displayName: OneCounter
+  get:
+    is: [fields]
+    description: Get one counter. 
+    responses:
+      200:
+        body:  
+          application/json:
+            example: !include examples/cache/counter_example.json
+            schema: !include schemas/counter_schema.json   

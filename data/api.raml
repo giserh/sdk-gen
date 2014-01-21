@@ -11,6 +11,9 @@ resourceTypes:
         responses:
           200:
             description: Success!
+            body:
+              application/json: 
+                example: "Status code : 200"
           500:
             body: !include schemas/error_500_schema.json
           404:
@@ -21,6 +24,9 @@ resourceTypes:
         responses:
           200:
             description: Success!
+            body:
+              application/json: 
+                example: "Status code : 200"
           500:
             body: !include schemas/error_500_schema.json
           404:
@@ -31,6 +37,9 @@ resourceTypes:
         responses:
           200:
             description: Success!
+            body:
+              application/json: 
+                example: "Status code : 200"
           500:
             body: !include schemas/error_500_schema.json
           404:
@@ -41,6 +50,9 @@ resourceTypes:
         responses:
           200:
             description: Success!
+            body:
+              application/json: 
+                example: "Status code : 200"
           500:
             body: !include schemas/error_500_schema.json
           404:
@@ -51,6 +63,9 @@ resourceTypes:
         responses:
           200:
             description: Success!
+            body:
+              application/json: 
+                example: "Status code : 200"
           500:
             body: !include schemas/error_500_schema.json
           400:
@@ -110,8 +125,8 @@ traits:
   /segments: !include cache_segments.raml
   /notifications: !include cache_notifications.raml
   /leaderboards: !include cache_leaderboards.raml
-  /history: !include cache_history.raml
   /games: !include cache_games.raml
+  /counters: !include cache_counters.raml
   /events: !include cache_events.raml
   /achievements: !include cache_achievements.raml
 /admin:

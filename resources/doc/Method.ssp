@@ -5,6 +5,7 @@
 <%@ var headerId : Int %>
 <%@ var url : String %>
 <%@ var response : String %>
+<%@ var request: String %>
 <%@ var queryParameters: List[(String,String,String)] %>
 
 <h2 id="nav-section-${headerId}-${methodId}">${methodName}</h2>
@@ -19,8 +20,9 @@ ${url}
 <h3>Parameters</h3>
 <p>
 List of all parameters:
-
+#if (! queryParameters.isEmpty())
 <table>
+	
 	<thead>
 		<tr>
 			<th>
@@ -44,7 +46,21 @@ List of all parameters:
 		#end
 	</tbody>
 </table>
-					
+#end	
+
+
+#if (! queryParameters.contains("body"))
+<h3>Request</h3>
+<p>
+Example request body:
+</p>
+<pre>
+<code>
+${request}
+</code>
+</pre>
+#end
+		
 </p>
 <h3>Responses</h3>
 <p>

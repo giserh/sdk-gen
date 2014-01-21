@@ -1,0 +1,17 @@
+[
+    {
+    	"name": "Example",
+    	"label": "Example label",
+    	"description": "Example description",
+    	"active": false,
+    	"level": 1,
+    	"displayRank": 1,
+    	"importanceRank": 1,
+    	"data": "Example data",
+    	"type": "PROGRESSIVE",
+    	"achievementGroup": 1,
+    	"progress": 1,
+    	"counter": 1,
+    	"segments": [ 1, 2]
+    }
+]

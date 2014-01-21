@@ -1,0 +1,15 @@
+ {
+        "globalCounter": false,
+        "conditions": {},
+        "name": "Test counter0",
+        "updatedAt": 1390236383950,
+        "description": "A simple counter",
+        "transactionSource": 1,
+        "achievement": 3,
+        "requirement": "ALL",
+        "id": 0,
+        "createdAt": 1390236383950,
+        "game": 4,
+        "value": 0,
+        "eventSettable": false
+ }

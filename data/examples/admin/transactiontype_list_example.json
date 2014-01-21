@@ -1,0 +1,7 @@
+[
+ 	{
+ 		"name": "Example",
+ 		"transactionSource": 1,
+ 		"conditions": [ 1, 2]
+ 	}
+]

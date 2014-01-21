@@ -1,37 +1,60 @@
 displayName: ClientScripts
 type: common
 post:
-  description: Post a new client script.
+  description: |
+    We can use this method to create a new client script. It needs a body and 
+    returns the created object.
   body:
     application/json:
       schema: !include schemas/clientscript_schema.json
-get:
-  is: [fields, ordering, paginator]
-  description: Get a list of client scripts.
+      example: !include examples/admin/clientscript_example.json 
   responses:
     200:
       body:
-        schema: !include schemas/clientscript_schema.json
+        application/json:
+          example: !include examples/admin/clientscript_example.json 
+          schema: !include schemas/clientscript_schema.json
+get:
+  is: [fields, ordering, paginator]
+  description: |
+    Use this method to get a list of client scripts. It returns a json body.
+  responses:
+    200:
+      body:
+        application/json:
+          example: !include examples/admin/clientscript_list_example.json 
+          schema: !include schemas/clientscript_schema.json
 /doc:
   displayName: ClientScriptsDoc
   type: common
   get:
-    description: Get a pseudo schema showing quickly how to make a proper json for clientscripts.
+    description: |
+      Get a schema showing how to create a proper json for clientscripts.
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include schemas/clientscript_schema.json
 /{id}:
   displayName: OneClientScript
   type: common
   get:
     is: [fields]
-    description: Get one client script by id.
+    description: |
+      Use this method to get one client script by id.
     responses:
       200:
         body:
-          schema: !include schemas/clientscript_schema.json
+          application/json:
+            example: !include examples/admin/clientscript_example.json 
+            schema: !include schemas/clientscript_schema.json
   put:
-    description: Change one client script.
-    responses:
-      200:
-        body:
-          schema: !include schemas/clientscript_schema.json
+    description: |
+      Use this method to change one client script.
+    body:
+      application/json:
+        example: !include examples/admin/clientscript_example.json 
+        schema: !include schemas/clientscript_schema.json
   delete:
-    description: Delete one client script.
+    description: |
+      Delete one client script using and id.

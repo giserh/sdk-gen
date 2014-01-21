@@ -1,0 +1,10 @@
+[
+ 	{
+ 		"notificationType": 1,
+ 		"segment": 1,
+ 		"game": 1,
+ 		"data": {
+ 			"key": "value"
+ 		}
+ 	}
+]

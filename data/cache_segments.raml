@@ -6,7 +6,9 @@ get:
   responses:
     200:
       body: 
-        schema: !include schemas/segment_schema.json
+        application/json:
+          example: !include examples/cache/segment_list_example.json
+          schema: !include schemas/segment_schema.json
 /{segmentId}:
   displayName: OneSegment
   type: common
@@ -15,5 +17,7 @@ get:
     description: Get segment by id. 
     responses:
       200:
-        body: 
-          schema: !include schemas/segment_schema.json  
+        body:  
+          application/json:
+            example: !include examples/cache/segment_example.json
+            schema: !include schemas/segment_schema.json  

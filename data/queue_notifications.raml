@@ -8,7 +8,7 @@ get:
       body: 
         application/json:
           schema: !include schemas/notification_schema.json
-          example: !include examples/queue_notification_list_example.json
+          example: !include examples/queue/notification_list_example.json
 /{notificationId}:
   displayName: OneNotification
   type: common
@@ -19,7 +19,7 @@ get:
         body: 
           application/json:
             schema: !include schemas/notification_schema.json
-            example: !include examples/queue_notification_example.json
+            example: !include examples/queue/notification_example.json
   patch:
     description: Update status for a notification.
     responses:
@@ -27,7 +27,7 @@ get:
         body: 
           application/json:
             schema: !include schemas/post_notification_schema.json
-            example: !include examples/queue_notification_example.json
+            example: !include examples/queue/notification_example.json
 /error:
   displayName: ErrorNotifications
   type: common
@@ -38,7 +38,7 @@ get:
       200:
         body: 
           application/json:
-            example: !include examples/queue_notification_list_example.json
+            example: !include examples/queue/notification_list_example.json
             schema: !include schemas/notification_schema.json
   /{notificationId}:
     displayName: OneErrorNotification
@@ -50,7 +50,7 @@ get:
           body: 
             application/json:
               schema: !include schemas/notification_schema.json
-              example: !include examples/queue_notification_example.json
+              example: !include examples/queue/notification_example.json
     patch:
       description: Update status for an error notification.
       responses:
@@ -58,6 +58,6 @@ get:
           body:
             application/json: 
               schema: !include schemas/post_notification_schema.json
-              example: !include examples/queue_notification_example.json
+              example: !include examples/queue/notification_example.json
 
 

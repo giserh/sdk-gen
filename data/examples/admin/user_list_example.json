@@ -1,0 +1,19 @@
+[
+ 	{
+ 		"email": "example@ex.pl",
+ 		"password": "example",
+ 		"firstName": "Example",
+ 		"lastName": "Example",
+ 		"gender": "MALE",
+ 		"birthDate": "???",
+ 		"status": "ACTIVE",
+ 		"role": "Example",
+ 		"friends": [1,2,3],
+ 		"usersGroups": [1,2],
+ 		"segments": [1,3],
+ 		"gainedAchievements": [2,3],
+ 		"wonGames": [4,5],
+ 		"counterValues": [5,3],
+ 		"externalIds": [3,4]
+ 	}
+]

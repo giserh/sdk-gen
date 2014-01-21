@@ -1,0 +1,7 @@
+{
+    "active": true,
+    "name": "Example",
+    "description": "Example description",
+    "cron": "30 08 10 06 *",
+    "script": 1
+}

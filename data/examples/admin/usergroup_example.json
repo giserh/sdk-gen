@@ -1,0 +1,13 @@
+{
+    "name": "Example",
+    "users": [1,2,3],
+    "segments": [1,3],
+    "gainedAchievements": [2,3]
+    "wonGames": [4,5],
+    "counterValues": [5,3],
+    "externalIds": [3,4],
+    "customFields": {
+        "key1": "value1",
+        "key2": "value2"
+    }
+}

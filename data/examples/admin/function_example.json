@@ -1,0 +1,13 @@
+[
+ 	{
+	 	"name": "Example",
+    	"description": "Example description",
+    	"className": "Example",
+    	"method": "isExample",
+    	"returnType": "BOOLEAN",
+    	"functionType": "NATIVE",
+    	"scriptType": "CLIENT",
+    	"scriptId": 1,
+    	"manifesto": {}
+ 	}
+]

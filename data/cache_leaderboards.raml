@@ -1,5 +1,14 @@
 displayName: Leaderboards
 type: common
+get:
+  is: [fields, segments, paginator, groups, ordering]
+  description: Get list of possible leaderboards.
+  responses:
+    200:
+      body: 
+        application/json:
+          schema: !include schemas/leaderboard_schema.json
+          example: !include examples/cache/leaderboard_list_example.json
 /{leaderboardId}:
   displayName: OneLeaderboard
   type: common
@@ -9,7 +18,9 @@ type: common
     responses:
       200:
         body: 
-          schema: !include schemas/leaderboard_schema.json
+          application/json:
+            schema: !include schemas/leaderboard_schema.json
+            example: !include examples/cache/leaderboard_example.json
   /users:
     displayName: LeaderboardUsers
     type: common
@@ -24,8 +35,10 @@ type: common
           description: Get user's friends with one of the leaderboards. 
           responses:
             200:
-              body: 
-                schema: !include schemas/leaderboard_schema.json   
+              body:
+                application/json:
+                  example: !include examples/cache/leaderboard_example.json
+                  schema: !include schemas/leaderboard_schema.json   
   /segments:
     type: common
     displayName: LeaderboardSegments
@@ -38,7 +51,9 @@ type: common
         responses:
           200:
             body: 
-              schema: !include schemas/leaderboard_schema.json 
+              application/json:
+                example: !include examples/cache/leaderboard_example.json
+                schema: !include schemas/leaderboard_schema.json 
   /groups:
     type: common
     displayName: LeaderboardGroups
@@ -51,4 +66,6 @@ type: common
         responses:
           200:
             body: 
-              schema: !include schemas/leaderboard_schema.json   
+              application/json:
+                example: !include examples/cache/leaderboard_example.json
+                schema: !include schemas/leaderboard_schema.json   

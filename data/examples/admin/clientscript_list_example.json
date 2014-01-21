@@ -1,0 +1,5 @@
+{
+    "name": "Example",
+    "code": "$.subject.getCounterValue(1)",
+    "returnType": "STRING"
+}

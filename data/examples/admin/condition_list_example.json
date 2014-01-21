@@ -1,0 +1,11 @@
+[
+	{
+    	"name": "Example",
+    	"leftSide": "hello",
+    	"rightSide": "game",
+    	"operator": "NE",
+    	"counters": [1,2],
+    	"type": "NORMAL",
+    	"transactionSource": 1
+	}
+]

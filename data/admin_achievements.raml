@@ -1,17 +1,27 @@
 displayName: Achievements
 type : common
 post:
-  description: Create new achievement. 
+  description: |
+    Use this method to create a new achievement. It needs a body and a returns the created object.
   body:
     application/json: 
+      example: !include examples/admin/achievement_example.json
       schema: !include schemas/admin_achievement_schema.json
+  responses:
+      200:
+        body: 
+          application/json:
+            example: !include examples/admin/achievement_example.json
+            schema: !include schemas/admin_achievement_schema.json
 get:
   is: [fields, ordering, segments, groups, paginator]
   description: Get a list of achievements.
   responses:
       200:
         body: 
-          schema: !include schemas/admin_achievement_schema.json
+          application/json:
+            example: !include examples/admin/achievement_list_example.json
+            schema: !include schemas/admin_achievement_schema.json
 /{achievementId}:
   type : common
   displayName: OneAchievement
@@ -21,11 +31,14 @@ get:
     responses:
       200:
         body: 
-          schema: !include schemas/admin_achievement_schema.json
+          application/json:
+            example: !include examples/admin/achievement_example.json
+            schema: !include schemas/admin_achievement_schema.json
   put:    
     description: Update one achievement. 
     body:
       application/json: 
+        example: !include examples/admin/achievement_example.json
         schema: !include schemas/admin_achievement_schema.json
   delete:
     description: Delete one achievement. 
@@ -47,18 +60,32 @@ get:
     body:
       application/json: 
         schema: !include schemas/category_schema.json
+        example: !include examples/admin/achievementcategory_example.json
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin/achievementcategory_example.json
+            schema: !include schemas/category_schema.json
   get:
     description: Get list of categories.
     is: [fields, ordering, paginator]
     responses:
       200:
         body:
-          schema: !include schemas/category_schema.json
+          application/json:
+            example: !include examples/admin/achievementcategory_list_example.json
+            schema: !include schemas/category_schema.json
   /doc:
     type: common
     displayName: AchievementsCategoriesDoc    
     get:
       description: Get a pseudo schema for category.
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include schemas/category_schema.json
   /{id}:
     type: common
     displayName: AchievementsCategory
@@ -67,12 +94,15 @@ get:
       responses:
         200:
           body:
-            schema: !include schemas/category_schema.json
+            application/json:
+              example: !include examples/admin/achievementcategory_example.json
+              schema: !include schemas/category_schema.json
     put:
       description: Update achievement category. 
       body:
         application/json: 
           schema: !include schemas/category_schema.json
+          example: !include examples/admin/achievementcategory_example.json
     delete:
       description: Delete one achievements category.
     /achievements:
@@ -89,22 +119,36 @@ get:
   type: common
   displayName: AchievementsGroups
   post:
-    description: Create new achievement group.
+    description: Create a new achievement group. This method needs a body and returns the created object.
     body:
       application/json: 
         schema: !include schemas/achievement_group_schema.json
+        example: !include examples/admin/achievementgroup_example.json     
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin/achievementgroup_example.json   
+            schema: !include schemas/achievement_group_schema.json   
   get:
     description: Get a list achievement groups. 
     is: [fields, ordering, paginator]
     responses:
         200:
           body:
-            schema: !include schemas/achievement_group_schema.json
+            application/json:
+              example: !include examples/admin/achievementgroup_list_example.json   
+              schema: !include schemas/achievement_group_schema.json
   /doc:
     type: common
     displayName: AchievementsGroupsDoc
     get:
-      description: Get a pseudo schema for group.
+      description: Get a schema for group. It shows how to create a new group.
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include schemas/achievement_group_schema.json
   /{id}:
     displayName: OneAchievementsGroup
     type: common
@@ -114,12 +158,15 @@ get:
       responses:
         200:
           body:
-            schema: !include schemas/achievement_group_schema.json
+            application/json:
+              example: !include examples/admin/achievementgroup_example.json   
+              schema: !include schemas/achievement_group_schema.json
     put:
       description: Update an achievement group.
       body:
         application/json: 
           schema: !include schemas/achievement_group_schema.json
+          example: !include examples/admin/achievementgroup_example.json   
     delete:
       description: Delete an achievement group.
     /achievements:
@@ -136,22 +183,37 @@ get:
   type: common
   displayName: AchievementsProgresses
   post:
-    description: Create new achievement progress.
+    description: Create a new achievement progress.
     body:
       application/json: 
         schema: !include schemas/achievement_progress_schema.json
+        example: !include examples/admin/achievementprogress_example.json   
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin/achievementprogress_example.json   
+            schema: !include schemas/achievement_progress_schema.json
   get:
     description: Get achievement progress list. 
     is: [fields, ordering, paginator]
     responses:
         200:
           body:
-            schema: !include schemas/achievement_progress_schema.json
+            application/json:
+              example: !include examples/admin/achievementprogress_list_example.json   
+              schema: !include schemas/achievement_progress_schema.json
+            
   /doc:
     type: common
     displayName: AchievementsProgressesDoc
     get:
-      description: Get a pseudo schema for progress.
+      description: Get a schema for achievement progress.
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include schemas/achievement_progress_schema.json
   /{id}:
     displayName: OneAchievementsProgress
     type: common
@@ -161,11 +223,14 @@ get:
       responses:
         200:
           body:
-            schema: !include schemas/achievement_progress_schema.json
+            application/json:
+              example: !include examples/admin/achievementprogress_example.json   
+              schema: !include schemas/achievement_progress_schema.json
     put:
       description: Update an achievement progress.
       body:
         application/json: 
+          example: !include examples/admin/achievementprogress_example.json  
           schema: !include schemas/achievement_progress_schema.json
     delete:
       description: Delete an achievement progress.

@@ -1,0 +1,32 @@
+[
+    {
+        "name": "leaderboard0",
+        "updatedAt": 1390236383800,
+        "description": "Test leaderboard 0",
+        "cron": null,
+        "id": 0,
+        "createdAt": 1390236383800,
+        "script": null,
+        "active": true
+    },
+    {
+        "name": "leaderboard1",
+        "updatedAt": 1390236383803,
+        "description": "Test leaderboard 1",
+        "cron": null,
+        "id": 1,
+        "createdAt": 1390236383803,
+        "script": null,
+        "active": true
+    },
+    {
+        "name": "leaderboard2",
+        "updatedAt": 1390236383804,
+        "description": "Test leaderboard 2",
+        "cron": null,
+        "id": 2,
+        "createdAt": 1390236383804,
+        "script": null,
+        "active": true
+    }
+]

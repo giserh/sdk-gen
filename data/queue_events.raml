@@ -8,7 +8,7 @@ get:
       body:
         application/json:
           schema: !include schemas/event_schema.json
-          example: !include examples/queue_event_list_example.json
+          example: !include examples/queue/event_list_example.json
 post:
   description: Create a new event.
   body:
@@ -19,7 +19,7 @@ post:
       body:
         application/json:
           schema: !include schemas/url_event_schema.json
-          example: !include examples/queue_event_url_example.json
+          example: !include examples/queue/event_url_example.json
 /{eventId}:
   type: common
   displayName: OneEvent
@@ -30,7 +30,7 @@ post:
         body: 
           application/json: 
             schema: !include schemas/event_schema.json
-            example: !include examples/queue_event_example.json
+            example: !include examples/queue/event_example.json
 /error:
   displayName: ErrorEvents
   type: common
@@ -42,7 +42,7 @@ post:
         body:
           application/json:  
             schema: !include schemas/event_schema.json
-            example: !include examples/queue_event_list_example.json
+            example: !include examples/queue/event_list_example.json
   /{eventId}:
     type: common
     displayName: OneErrorEvent
@@ -53,4 +53,4 @@ post:
           body: 
             application/json: 
               schema: !include schemas/event_schema.json
-              example: !include examples/queue_event_example.json
+              example: !include examples/queue/event_example.json

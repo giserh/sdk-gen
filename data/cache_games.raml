@@ -6,7 +6,9 @@ get:
   responses:
     200:
       body: 
-        schema: !include schemas/game_schema.json     
+        application/json:
+          example: !include examples/cache/game_list_example.json
+          schema: !include schemas/game_schema.json     
 /{gameId}:
   type: common
   displayName: OneGame
@@ -16,4 +18,6 @@ get:
     responses:
       200:
         body: 
-          schema: !include schemas/game_schema.json
+          application/json:
+            example: !include examples/cache/game_example.json
+            schema: !include schemas/game_schema.json

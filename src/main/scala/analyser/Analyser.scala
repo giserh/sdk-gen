@@ -94,6 +94,15 @@ object Analyser {
 					val body=action.getBody					
 					
 					if(!body.isEmpty()) {
+						
+						// setup example body
+						val example = body.get("application/json")
+						if (example != null){
+							if( example.getExample() != null)
+								m.addDoc("example_body", example.getExample(), DocType.OTHER)
+						}
+						
+						// get all schemas
 						var gatherBodyTypes = List[String]()
 						body.asScala.foreach{
 							body_type => {
@@ -102,6 +111,7 @@ object Analyser {
 							}
 							
 						}
+						
 						/** Just to show that we use body */
 						m.addQueryParameter("body", "STRING")
 						m.addDoc("body", gatherBodyTypes.mkString("\n OR "),DocType.PARAM)

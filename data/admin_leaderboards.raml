@@ -5,18 +5,26 @@ post:
   body:
     application/json:
       schema: !include schemas/admin_leaderboard_schema.json
+      example: !include examples/admin/leaderboard_example.json
 get:
   is: [fields, paginator, ordering]
   description: Get a leaderboard list.
   responses:
     200:
       body:
-        schema: !include schemas/admin_leaderboard_schema.json
+        application/json:
+          example: !include examples/admin/leaderboard_list_example.json
+          schema: !include schemas/admin_leaderboard_schema.json
 /doc:
   displayName: LeaderboardsDocs
   type: common
   get:
-    description: Get a pseudo schema showing quickly how to make a proper json for leaderboards.
+    description: Get a schema showing how to make a proper json for leaderboards.
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include schemas/admin_leaderboard_schema.json
 /{id}:
   displayName: OneLeaderboard
   type: common
@@ -26,12 +34,15 @@ get:
     responses:
       200:
         body:
-          schema: !include schemas/admin_leaderboard_schema.json
+          application/json:
+            example: !include examples/admin/leaderboard_example.json
+            schema: !include schemas/admin_leaderboard_schema.json
   put:
     description: Update a leaderboard.
     body:
       application/json:
         schema: !include schemas/admin_leaderboard_schema.json
+        example: !include examples/admin/leaderboard_example.json
   delete:
     description: Remove a leaderboard.
   /recalculate:

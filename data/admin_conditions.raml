@@ -5,33 +5,45 @@ post:
   body:
     application/json:
       schema: !include schemas/condition_schema.json
+      example: !include examples/admin/condition_example.json
 get:
   is: [fields, paginator, ordering]
   description: Get a list of conditions.
   responses:
     200:
       body:
-        schema: !include schemas/condition_schema.json
+        application/json:
+          example: !include examples/admin/condition_list_example.json
+          schema: !include schemas/condition_schema.json
 /doc:
   displayName: ConditionsDoc
   type: common
   get:
-    description: Get a pseudo schema showing quickly how to make a proper json for clientscripts.
+    description: Get a schema showing how to make a proper json for clientscripts.
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include schemas/condition_schema.json
 /{id}:
   displayName: OneCondition
   type: common
   get:
     is: [fields]
-    description: Get one condition.
+    description: |
+      Get one condition by its id.
     responses:
       200:
         body:
-          schema: !include schemas/condition_schema.json
+          application/json:
+            example: !include examples/admin/condition_example.json
+            schema: !include schemas/condition_schema.json
   put:
     description: Change one condition.
     body:
       application/json:
         schema: !include schemas/condition_schema.json
+        example: !include examples/admin/condition_example.json
   delete:
     description: Delete one condition.
   /counters:

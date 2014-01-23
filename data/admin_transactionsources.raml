@@ -5,32 +5,43 @@ post:
   body:
     application/json:
       schema: !include schemas/transactionsource_schema.json
+      example: !include examples/admin/transactionsource_example.json
 get:
   is: [fields, paginator, ordering]
   description: Get a list of transaction sources.
   responses:
     200:
       body:
-        schema: !include schemas/transactionsource_schema.json
+        application/json:
+          example: !include examples/admin/transactionsource_list_example.json
+          schema: !include schemas/transactionsource_schema.json
 /doc:
   displayName: TransactionSourcesDocs
   type: common
   get:
-    description: Get a pseudo schema showing quickly how to make a proper json for transaction source.
+    description: Get a schema showing how to make a proper json for transaction source.
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include schemas/transactionsource_schema.json
 /{id}:
   displayName: OneTransactionSource
   type: common
   get:
     is: [fields]
-    description: Get a transaction source.
+    description: Get a transaction source by its id.
     responses:
       200:
         body:
-          schema: !include schemas/transactionsource_schema.json
+          application/json:
+            example: !include examples/admin/transactionsource_example.json
+            schema: !include schemas/transactionsource_schema.json
   put:
     description: Update a transaction source.
     body:
       application/json:
+        example: !include examples/admin/transactionsource_example.json
         schema: !include schemas/transactionsource_schema.json
   delete:
     description: Delete a transaction source.

@@ -1,109 +1,132 @@
-displayName: Users
+displayName: UserGroups
 type: common
 post:
-  description: Add a user.
+  description: Add a user group.
   body:
     application/json:
-      example: !include examples/admin/user_example.json
-      schema: !include schemas/admin_user.json
+      schema: !include schemas/admin_user_group_schema.json
+      example: !include examples/admin/usergroup_example.json
 get:
-  is: [fields, paginator, ordering, groups, segments]
-  description: Get a list of users.
+  is: [fields, paginator, ordering, segments]
+  description: Get a list of user groups.
   responses:
     200:
       body:
         application/json:
-          example: !include examples/admin/user_list_example.json
-          schema: !include schemas/admin_user.json
-/groups: !include  admin_usergroup.raml
+          example: !include examples/admin/usergroup_list_example.json
+          schema: !include schemas/admin_user_group_schema.json
 /doc:
-  displayName: UsersDoc
+  displayName: UserGroupsDoc
   type: common
   get:
-    description: Get a schema showing how to make a proper json for users.
+    description: Get a schema showing how to make a proper json for user group.
     responses:
       200:
         body:
           application/json:
-            example: !include schemas/admin_user.json
+            example: !include schemas/admin_user_group_schema.json
 /{id}:
-  displayName: OneUser
+  displayName: OneUserGroup
   type: common
   get:
-    description: Get one user by id.
+    description: Get a user group.
     responses:
       200:
         body:
           application/json:
-            example: !include examples/admin/user_example.json
-            schema: !include schemas/admin_user.json
+            example: !include examples/admin/usergroup_example.json
+            schema: !include schemas/admin_user_group_schema.json
   put:
-    description: Update one user by id.
+    description: Update a user group.
     body:
       application/json:
-        schema: !include schemas/admin_user.json
-        example: !include examples/admin/user_example.json
+        schema: !include schemas/admin_user_group_schema.json
+        example: !include examples/admin/usergroup_example.json
   delete:
-    description: Delete one user
+    description: Delete a user group.
+  /customfields:
+    displayName: UserGroupCustomFields
+    type: common
+    put:
+      description: Create a new custom field for user group.
+      body:
+        application/json:
+          schema: !include schemas/TODO.json
+          example: !include schemas/TODO.json
+    /{key}:
+      displayName: UserGroupCustomField
+      type: common
+      delete:
+        description: Delete a custom field by key.
   /externalids:
-    displayName: UserExternalIds
+    displayName: UserGroupExternalIds
     type: common
     post:
-      description: Create a new external id.
-      body:        
+      description: Add an external group id.
+      body:
         application/json:
           schema: !include schemas/externalid_schema.json
           example: !include examples/admin/externalid_example.json
     get:
-      is: [fields, paginator, ordering]
+      is: [fields, ordering, paginator]
       description: Get a list of external ids.
       responses:
         200:
           body:
             application/json:
-              schema: !include schemas/externalid_schema.json
               example: !include examples/admin/externalid_list_example.json
+              schema: !include schemas/externalid_schema.json
     /{childId}:
-      displayName: OneUserExternalId
+      displayName: OneUserGroupExternalId
       type: common
       get:
-        description: Get one external id for a user.
+        description: Get an external group id.
         responses:
           200:
             body:
               application/json:
-                schema: !include schemas/externalid_schema.json
                 example: !include examples/admin/externalid_example.json
+                schema: !include schemas/externalid_schema.json
       put:
-        description: Update one external id for a user.
+        description: Update an external group id.
         body:
           application/json:
             schema: !include schemas/externalid_schema.json
             example: !include examples/admin/externalid_example.json
       delete:
-        description: Delete one external id for a user.
+        description: Remove an external group id.
     /doc:
-      displayName: UserExternalIdsDoc
+      displayName: UserGroupExternalIdsDocs
       type: common
       get:
-        description: Get a schema showing how to make a proper json for user external ids.
+        description: Get a schema showing how to make a proper json for user group external ids.
         responses:
           200:
             body:
               application/json:
-                schema: !include examples/admin/externalid_example.json
+                example: !include schemas/externalid_schema.json
+  /users:
+    displayName: UserGroupFriends
+    type: common
+    /{childId}:
+      displayName: OneUserGroupFriend
+      type: common
+      put:
+        description: Add a user to user group.
+      delete:
+        description: Delete a user from user group.
   /gainedachievements:
-    displayName: UserGainedAchievements
+    displayName: UserGroupGainedAchievements
     type: common
     post:
-      description: Create a new gained achievement for a user.
+      description: Create a gained achievement for a group.
       body:
         application/json:
           example: !include examples/admin/gainedachievement_example.json
           schema: !include schemas/gained_achievement_schema.json
     get:
-      is: [paginator, ordering, fields]
-      description: Get a list of gained achievements for a user.
+      is: [fields, paginator, ordering]
+      description: Get a list of gained achievements for a group.
       responses:
         200:
           body:
@@ -111,10 +134,10 @@ get:
               example: !include examples/admin/gainedachievement_list_example.json
               schema: !include schemas/gained_achievement_schema.json
     /{childId}:
-      displayName: OneUserGainedAchievement
+      displayName: OneUserGroupGainedAchievement
       type: common
       get:
-        description: Get one user gained achievement.
+        description: Get a gained achievement for a group by id.
         responses:
           200:
             body:
@@ -122,35 +145,35 @@ get:
                 example: !include examples/admin/gainedachievement_example.json
                 schema: !include schemas/gained_achievement_schema.json
       put:
-        description: Update one user gained achievement.
+        description: Update a gained achievement for a group by id.
         body:
           application/json:
             schema: !include schemas/gained_achievement_schema.json
             example: !include examples/admin/gainedachievement_example.json
       delete:
-        description: Update one user gained achievement.
+        description: Delete a gained achievement for a group by id.
     /doc:
-      displayName:  OneUserGainedAchievementsDoc
+      displayName: UserGroupGainedAchievementDocs
       type: common
       get:
-        description: Get a schema showing how to make a proper json for user gained achievement.
+        description: Get a schema showing how to make a proper json for user group gained achivements.
         responses:
           200:
             body:
               application/json:
                 example: !include schemas/gained_achievement_schema.json
   /wongames:
-    displayName: UserWonGames
+    displayName: UserGroupWonGames
     type: common
     post:
-      description: Create a new won game for a user.
+      description: Create a won game for user group.
       body:
         application/json:
           schema: !include schemas/won_game_schema.json
           example: !include examples/admin/wongame_example.json
     get:
-      is: [paginator, ordering, fields]
-      description: Get a list of won games for a user.
+      is: [fields, paginator, ordering]
+      description: Get a list of user group won games.
       responses:
         200:
           body:
@@ -158,56 +181,56 @@ get:
               example: !include examples/admin/wongame_list_example.json
               schema: !include schemas/won_game_schema.json
     /{childId}:
-      displayName: OneUserWonGame
+      displayName: OneUserGroupWonGame
       type: common
       get:
-        description: Get one won game for a user.
+        description: Get a won game for user group by id.
         responses:
           200:
             body:
               application/json:
-                example: !include examples/admin/wongame_example.json
                 schema: !include schemas/won_game_schema.json
+                example: !include examples/admin/wongame_example.json
       put:
-        description: Update one won game for a user.
+        description: Update a won game for user group by id.
         body:
           application/json:
             schema: !include schemas/won_game_schema.json
             example: !include examples/admin/wongame_example.json
       delete:
-        description: Delete one won game for a user.
+        description: Delete a won game for user group by id.
     /doc:
-      displayName: UserWonGamesDoc
+      displayName: UserGroupWonGameDoc
       type: common
       get:
-        description: Get a pseudo schema showing quickly how to make a proper json for user won game.
+        description: Get a schema showing how to make a proper json for user group won games.
         responses:
           200:
             body:
               application/json:
-                example: !include schemas/won_game_schema.json
+                schema: !include examples/admin/wongame_example.json
   /segments:
-    displayName: UserSegments
+    displayName: UserGroupSegments
     type: common
     /{childId}:
-      displayName: OneUserSegment
+      displayName: OneUserGroupSegment
       type: common
       put:
-        description: Add a segment to a user.
+        description: Add a segment to a user group.
       delete:
-        description: Delete a segment from a user.
+        description: Remove a segment from a user group.
   /countervalues:
-    displayName: UserCounterValues
+    displayName: UserGroupCounterValues
     type: common
     post:
-      description: Create a new counter value for a user.
+      description: Create a new counter value.
       body:
         application/json:
           example: !include examples/admin/countervalue_example.json
           schema: !include schemas/counter_value_schema.json
     get:
-      is: [paginator, fields, ordering]
-      description: Get a list of counter values for a user.
+      is: [fields, paginator, ordering]
+      description: Get a list of counter values fro a user group.
       responses:
         200:
           body:
@@ -215,10 +238,10 @@ get:
               example: !include examples/admin/countervalue_list_example.json
               schema: !include schemas/counter_value_schema.json
     /{childId}:
-      displayName: OneUserCounterValue
+      displayName: OneUserGroupCounterValue
       type: common
       get:
-        description: Get one user counter value.
+        description: Get one counter value for a user group.
         responses:
           200:
             body:
@@ -226,54 +249,20 @@ get:
                 example: !include examples/admin/countervalue_example.json
                 schema: !include schemas/counter_value_schema.json
       put:
-        description: Update one user counter value.
+        description: Update one counter value for a user group.
         body:
           application/json:
             schema: !include schemas/counter_value_schema.json
             example: !include examples/admin/countervalue_example.json
       delete:
-        description: Delete one user counter value.
+        description: Remove one counter value from a user group.
     /doc:
-      displayName: UserCounterValueDoc
+      displayName: OneUserGroupCounterValueDoc
       type: common
       get:
-        description: Get a schema showing how to make a proper json for user counter values.
+        description: Get a schema showing how to make a proper json for user group counter value.
         responses:
           200:
             body:
               application/json:
                 example: !include schemas/counter_value_schema.json
-  /groups:
-    displayName: GroupUser
-    type: common
-    /{childId}:
-      displayName: OneGroupUser
-      type: common
-      put:
-        description: Add a group to user.
-      delete:
-        description: Remove a group from user.
-  /customfields:
-    displayName: UserCustomFields
-    type: common
-    put:
-      description: Create a new custom field for user.
-      body:
-        application/json:
-          schema: !include schemas/TODO.json
-          example: !include schemas/TODO.json
-    /{key}:
-      displayName: UserCustomField
-      type: common
-      delete:
-        description: Delete a custom field by key.
-  /friends:
-    displayName: UserFriends
-    type: common
-    /{childId}:
-      displayName: OneUserFriend
-      type: common
-      put:
-        description: Add a friend to user.
-      delete:
-        description: Remove a friend from user.

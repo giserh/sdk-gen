@@ -5,33 +5,44 @@ post:
   body:
     application/json:
       schema: !include schemas/admin_notification_schema.json
+      example: !include examples/admin/notification_example.json
 get:
   is: [fields, paginator, ordering]
   description: Get a list of notifications.
   responses:
     200:
       body:
-        schema: !include schemas/admin_notification_schema.json
+        application/json:
+          schema: !include schemas/admin_notification_schema.json
+          example: !include examples/admin/notification_list_example.json
 /doc:
   displayName: NotificationsDocs
   type: common
   get:
-    description: Get a pseudo schema showing quickly how to make a proper json for notifications.
+    description: Get a schema showing how to make a proper json for notifications.
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include schemas/admin_notification_schema.json
 /{id}:
   displayName: OneNotification
   type: common
   get:
     is: [fields]
-    description: Get one notification.
+    description: Get one notification by its id.
     responses:
       200:
         body:
-          schema: !include schemas/admin_notification_schema.json
+          application/json:
+            example: !include examples/admin/notification_example.json
+            schema: !include schemas/admin_notification_schema.json
   put:
     description: Update a notification.
     body:
       application/json:
         schema: !include schemas/admin_notification_schema.json
+        example: !include examples/admin/notification_example.json
   delete:
     description: Delete a notification.
 /types:
@@ -42,18 +53,26 @@ get:
     body:
       application/json:
         schema: !include schemas/admin_notification_type_schema.json
+        example: !include examples/admin/notificationtype_example.json
   get:
     is: [fields, paginator, ordering]
     description: Get a list of notification types.
     responses:
       200:
         body:
-          schema: !include schemas/admin_notification_type_schema.json
+          application/json:
+            example: !include examples/admin/notificationtype_list_example.json
+            schema: !include schemas/admin_notification_type_schema.json
   /doc:
     displayName: NotificationTypesDocs
     type: common
     get:
       description: Get a pseudo schema showing quickly how to make a proper json for notification types.
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include schemas/admin_notification_type_schema.json
   /{id}:
     displayName: OneNotificationType
     type: common
@@ -63,11 +82,14 @@ get:
       responses:
         200:
           body:
-            schema: !include schemas/admin_notification_type_schema.json
+            application/json:
+              example: !include examples/admin/notificationtype_example.json
+              schema: !include schemas/admin_notification_type_schema.json
     put:
       description: Update a notification type
       body:
         application/json:
+          example: !include examples/admin/notificationtype_example.json
           schema: !include schemas/admin_notification_type_schema.json
     delete:
       description: Delete a notification type.

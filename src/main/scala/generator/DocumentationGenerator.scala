@@ -12,7 +12,7 @@ import java.io.StringWriter
 
 class DocumentationGenerator extends Generator {
 
-	protected var fileName = "documentation.php"
+	protected var fileName = "admin_doc.php"
 	val engine: TemplateEngine = new TemplateEngine
 	/**
 	 * Creates the sdk based on Raml
@@ -69,7 +69,7 @@ class DocumentationGenerator extends Generator {
 	}
 
 	/**
-	 * Generates docuemnetation page for chosen methods.
+	 * Generates documentation page for chosen methods.
 	 * @param pack - Package object representing the entire SDK.
 	 * @param packageFile - path to package template.
 	 * @param headers - a list of generated subpages.

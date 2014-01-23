@@ -17,12 +17,12 @@ ${desc}
 ${url}
 </code>
 </pre>
+#if (! queryParameters.isEmpty())
 <h3>Parameters</h3>
 <p>
 List of all parameters:
-#if (! queryParameters.isEmpty())
+</p>
 <table>
-	
 	<thead>
 		<tr>
 			<th>
@@ -41,7 +41,11 @@ List of all parameters:
  			<tr>
  				<td class="confluenceTd"> ${p._1} </td>
 				<td class="confluenceTd"> ${p._2} </td>
-				<td class="confluenceTd"> ${p._3} </td>
+				#if(p._1.equals("body"))
+					<td class="confluenceTd"> <pre><code>${p._3}</pre></code> </td>
+				#else
+					<td class="confluenceTd"> ${p._3}</td>
+				#end
 			</tr>
 		#end
 	</tbody>

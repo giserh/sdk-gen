@@ -4,7 +4,7 @@
     "firstName": "Example",
     "lastName": "Example",
     "gender": "MALE",
-    "birthDate": "???",
+    "birthDate": null,
     "status": "ACTIVE",
     "role": "Example",
     "friends": [1,2,3],
@@ -13,5 +13,9 @@
     "gainedAchievements": [2,3],
     "wonGames": [4,5],
     "counterValues": [5,3],
-    "externalIds": [3,4]
+    "externalIds": [3,4],
+    "customFields": {
+        "shoes": "45",
+        "system": "Windows"
+    }
 }

@@ -7,6 +7,7 @@ import org.raml.parser.visitor.RamlDocumentBuilder
 import collection.JavaConverters._
 import org.raml.model.SecurityReference
 import org.raml.model.Action
+import scala.util.parsing.json.JSON
 
 /**
  * Object used to extract data from raml objects and creating sdk packages.
@@ -25,16 +26,15 @@ object Analyser {
 		val securedBy = raml.getSecuredBy().get(0)
 
 		val oauth = raml.getSecuritySchemes().get(0).get("oauth_2_0").getSettings().get("baseUri").get(0)
-			
+
 		val pack = new Package(baseUri, mediaType, securedBy, oauth)
 
 		val version = raml.getVersion()
 		pack.addDoc("version", version)
 
 		val title = raml.getTitle()
-		pack.addDoc("title", title)		
-		
-		
+		pack.addDoc("title", title)
+
 		/* @TODO Should be logged*/
 		println(s"Building SDK package for API version ${pack.docs("version")}")
 
@@ -44,7 +44,7 @@ object Analyser {
 
 		pack
 	}
-	
+
 	/**
 	 * Maps raml REST method type to the one used by the analyser
 	 * @param atype : ActionType enum representing the type of rest method
@@ -70,7 +70,7 @@ object Analyser {
 	 *  @param resourceUrl : url of the resource containing the methods in map
 	 *  @param resourceName : name of the resource containing the methods in map
 	 */
-	private def createMethods(methods: java.util.Map[ActionType, Action], clazz: Clazz, resourceUrl : String, resourceName: String) {
+	private def createMethods(methods: java.util.Map[ActionType, Action], clazz: Clazz, resourceUrl: String, resourceName: String) {
 
 		/** We check each method*/
 		methods.asScala.foreach {
@@ -79,85 +79,74 @@ object Analyser {
 
 					val actionType = action_tuple._1
 					val action = action_tuple._2
-				
+
 					/** Create new method with all the needed parameters. */
 					val m = new Method(mapRestType(actionType), resourceUrl, resourceName, action.getSecuredBy().asScala.toList)
-					
+
 					/** Add the traits */
 					m.setupTraits(action.getQueryParameters().asScala.toMap)
-					
+
 					/** Add basic doc - description*/
-					m.addDoc("", action.getDescription(),DocType.OTHER) 
-					
+					m.addDoc("", action.getDescription(), DocType.DESCRIPTION)
+
 					/** Analyse the possible values for body **/
-					
-					val body=action.getBody					
-					
-					if(!body.isEmpty()) {
-						
+
+					val body = action.getBody
+
+					if (!body.isEmpty()) {
+
 						// setup example body
-						val example = body.get("application/json")
-						if (example != null){
-							if( example.getExample() != null)
-								m.addDoc("example_body", example.getExample(), DocType.OTHER)
+						val appjson = body.get("application/json")
+						if (appjson != null) {
+							if (appjson.getExample() != null)
+								m.addDoc("example_body", appjson.getExample(), DocType.OTHER)
+							/** Just to show that we use body */
+							m.addQueryParameter("body", "STRING")
+							m.addDoc("body", appjson.getSchema(), DocType.PARAM)
 						}
-						
-						// get all schemas
-						var gatherBodyTypes = List[String]()
-						body.asScala.foreach{
-							body_type => {
-								/** Add example schema to docs **/
-								gatherBodyTypes =  (body_type._1 + " schema : \n" +body_type._2.getSchema())/*.replace("\n", "\n*") */ :: gatherBodyTypes
-							}
-							
-						}
-						
-						/** Just to show that we use body */
-						m.addQueryParameter("body", "STRING")
-						m.addDoc("body", gatherBodyTypes.mkString("\n OR "),DocType.PARAM)
+
 					}
-					
+
 					/** Analyse the possible values for responses **/
-					
-					val responses = action.getResponses() 
-					
-					if (!responses.isEmpty()){
-						
-						
+
+					val responses = action.getResponses()
+
+					if (!responses.isEmpty()) {
+
 						// getting a succesful result - 200
 						val res200 = responses.get("200")
-						if (res200 != null){
-								val example = res200.getBody().get("application/json")
-								if (example != null){
-									if( example.getExample() != null)
-										m.addDoc("example", example.getExample(), DocType.OTHER)
-								}
-						}
-						
-						// getting a succesful result - 201
-						val res201 = responses.get("201")
-						if (res201 != null){
-								val example = res201.getBody().get("application/json")
-								if (example != null){
-									if( example.getExample() != null)
-										m.addDoc("example", example.getExample(), DocType.OTHER)
-								}
-						}
-						
-						// get return values schemas
-						var gatherReturn = List[String]()
-						responses.asScala.foreach{
-							response => {
-								/** Get all mime-types of responses **/
-								val typeSchema = response._2.getBody().asScala.map{ tpl => tpl._1 + " : " + tpl._2.getSchema()/*.replace("\n", "\n *")*/}.mkString(" | ")
-								/** Join all possible responses **/
-								gatherReturn = response._1 + " : " + typeSchema :: gatherReturn 
+						if (res200 != null) {
+							val example = res200.getBody().get("application/json")
+							if (example != null) {
+								if (example.getExample() != null)
+									m.addDoc("example", example.getExample(), DocType.OTHER)
 							}
 						}
-						m.addDoc("return value", gatherReturn.mkString("\n or "),DocType.RETURN)
-					}	
-					
-										
+
+						// getting a succesful result - 201
+						val res201 = responses.get("201")
+						if (res201 != null) {
+							val example = res201.getBody().get("application/json")
+							if (example != null) {
+								if (example.getExample() != null)
+									m.addDoc("example", example.getExample(), DocType.OTHER)
+							}
+						}
+
+						// get return values schemas
+						var gatherReturn = List[String]()
+						responses.asScala.foreach {
+							response =>
+								{
+									/** Get all mime-types of responses **/
+									val typeSchema = response._2.getBody().asScala.map { tpl => tpl._1 + " : " + tpl._2.getSchema() /*.replace("\n", "\n *")*/ }.mkString(" | ")
+									/** Join all possible responses **/
+									gatherReturn = response._1 + " : " + typeSchema :: gatherReturn
+								}
+						}
+						m.addDoc("return value", gatherReturn.mkString("\n or "), DocType.RETURN)
+					}
+
 					clazz.add(m)
 				}
 		}
@@ -172,19 +161,19 @@ object Analyser {
 
 		/*Base uri*/
 		val url = resourceTuple._2.getUri()
-		
+
 		/*Actual resource*/
 		val resource = resourceTuple._2
-		
+
 		val methods = resource.getActions()
-		val name = resource.getDisplayName()		
-		
+		val name = resource.getDisplayName()
+
 		/** create a new clazz object*/
 		var clazz: Clazz = null
 		if (name != null) clazz = new Clazz(url, pack.baseUri, pack.baseOauthUri, pack.docs("version"), name)
-		else clazz = new Clazz(url,pack.baseUri, pack.baseOauthUri, pack.docs("version"))
+		else clazz = new Clazz(url, pack.baseUri, pack.baseOauthUri, pack.docs("version"))
 
-		createMethods(methods, clazz , url ,name)
+		createMethods(methods, clazz, url, name)
 
 		pack.addClazz(clazz)
 
@@ -200,16 +189,16 @@ object Analyser {
 	 * @param clazz : Clazz to add all the methods to.
 	 */
 	private def analyzeSubresource(resourceTuple: (String, Resource), clazz: Clazz) {
-		
+
 		/* base uri*/
 		val url = resourceTuple._2.getUri()
-		
+
 		/* actual resource */
 		val resource = resourceTuple._2
-		
+
 		/* actions for a uri */
 		val methods = resource.getActions()
-		createMethods(methods, clazz,url, resource.getDisplayName())
+		createMethods(methods, clazz, url, resource.getDisplayName())
 
 		for { child <- resource.getResources().asScala } {
 			analyzeSubresource(child, clazz)

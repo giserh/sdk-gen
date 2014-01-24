@@ -1,7 +1,7 @@
 [
     {
         "globalCounter": false,
-        "conditions": {},
+        "conditions": [33, 44],
         "name": "Test counter0",
         "updatedAt": 1390236383950,
         "description": "A simple counter",

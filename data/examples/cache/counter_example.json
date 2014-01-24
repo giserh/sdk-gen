@@ -1,6 +1,6 @@
  {
         "globalCounter": false,
-        "conditions": {},
+        "conditions": [1],
         "name": "Test counter0",
         "updatedAt": 1390236383950,
         "description": "A simple counter",

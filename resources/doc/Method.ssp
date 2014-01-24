@@ -6,6 +6,7 @@
 <%@ var url : String %>
 <%@ var response : String %>
 <%@ var request: String %>
+<%@ var bodyTable: List[(String,String,String)] %>
 <%@ var queryParameters: List[(String,String,String)] %>
 
 <h2 id="nav-section-${headerId}-${methodId}">${methodName}</h2>
@@ -41,16 +42,40 @@ List of all parameters:
  			<tr>
  				<td class="confluenceTd"> ${p._1} </td>
 				<td class="confluenceTd"> ${p._2} </td>
-				#if(p._1.equals("body"))
-					<td class="confluenceTd"> <pre><code>${p._3}</pre></code> </td>
-				#else
-					<td class="confluenceTd"> ${p._3}</td>
-				#end
+				<td class="confluenceTd"> ${p._3}</td>
+				
 			</tr>
 		#end
 	</tbody>
 </table>
 #end	
+
+#if ( bodyTable.length != 0)
+<p>
+Body json specs:
+</p>
+<table>
+	<thead>
+		<tr>
+			<th>
+				<div class="tablesorter-header-inner">Name</div>
+			</th>
+			<th>
+				<div class="tablesorter-header-inner">Type</div>
+			</th>
+		</tr>
+ 	</thead>
+ 	<tbody class="">
+ 		#for ( p <-bodyTable)
+ 			<tr>
+ 				<td class="confluenceTd"> ${p._1}</td>
+				<td class="confluenceTd"> ${p._2} </td>
+				
+			</tr>
+		#end
+	</tbody>
+</table>
+#end
 
 #if (request != "example_body")
 <h3>Request</h3>

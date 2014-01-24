@@ -110,12 +110,12 @@ class JavaSDKGenerator extends SourceGenerator(".java"){
 		context.attributes("parameters") = method.query.map{
 			tpl => (tpl._1,nameChanger(tpl._2))
 		}
-		context.attributes("docs") = method.docs.map{
+		context.attributes("docs") = method.docs.filter( tpl => tpl._2._1 != DocType.OTHER).map{
 			tpl =>{
 				val attr = tpl._2
-				if (attr._1 == DocType.OTHER){
+				if (attr._1 == DocType.DESCRIPTION){
 					(tpl._1,attr._2)
-				}else{
+				}else {
 					("@"+attr._1+" "+tpl._1,attr._2)
 				}
 			}

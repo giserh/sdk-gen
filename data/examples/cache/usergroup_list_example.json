@@ -2,14 +2,14 @@
     {
         "name": "Testers 0",
         "updatedAt": 1390236383333,
-        "users": {},
-        "counterValues": {},
-        "externalIds": {},
+        "users": [1 ,11],
+        "counterValues": [],
+        "externalIds": [],
         "id": 0,
-        "gainedAchievements": {},
-        "segments": {},
+        "gainedAchievements": [],
+        "segments": [],
         "createdAt": 1390236383333,
-        "wonGames": {},
+        "wonGames": [],
         "level": 1
     }
 ]

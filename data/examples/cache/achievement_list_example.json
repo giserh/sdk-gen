@@ -10,11 +10,7 @@
         "id": 0,
         "achievementType": "NORMAL",
         "progress": null,
-        "segments": {
-            "0": 54,
-            "1": 52,
-            "2": 53
-        },
+        "segments": [54, 52, 53],
         "createdAt": 1390236382941,
         "achievementGroup": null,
         "counter": null,

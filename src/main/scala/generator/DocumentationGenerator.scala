@@ -9,10 +9,10 @@ import java.io.File
 import org.fusesource.scalate.DefaultRenderContext
 import org.fusesource.scalate.TemplateEngine
 import java.io.StringWriter
-
+import scala.util.parsing.json.JSON
 class DocumentationGenerator extends Generator {
 
-	protected var fileName = "admin_doc.php"
+	protected var fileName = "documentation.php"
 	val engine: TemplateEngine = new TemplateEngine
 	/**
 	 * Creates the sdk based on Raml
@@ -37,28 +37,27 @@ class DocumentationGenerator extends Generator {
 			}
 		}
 
-		
 		val pages = all.keys.map {
 			key =>
 				{
 					var headerId = -1
-					val sortedKeys = all(key).keys.toList//.sortBy( x => x)						
-					val headers  = sortedKeys.map {
+					val sortedKeys = all(key).keys.toList //.sortBy( x => x)						
+					val headers = sortedKeys.map {
 						mkey =>
 							{
 								var methodId = -1
-								headerId+=1
+								headerId += 1
 								val methods = all(key)(mkey).map {
-									m => methodId +=1; generateMethod(m, resourcePath +"/Method.ssp",methodId,headerId)
+									m => methodId += 1; generateMethod(m, resourcePath + "/Method.ssp", methodId, headerId)
 								}
-								generateHeaders(methods,resourcePath + "/Header.ssp",headerId,mkey)
+								generateHeaders(methods, resourcePath + "/Header.ssp", headerId, mkey)
 							}
 					}
-					(key,generatePage(pack,resourcePath +"/Page.ssp",headers))
+					(key, generatePage(pack, resourcePath + "/Page.ssp", headers))
 
 				}
 		}.toMap
-		
+
 		// write to file
 
 		val dest = new PrintWriter(new File(tempDirectory + "/" + fileName))
@@ -91,7 +90,7 @@ class DocumentationGenerator extends Generator {
 		result.toString()
 	}
 
-	def generateHeaders(methods: List[String], pageFile: String, headerId : Int, name : String): String = {
+	def generateHeaders(methods: List[String], pageFile: String, headerId: Int, name: String): String = {
 		val templ = engine.load(pageFile)
 
 		val result = new StringWriter()
@@ -100,7 +99,7 @@ class DocumentationGenerator extends Generator {
 
 		context.attributes("methods") = methods
 		context.attributes("name") = name.capitalize
-		context.attributes("id") = headerId 
+		context.attributes("id") = headerId
 
 		templ.render(context)
 
@@ -114,7 +113,7 @@ class DocumentationGenerator extends Generator {
 	 * @param methodFile - path to method template
 	 * @return generated method in a string
 	 */
-	def generateMethod(method: Method, methodFile: String, methodId : Int, headerId : Int): String = {
+	def generateMethod(method: Method, methodFile: String, methodId: Int, headerId: Int): String = {
 
 		val templ = engine.load(methodFile)
 
@@ -128,16 +127,35 @@ class DocumentationGenerator extends Generator {
 		context.attributes("desc") = method.docs("")._2
 		context.attributes("headerId") = headerId
 		context.attributes("methodId") = methodId
-		context.attributes("queryParameters")  = method.query.toList.map{
+		context.attributes("queryParameters") = method.query.toList.filter(tpl => tpl._1 != "body").map {
 			tpl => (tpl._1, tpl._2.toLowerCase(), method.docs(tpl._1)._2)
 		}
-		context.attributes("url") = method.restType.toString().toUpperCase() +" "+method.url
-		
+
+		context.attributes("url") = method.restType.toString().toUpperCase() + " " + method.url
+
+		if (method.docs.contains("body")) {
+			val obj = JSON.parseFull(method.docs("body")._2) match {
+				case Some(v) => v
+				case None =>
+			}
+			var bodypar = obj.asInstanceOf[Map[String, Any]]
+			if (bodypar.contains("properties"))
+				bodypar = bodypar("properties").asInstanceOf[Map[String, Any]]
+
+			val bodyTable = bodypar.map {
+				tupl =>
+					{
+						(tupl._1, tupl._2.asInstanceOf[Map[String, Any]]("type"), "")
+					}
+			}.toList
+			context.attributes("bodyTable") = bodyTable
+		} else context.attributes("bodyTable") = List[(String, String, String)]()
+
 		if (method.docs.contains("example"))
 			context.attributes("response") = method.docs("example")._2
 		else
 			context.attributes("response") = "example"
-			
+
 		if (method.docs.contains("example_body"))
 			context.attributes("request") = method.docs("example_body")._2
 		else

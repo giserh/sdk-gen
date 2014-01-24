@@ -9,14 +9,10 @@
         "id": 0,
         "gameType": "ONE_TIME",
         "expression": null,
-        "segments": {
-            "0": 51,
-            "1": 52,
-            "2": 50
-        },
+        "segments": [ 51, 52, 50],
         "createdAt": 1390236382695,
         "counter": null,
-        "notifications": {},
+        "notifications": [],
         "active": true
     }
 ]

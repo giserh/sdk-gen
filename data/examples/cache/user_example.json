@@ -3,15 +3,15 @@
         "email": "user0@test.com",
         "role": null,
         "counterValues": {},
-        "externalIds": {},
+        "externalIds": {}
+        ,
         "lastName": "user",
         "firstName": null,
         "birthDate": null,
         "id": 0,
         "friends": {},
         "status": 0,
-        "gainedAchievements": {
-            "0": {
+        "gainedAchievements": [ {
                 "updatedAt": 1390236381898,
                 "achievement": 0,
                 "amount": 1,
@@ -19,7 +19,7 @@
                 "status": 0,
                 "createdAt": 1390236381898
             },
-            "1": {
+            {
                 "updatedAt": 1390236381898,
                 "achievement": 2,
                 "amount": 1,
@@ -27,7 +27,7 @@
                 "status": 0,
                 "createdAt": 1390236381898
             },
-            "2": {
+             {
                 "updatedAt": 1390236381898,
                 "achievement": 1,
                 "amount": 1,
@@ -35,19 +35,11 @@
                 "status": 0,
                 "createdAt": 1390236381898
             }
-        },
-        "segments": {
-            "0": 52,
-            "1": 53,
-            "2": 54
-        },
+        ],
+        "segments": [52, 53, 54],
         "createdAt": 1390236382254,
-        "wonGames": {},
-        "usersGroups": {
-            "0": 52,
-            "1": 53,
-            "2": 54
-        },
+        "wonGames": [1292],
+        "usersGroups":[52, 53, 54],
         "gender": 0,
         "level": 1
 }

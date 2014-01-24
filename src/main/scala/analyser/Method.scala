@@ -23,6 +23,7 @@ object RestType extends Enumeration {
 object DocType extends Enumeration {
     val PARAM = Value("param")
     val RETURN = Value("return")
+    val DESCRIPTION = Value("")
     val OTHER = Value("")
   }
 
@@ -95,7 +96,13 @@ class Method(val restType: RestType.Value, val url: String, private var _name : 
 				var getId = id.replace("{", "")				
 				getId = getId.replace("}", "")
 				addQueryParameter(getId, "String")
-				addDoc(getId, "Id of the object we are interested in.",DocType.PARAM )
+				
+				// get the name of the object
+				val start = this.url.take(this.url.indexOf(id) -1)  
+				var name = start.drop(start.lastIndexOf("/") + 1)
+				if (name.endsWith("s")) name = name.take( name.length() - 1)
+				
+				addDoc(getId, "Id of the " + name + " we are interested in.",DocType.PARAM )
 			}
 		}
 	}

@@ -6,6 +6,12 @@ post:
     application/json:
       schema: !include schemas/condition_schema.json
       example: !include examples/admin/condition_example.json
+  responses:
+    200:
+      body:
+        application/json:
+          example: !include examples/admin/condition_example.json
+          schema: !include schemas/condition_schema.json
 get:
   is: [fields, paginator, ordering]
   description: Get a list of conditions.

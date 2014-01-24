@@ -59,11 +59,11 @@ class DocumentationGenerator extends Generator {
 		}.toMap
 
 		// write to file
-
-		val dest = new PrintWriter(new File(tempDirectory + "/" + fileName))
-		dest.print(pages("admin"))
-		dest.flush()
-
+		for (p <- pages.keys) {
+			val dest = new PrintWriter(new File(tempDirectory + "/" + p + "_" + fileName))
+			dest.print(pages(p))
+			dest.flush()
+		}
 		true
 	}
 

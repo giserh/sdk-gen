@@ -86,6 +86,7 @@ public class Connector {
 
 		if (currentTime > Connector.currentTokenTime) {
 
+			Connector.currentTokenTime = currentTime + 3600 * 1000;
 			HttpPost method = new HttpPost(Connector.oauthUrl + "/token");
 			method.addHeader(
 					"Authorization",

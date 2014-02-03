@@ -28,3 +28,5 @@ error.log
 /resources/php/source/nbproject/private/
 *~
 /resources/java-android/source/isaacloud-android-sdk-test/bin
+*.jar
+

@@ -7,41 +7,20 @@ import org.json.JSONObject;
 public class HttpResponse {
 	
 	private boolean isValid;
+	private int responseCode;
 	private String responseString;
-	private HttpMethod method;
-	private boolean hasJSON;
+	private String method;
 	
-	public HttpResponse(){
-		this.setIsValid(true);
-	}
 	
-	public HttpResponse(HttpMethod method, boolean hasJSON){
-		this.setMethod(method);
-		this.setHasJSON(hasJSON);
+	private HttpResponse(HttpResponse.Builder builder){
+		this.isValid = builder.isValid;
+		this.responseCode = builder.responseCode;
+		this.responseString =builder.responseString;
+		this.method = builder.method;
 	}
 
-	//public JSONObject getJson() {
-	//	return json;
-	//}
-
-	//public void setJson(JSONObject json) {
-	//	this.json = json;
-	//}
-
-	public boolean hasJSON() {
-		return hasJSON;
-	}
-
-	public void setHasJSON(boolean hasJSON) {
-		this.hasJSON = hasJSON;
-	}
-
-	public HttpMethod getMethod() {
+	public String getMethod() {
 		return method;
-	}
-
-	public void setMethod(HttpMethod method) {
-		this.method = method;
 	}
 	
 	@Override
@@ -49,8 +28,9 @@ public class HttpResponse {
 		String s = "";
 		s += "HttpResponse" + "\n";
 		s += "Method: " + method.toString() + "\n";
-		s += "JSON available: " + hasJSON;
-		if(hasJSON){
+		s += "ResponseCod: " + responseCode + "\n";
+		s += "isValid: " + isValid;
+		if(isValid){
 			s += "\n" + "JSON: " + responseString;
 		}
 		return s;
@@ -58,10 +38,6 @@ public class HttpResponse {
 
 	public String getResponseString() {
 		return responseString;
-	}
-
-	public void setResponseString(String responseString) {
-		this.responseString = responseString;
 	}
 	
 	public JSONObject getJSONObject(){
@@ -90,7 +66,36 @@ public class HttpResponse {
 		return isValid;
 	}
 
-	public void setIsValid(boolean isValid) {
-		this.isValid = isValid;
+	public int getResponseCode() {
+		return responseCode;
 	}
+
+	public static class Builder{
+		private boolean isValid;
+		private int responseCode;
+		private String responseString;
+		private String method;
+		
+		public void setIsValid(boolean isValid) {
+			this.isValid = isValid;
+		}
+		
+		public void setResponseCode(int responseCode) {
+			this.responseCode = responseCode;
+		}
+		
+		public void setResponseString(String responseString) {
+			this.responseString = responseString;
+		}
+		
+		public void setMethod(String method) {
+			this.method = method;
+		}
+		
+		public HttpResponse build(){
+			return new HttpResponse(this);
+		}
+		
+	}
+	
 }

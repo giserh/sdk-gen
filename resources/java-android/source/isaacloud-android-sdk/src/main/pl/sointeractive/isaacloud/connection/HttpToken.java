@@ -3,13 +3,22 @@ package pl.sointeractive.isaacloud.connection;
 public class HttpToken {
 
 	private String tokenType;
-	private String expiresIn;
+	private int tokenTimeToLive;
 	private String accessToken;
+	private long updateTime;
 	
-	public HttpToken(String tokenType, String expiresIn, String accessToken){
+	public HttpToken(){
+		tokenType = "";
+		tokenTimeToLive = 0;
+		accessToken = "";
+		updateTime = 0;
+	}
+	
+	public HttpToken(String tokenType, String accessToken, int tokenTimeToLive, long updateTime){
 		this.setTokenType(tokenType);
-		this.setExpiresIn(expiresIn);
 		this.setAccessToken(accessToken);
+		this.setTokenTimeToLive(tokenTimeToLive);
+		this.setUpdateTime(updateTime);
 	}
 
 	public String getTokenType() {
@@ -20,13 +29,7 @@ public class HttpToken {
 		this.tokenType = tokenType;
 	}
 
-	public String getExpiresIn() {
-		return expiresIn;
-	}
-
-	public void setExpiresIn(String expiresIn) {
-		this.expiresIn = expiresIn;
-	}
+	
 
 	public String getAccessToken() {
 		return accessToken;
@@ -34,6 +37,26 @@ public class HttpToken {
 
 	public void setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
+	}
+
+	public long getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(long updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public int getTokenTimeToLive() {
+		return tokenTimeToLive;
+	}
+
+	public void setTokenTimeToLive(int tokenTimeToLive) {
+		this.tokenTimeToLive = tokenTimeToLive;
+	}
+	
+	public String getAuthorizationHeader(){
+		return tokenType + " " + accessToken;
 	}
 	
 	

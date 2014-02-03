@@ -18,12 +18,21 @@ public class TestActivity extends Activity{
 	private static final String TAG = "TestActivity";
 	
 	FakeWrapper wrapper;
+	Connector connector;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		wrapper = new FakeWrapper();
+		
+		String baseUrl = "http://api.isaacloud.com";
+		String oauthUrl = "http://oauth.isaacloud.com";
+		String version = "version1";
+		Map<String, String> config = new HashMap<String, String>();
+		config.put("clientId", "86");
+		config.put("secret", "c777bffe0d377a54e5d46a21cace834");
+		connector = new Connector(baseUrl, oauthUrl, version, config);
 		
 		runTestAsyncTask();
 	}
@@ -32,28 +41,19 @@ public class TestActivity extends Activity{
 		new AsyncTask<Object, Object, Object>(){
 			@Override
 			protected Object doInBackground(Object... params) {
-				initializeConnector();
 				test();
 				return null;
 			}
 		}.execute();
 	}
 	
-	public void initializeConnector(){
-		String baseUrl = "http://api.isaacloud.com";
-		String oauthUrl = "http://oauth.isaacloud.com";
-		String version = "version1";
-		Map<String, String> config = new HashMap<String, String>();
-		config.put("clientId", "86");
-		config.put("secret", "c777bffe0d377a54e5d46a21cace834");
-		new Connector(baseUrl, oauthUrl, version, config);
-	}
+	
 	
 	public void test(){
 		try {
 			String result;
 			
-			result = Connector.getAuthentication();
+			result = connector.getAuthentication();
 			Log.d(TAG,result);
 			
 			result = wrapper.getAdminUsers().toString();

@@ -24,106 +24,117 @@ import android.util.Base64;
  * 
  */
 public class Connector {
-	private static String baseUrl;
-	private static String version;
-	
-	private HttpToken httpToken;
+	private String baseUrl;
+	private String version;
 
-	private static String oauthUrl;
-	private static String clientId;
-	private static String clientSecret;
-	private static long tokenRetrievalTime = 0;
-	private static String currentToken = "";
+	private static HttpToken httpToken;
+
+	private String oauthUrl;
+	private String clientId;
+	private String clientSecret;
+	
 
 	public Connector(String baseUrl, String oauthUrl, String version,
 			Map<String, String> config) {
-		Connector.baseUrl = baseUrl;
-		Connector.oauthUrl = oauthUrl;
+		this.baseUrl = baseUrl;
+		this.oauthUrl = oauthUrl;
 		this.setVersion(version);
+		httpToken = new HttpToken();
 
 		if (config.containsKey("clientId")) {
-			Connector.clientId = config.get("clientId");
+			this.clientId = config.get("clientId");
 		} else {
 			System.out.println("Did not define clientId");
 		}
 
 		if (config.containsKey("secret")) {
-			Connector.clientSecret = config.get("secret");
+			this.clientSecret = config.get("secret");
 		} else {
 			System.out.println("Did not define secret");
 		}
 
 	}
 
-	public static String getAuthentication() throws JSONException, IOException {
-		long currentTime = new Date().getTime();
-		if (tokenRetrievalTime==0 || currentTime > Connector.tokenRetrievalTime + 3000 * 1000) {
-			//update token time
-			Connector.tokenRetrievalTime = currentTime;
-			// generate credentials
-			String base64EncodedCredentials = null;
-			base64EncodedCredentials = Base64.encodeToString(
-					(clientId + ":" + clientSecret).getBytes("US-ASCII"),
-					Base64.DEFAULT);
-			String auth = "Basic " + base64EncodedCredentials;
-			// setup connection
-			URL url = new URL(Connector.oauthUrl + "/token");
-			HttpURLConnection connection = (HttpURLConnection) url
-					.openConnection();
-			connection.setRequestMethod("POST");
-			connection.setDoOutput(true);
-			connection.setDoInput(true);
-			// setup headers
-			connection.setRequestProperty("Content-Type",
-					"application/x-www-form-urlencoded");
-			connection.setRequestProperty("Authorization", auth);
-			// set body
-			OutputStream os = new BufferedOutputStream(
-					connection.getOutputStream());
-			os.write("grant_type=client_credentials".getBytes("UTF-8"));
-			os.flush();
-			os.close();
-			// connect
-			connection.connect();
-			// check response code
-			int responseCode = connection.getResponseCode();
-			// get result string
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					connection.getInputStream()));
-			String resultString = reader.readLine();
-			// build response
-			HttpResponse.Builder responseBuilder = new HttpResponse.Builder();
-			responseBuilder.setMethod("POST");
-			responseBuilder.setResponseCode(responseCode);
-			if (resultString != null) {
-				responseBuilder.setResponseString(resultString);
-				responseBuilder.setIsValid(true);
-			} else {
-				responseBuilder.setIsValid(false);
-			}
-			HttpResponse response = responseBuilder.build();
-			// disconnect
-			connection.disconnect();
-			// save token
-			Connector.currentToken = response.getJSONObject().getString(
-					"access_token");
-
+	// I think this method could be private. The authentication process should
+	// transparent for the user, he doesnt need to know how it is done or when.
+	// He will never have to get authentication himself, the getService method
+	// will do that for him. Please verify.
+	public String getAuthentication() throws JSONException, IOException {
+		if (!isTokenValid()) {
+			getAccessTokenData();
 		}
-		System.out.println(currentToken);
-		return "Bearer " + currentToken;
+		System.out.println(httpToken.getAuthorizationHeader());
+		return httpToken.getAuthorizationHeader();
+	}
+
+	public void getAccessTokenData() throws JSONException, IOException {
+		// generate credentials
+		String base64EncodedCredentials = null;
+		base64EncodedCredentials = Base64.encodeToString(
+				(clientId + ":" + clientSecret).getBytes("US-ASCII"),
+				Base64.DEFAULT);
+		String auth = "Basic " + base64EncodedCredentials;
+		// setup connection
+		URL url = new URL(this.oauthUrl + "/token");
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setRequestMethod("POST");
+		connection.setDoOutput(true);
+		connection.setDoInput(true);
+		// setup headers
+		connection.setRequestProperty("Content-Type",
+				"application/x-www-form-urlencoded");
+		connection.setRequestProperty("Authorization", auth);
+		// set body
+		OutputStream os = new BufferedOutputStream(connection.getOutputStream());
+		os.write("grant_type=client_credentials".getBytes("UTF-8"));
+		os.flush();
+		os.close();
+		// connect
+		connection.connect();
+		// check response code
+		int responseCode = connection.getResponseCode();
+		// get result string
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+				connection.getInputStream()));
+		String resultString = reader.readLine();
+		// build response
+		HttpResponse.Builder responseBuilder = new HttpResponse.Builder();
+		responseBuilder.setMethod("POST");
+		responseBuilder.setResponseCode(responseCode);
+		if (resultString != null) {
+			responseBuilder.setResponseString(resultString);
+			responseBuilder.setIsValid(true);
+		} else {
+			responseBuilder.setIsValid(false);
+		}
+		HttpResponse response = responseBuilder.build();
+		// disconnect
+		connection.disconnect();
+		// update token time
+		long currentTime = new Date().getTime();
+		httpToken.setUpdateTime(currentTime);
+		// save token data
+		httpToken.setTokenTimeToLive(response.getJSONObject().getInt(
+				"expires_in"));
+		httpToken.setAccessToken(response.getJSONObject().getString(
+				"access_token"));
+		httpToken
+				.setTokenType(response.getJSONObject().getString("token_type"));
 	}
 
 	public HttpResponse callService(String uri, String methodName,
 			Map<String, Object> parameters, String body) throws IOException,
 			JSONException {
 		// parse parameters
-		String targetUri = Connector.baseUrl + uri;
+		String targetUri = baseUrl + uri;
 		for (Entry<String, Object> entry : parameters.entrySet()) {
-			String entryKey = "{"+entry.getKey()+"}";
+			String entryKey = "{" + entry.getKey() + "}";
 			System.out.println(entryKey);
 			if (targetUri.contains(entryKey))
-				System.out.println("Replace "+ entryKey + " with "+ entry.getValue());
-				targetUri = targetUri.replace(entryKey, entry.getValue().toString());
+				System.out.println("Replace " + entryKey + " with "
+						+ entry.getValue());
+			targetUri = targetUri
+					.replace(entryKey, entry.getValue().toString());
 		}
 		System.out.println(targetUri);
 		// setup connection
@@ -138,8 +149,7 @@ public class Connector {
 		connection.setRequestMethod(methodName);
 		// setup headers
 		connection.setRequestProperty("Content-Type", "application/json");
-		connection.setRequestProperty("Authorization",
-				Connector.getAuthentication());
+		connection.setRequestProperty("Authorization", getAuthentication());
 		// setup body (optional)
 		if (body != null) {
 			OutputStream os = new BufferedOutputStream(
@@ -150,12 +160,12 @@ public class Connector {
 		}
 		// connect
 		connection.connect();
-		// check response code
-		int responseCode = connection.getResponseCode();
 		// get result string
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				connection.getInputStream()));
 		String resultString = reader.readLine();
+		// check response code
+		int responseCode = connection.getResponseCode();
 		// disconnect
 		connection.disconnect();
 		// build response
@@ -178,6 +188,17 @@ public class Connector {
 	}
 
 	public void setVersion(String version) {
-		Connector.version = version;
+		this.version = version;
 	}
+
+	// Same as getAuthentication(), this method could be private. Please verify.
+	public static boolean isTokenValid() {
+		long currentTime = new Date().getTime();
+		if (currentTime > httpToken.getUpdateTime()
+				+ httpToken.getTokenTimeToLive() * 1000) {
+			return false;
+		} else
+			return true;
+	}
+
 }

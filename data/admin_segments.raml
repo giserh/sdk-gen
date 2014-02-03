@@ -5,7 +5,7 @@ post:
   body:
     application/json:
       schema: !include schemas/admin_segment_schema.json
-      example: !include examples/admin/segment_example.json
+      example: !include examples/admin/segment_post_example.json
 get:
   is: [fields, paginator, ordering]
   description: Get a segment list.
@@ -35,7 +35,7 @@ get:
       200:
         body:
           application/json: 
-            example: !include examples/admin/segment_example.json
+            example: !include examples/admin/segment_post_example.json
             schema: !include schemas/admin_segment_schema.json
   put:
     description: Update a segment.

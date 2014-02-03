@@ -9,93 +9,96 @@
 <%@ var bodyTable: List[(String,String,String)] %>
 <%@ var queryParameters: List[(String,String,String)] %>
 
-<h2 id="nav-section-${headerId}-${methodId}">${methodName}</h2>
-<p>
-${desc}
-</p>
-<pre>
-<code>
+<div class="method">	
+	<h2 id="nav-section-${headerId}-${methodId}">${methodName}</h2>
+	<p>
+		${desc}
+	</p>
+	<pre class="prettyprint linenums">
 ${url}
-</code>
-</pre>
-#if (! queryParameters.isEmpty())
-<h3>Parameters</h3>
-<p>
-List of all parameters:
-</p>
-<table>
-	<thead>
-		<tr>
-			<th>
-				<div class="tablesorter-header-inner">Name</div>
-			</th>
-			<th>
-				<div class="tablesorter-header-inner">Type</div>
-			</th>
-			<th>
-				<div class="tablesorter-header-inner">Description</div>
-			</th>
-		</tr>
- 	</thead>
- 	<tbody class="">
- 		#for ( p <-queryParameters)
- 			<tr>
- 				<td class="confluenceTd"> ${p._1} </td>
-				<td class="confluenceTd"> ${p._2} </td>
-				<td class="confluenceTd"> ${p._3}</td>
-				
-			</tr>
-		#end
-	</tbody>
-</table>
-#end	
+	</pre>
 
-#if ( bodyTable.length != 0)
-<p>
-Body json specs:
-</p>
-<table>
-	<thead>
-		<tr>
-			<th>
-				<div class="tablesorter-header-inner">Name</div>
-			</th>
-			<th>
-				<div class="tablesorter-header-inner">Type</div>
-			</th>
-		</tr>
- 	</thead>
- 	<tbody class="">
- 		#for ( p <-bodyTable)
- 			<tr>
- 				<td class="confluenceTd"> ${p._1}</td>
-				<td class="confluenceTd"> ${p._2} </td>
-				
-			</tr>
+	#if (! queryParameters.isEmpty())
+		<h3>Url parameters</h3>
+		<div class="content">
+			<p>
+			List of all possible url parameters:
+			</p>
+			<table>
+			<thead>
+				<tr>
+					<th>
+						<div>Parameter</div>
+					</th>
+					<th>
+						<div>Description</div>
+					</th>
+				</tr>
+ 			</thead>
+ 			<tbody >
+ 				#for ( p <-queryParameters)
+ 					<tr>
+ 						<td class="parameter"> 
+ 							<strong>${p._1}</strong>  
+ 							<em>${p._2}</em> 
+ 						</td>
+						<td class="parameter"> ${p._3}</td>
+					</tr>
+				#end
+			</tbody>
+			</table>
+		</div>
+	#end	
+	<div class="method-details">	
+		#if ( bodyTable.length != 0)
+		    <h3>Request body</h3>
+			<div class="detail">
+				<p>
+					Application/json body should contain:
+				</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Parameter</th>
+						</tr>
+ 					</thead>
+ 					<tbody>
+ 						#for ( p <-bodyTable)
+ 							<tr>
+ 								<td class="parameter"> 
+ 									<strong>
+ 										${p._1}
+ 									</strong>
+ 									<em>
+ 										${p._2} 
+ 									</em>
+ 								</td>
+							</tr>
+						#end
+					</tbody>
+				</table>
+			</div>
 		#end
-	</tbody>
-</table>
-#end
-
-#if (request != "example_body")
-<h3>Request</h3>
-<p>
-Example request body:
-</p>
-<pre>
-<code>
+		#if (request != "example_body")
+			<div class="detail">				
+				<p>
+					Example application/json body required by the method:
+				</p>
+				<pre class="prettyprint linenums">
 ${request}
-</code>
-</pre>
-#end
-		
-</p>
-<h3>Responses</h3>
-<p>
-Example response:
-</p>
-<pre>
-<code>
+				</pre>
+			</div>
+		#end
+		#if (response != "example")
+			<div class="detail">	
+				<h3>Response</h3>
+				<p>
+					Example response body returned by the method:
+				</p>
+				<pre class="prettyprint linenums">
 ${response}
-</code>
-</pre>
+				</pre>
+			</div>
+		#end
+	</div>
+</div>

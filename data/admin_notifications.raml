@@ -5,7 +5,7 @@ post:
   body:
     application/json:
       schema: !include schemas/admin_notification_schema.json
-      example: !include examples/admin/notification_example.json
+      example: !include examples/admin/notification_post_example.json
 get:
   is: [fields, paginator, ordering]
   description: Get a list of notifications.
@@ -26,7 +26,7 @@ get:
           application/json:
             example: !include schemas/admin_notification_schema.json
 /{id}:
-  displayName: OneNotification
+  displayName: Notification
   type: common
   get:
     is: [fields]
@@ -42,7 +42,7 @@ get:
     body:
       application/json:
         schema: !include schemas/admin_notification_schema.json
-        example: !include examples/admin/notification_example.json
+        example: !include examples/admin/notification_post_example.json
   delete:
     description: Delete a notification.
 /types:
@@ -53,7 +53,7 @@ get:
     body:
       application/json:
         schema: !include schemas/admin_notification_type_schema.json
-        example: !include examples/admin/notificationtype_example.json
+        example: !include examples/admin/notificationtype_post_example.json
   get:
     is: [fields, paginator, ordering]
     description: Get a list of notification types.
@@ -74,7 +74,7 @@ get:
             application/json:
               example: !include schemas/admin_notification_type_schema.json
   /{id}:
-    displayName: OneNotificationType
+    displayName: NotificationType
     type: common
     get:
       is: [fields]
@@ -89,7 +89,7 @@ get:
       description: Update a notification type
       body:
         application/json:
-          example: !include examples/admin/notificationtype_example.json
+          example: !include examples/admin/notificationtype_post_example.json
           schema: !include schemas/admin_notification_type_schema.json
     delete:
       description: Delete a notification type.

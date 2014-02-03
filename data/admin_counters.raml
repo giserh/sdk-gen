@@ -5,7 +5,7 @@ post:
   body:
     application/json:
       schema: !include schemas/counter_schema.json
-      example: !include examples/admin/counter_example.json
+      example: !include examples/admin/counter_post_example.json
 get:
   is: [paginator, fields, ordering]
   description: Get one counter.
@@ -26,7 +26,7 @@ get:
           application/json:
             example: !include schemas/counter_schema.json
 /{id}:
-  displayName: OneCounter
+  displayName: Counter
   type: common
   get:
     is: [fields]
@@ -41,7 +41,7 @@ get:
     description: Update a counter.
     body:
       application/json:
-        example: !include examples/admin/counter_example.json
+        example: !include examples/admin/counter_post_example.json
         schema: !include schemas/counter_schema.json
   delete:
     description: Delete one counter.
@@ -49,7 +49,7 @@ get:
     displayName: CounterConditions
     type: common
     /{childId}:
-      displayName: OneCounterCondition
+      displayName: CounterCondition
       type: common
       put:
         description: Add a condition to a counter.

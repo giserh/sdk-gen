@@ -1,13 +1,16 @@
 {
-        "name": "Testers 0",
-        "updatedAt": 1390236383333,
-        "users": [],
-        "counterValues": [],
-        "externalIds": [],
-        "id": 0,
-        "gainedAchievements": [],
-        "segments": [23 , 44],
-        "createdAt": 1390236383333,
-        "wonGames": [],
-        "level": 1
+    "counterValues": [],
+    "externalIds": [],
+    "gainedAchievements": [],
+    "id": 0,
+    "level": 1,
+    "name": "Testers 0",
+    "segments": [
+        23,
+        44
+    ],
+    "users": [],
+    "wonGames": [],
+    "updatedAt": 1390236382695,
+    "createdAt": 1390236382695
 }

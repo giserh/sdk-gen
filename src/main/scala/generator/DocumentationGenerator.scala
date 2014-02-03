@@ -12,7 +12,7 @@ import java.io.StringWriter
 import scala.util.parsing.json.JSON
 class DocumentationGenerator extends Generator {
 
-	protected var fileName = "documentation.php"
+	protected var fileName = "documentation.html"
 	val engine: TemplateEngine = new TemplateEngine
 	/**
 	 * Creates the sdk based on Raml
@@ -33,30 +33,33 @@ class DocumentationGenerator extends Generator {
 				// group by the second part of url
 				val nameMap = clazz.methods.groupBy(m => m.url.split("/")(2))
 				all += (mapName -> nameMap)
+				
 
 			}
 		}
 
-		val pages = all.keys.map {
+		//create all the pages
+		var pages = Map[String, String]()
+		all.keys.map {
 			key =>
 				{
-					var headerId = -1
+					var headerId = 0
 					val sortedKeys = all(key).keys.toList //.sortBy( x => x)						
 					val headers = sortedKeys.map {
 						mkey =>
 							{
 								var methodId = -1
-								headerId += 1
 								val methods = all(key)(mkey).map {
 									m => methodId += 1; generateMethod(m, resourcePath + "/Method.ssp", methodId, headerId)
 								}
-								generateHeaders(methods, resourcePath + "/Header.ssp", headerId, mkey)
+								val generated_header = generateHeaders(methods, resourcePath + "/Header.ssp", headerId, mkey)
+								pages += (key + "_" + mkey) -> generatePage(pack, resourcePath + "/Page.ssp", List(generated_header))
+								
 							}
 					}
-					(key, generatePage(pack, resourcePath + "/Page.ssp", headers))
 
 				}
-		}.toMap
+		}
 
 		// write to file
 		for (p <- pages.keys) {
@@ -97,8 +100,15 @@ class DocumentationGenerator extends Generator {
 		val buffer = new PrintWriter(result)
 		val context = new DefaultRenderContext("/", engine, buffer)
 
+		def mapper(s: String) = s match {
+			case "clientscripts" => "Client Scripts"
+			case "transactionsources" => "Transaction Sources"
+			case "transactiontypes" => "Transaction Types"
+			case other => other.capitalize
+		}
+		
 		context.attributes("methods") = methods
-		context.attributes("name") = name.capitalize
+		context.attributes("name") = mapper(name)
 		context.attributes("id") = headerId
 
 		templ.render(context)
@@ -121,9 +131,20 @@ class DocumentationGenerator extends Generator {
 		val buffer = new PrintWriter(result)
 		val context = new DefaultRenderContext("/", engine, buffer)
 
-		val name = method.name.capitalize
-		name.split("")
-		context.attributes("methodName") = method.name.capitalize
+		def mapper(s: String) = s match {
+			case "put" => "update"
+			case "post" => "create"
+			case "doc" => "documentation"
+			case "docs" => "documentation"
+			case other => other
+		}
+		
+		// Name of form "Get notifications"
+		val name = method.name.split("(?=[A-Z])").map {
+			l => mapper(l.toLowerCase())
+		}.mkString(" ") capitalize
+
+		context.attributes("methodName") = name
 		context.attributes("desc") = method.docs("")._2
 		context.attributes("headerId") = headerId
 		context.attributes("methodId") = methodId
@@ -145,10 +166,10 @@ class DocumentationGenerator extends Generator {
 			val bodyTable = bodypar.map {
 				tupl =>
 					{
-						(tupl._1, tupl._2.asInstanceOf[Map[String, Any]]("type"), "")
+						(tupl._1, tupl._2.asInstanceOf[Map[String, Any]]("type").toString, "")
 					}
 			}.toList
-			context.attributes("bodyTable") = bodyTable
+			context.attributes("bodyTable") = bodyTable.sortWith((x,y)=> x._1 < y._1 )
 		} else context.attributes("bodyTable") = List[(String, String, String)]()
 
 		if (method.docs.contains("example"))

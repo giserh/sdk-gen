@@ -1,3 +1,6 @@
 {
-    "name": "Example"
+    "id": 1,
+    "name": "Example",
+    "updatedAt": 1390236382695,
+    "createdAt": 1390236382695
 }

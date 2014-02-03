@@ -1,4 +1,7 @@
 {
+    "amount": 5,
     "game": 1,
-    "amount": 5
+    "id": 1,
+    "updatedAt": 1390236382695,
+    "createdAt": 1390236382695
 }

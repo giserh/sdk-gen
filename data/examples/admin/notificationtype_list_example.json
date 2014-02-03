@@ -1,8 +1,11 @@
 [
- 	{
- 		"name": "Example",
- 		"action": "COUNTER_INC"
- 		"config": "Example config",
- 		"priority": "PRIORITY_MEDIUM"
- 	}
+    {
+        "action": "COUNTER_INC",
+        "config": "Example config",
+        "id": 1,
+        "name": "Example",
+        "priority": "PRIORITY_MEDIUM",
+        "updatedAt": 1390236382695,
+        "createdAt": 1390236382695
+    }
 ]

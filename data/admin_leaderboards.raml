@@ -5,7 +5,7 @@ post:
   body:
     application/json:
       schema: !include schemas/admin_leaderboard_schema.json
-      example: !include examples/admin/leaderboard_example.json
+      example: !include examples/admin/leaderboard_post_example.json
 get:
   is: [fields, paginator, ordering]
   description: Get a leaderboard list.
@@ -26,7 +26,7 @@ get:
           application/json:
             example: !include schemas/admin_leaderboard_schema.json
 /{id}:
-  displayName: OneLeaderboard
+  displayName: Leaderboard
   type: common
   get:
     is: [fields]
@@ -42,11 +42,11 @@ get:
     body:
       application/json:
         schema: !include schemas/admin_leaderboard_schema.json
-        example: !include examples/admin/leaderboard_example.json
+        example: !include examples/admin/leaderboard_post_example.json
   delete:
     description: Remove a leaderboard.
   /recalculate:
-    displayName:  OneLeaderboardRecalculate
+    displayName:  LeaderboardRecalculated
     get:
       description: Recalculate a leaderboard
       responses:

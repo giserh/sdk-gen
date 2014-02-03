@@ -4,7 +4,7 @@ post:
   description: Add a user.
   body:
     application/json:
-      example: !include examples/admin/user_example.json
+      example: !include examples/admin/user_post_example.json
       schema: !include schemas/admin_user.json
 get:
   is: [fields, paginator, ordering, groups, segments]
@@ -27,7 +27,7 @@ get:
           application/json:
             example: !include schemas/admin_user.json
 /{id}:
-  displayName: OneUser
+  displayName: User
   type: common
   get:
     description: Get one user by id.
@@ -42,7 +42,7 @@ get:
     body:
       application/json:
         schema: !include schemas/admin_user.json
-        example: !include examples/admin/user_example.json
+        example: !include examples/admin/user_post_example.json
   delete:
     description: Delete one user
   /externalids:
@@ -53,7 +53,7 @@ get:
       body:        
         application/json:
           schema: !include schemas/externalid_schema.json
-          example: !include examples/admin/externalid_example.json
+          example: !include examples/admin/externalid_post_example.json
     get:
       is: [fields, paginator, ordering]
       description: Get a list of external ids.
@@ -64,7 +64,7 @@ get:
               schema: !include schemas/externalid_schema.json
               example: !include examples/admin/externalid_list_example.json
     /{childId}:
-      displayName: OneUserExternalId
+      displayName: UserExternalId
       type: common
       get:
         description: Get one external id for a user.
@@ -79,7 +79,7 @@ get:
         body:
           application/json:
             schema: !include schemas/externalid_schema.json
-            example: !include examples/admin/externalid_example.json
+            example: !include examples/admin/externalid_post_example.json
       delete:
         description: Delete one external id for a user.
     /doc:
@@ -99,7 +99,7 @@ get:
       description: Create a new gained achievement for a user.
       body:
         application/json:
-          example: !include examples/admin/gainedachievement_example.json
+          example: !include examples/admin/gainedachievement_post_example.json
           schema: !include schemas/gained_achievement_schema.json
     get:
       is: [paginator, ordering, fields]
@@ -111,7 +111,7 @@ get:
               example: !include examples/admin/gainedachievement_list_example.json
               schema: !include schemas/gained_achievement_schema.json
     /{childId}:
-      displayName: OneUserGainedAchievement
+      displayName: UserGainedAchievement
       type: common
       get:
         description: Get one user gained achievement.
@@ -126,11 +126,11 @@ get:
         body:
           application/json:
             schema: !include schemas/gained_achievement_schema.json
-            example: !include examples/admin/gainedachievement_example.json
+            example: !include examples/admin/gainedachievement_post_example.json
       delete:
         description: Update one user gained achievement.
     /doc:
-      displayName:  OneUserGainedAchievementsDoc
+      displayName:  UserGainedAchievementsDoc
       type: common
       get:
         description: Get a schema showing how to make a proper json for user gained achievement.
@@ -147,7 +147,7 @@ get:
       body:
         application/json:
           schema: !include schemas/won_game_schema.json
-          example: !include examples/admin/wongame_example.json
+          example: !include examples/admin/wongame_post_example.json
     get:
       is: [paginator, ordering, fields]
       description: Get a list of won games for a user.
@@ -158,7 +158,7 @@ get:
               example: !include examples/admin/wongame_list_example.json
               schema: !include schemas/won_game_schema.json
     /{childId}:
-      displayName: OneUserWonGame
+      displayName: UserWonGame
       type: common
       get:
         description: Get one won game for a user.
@@ -173,7 +173,7 @@ get:
         body:
           application/json:
             schema: !include schemas/won_game_schema.json
-            example: !include examples/admin/wongame_example.json
+            example: !include examples/admin/wongame_post_example.json
       delete:
         description: Delete one won game for a user.
     /doc:
@@ -190,7 +190,7 @@ get:
     displayName: UserSegments
     type: common
     /{childId}:
-      displayName: OneUserSegment
+      displayName: UserSegment
       type: common
       put:
         description: Add a segment to a user.
@@ -203,7 +203,7 @@ get:
       description: Create a new counter value for a user.
       body:
         application/json:
-          example: !include examples/admin/countervalue_example.json
+          example: !include examples/admin/countervalue_post_example.json
           schema: !include schemas/counter_value_schema.json
     get:
       is: [paginator, fields, ordering]
@@ -215,7 +215,7 @@ get:
               example: !include examples/admin/countervalue_list_example.json
               schema: !include schemas/counter_value_schema.json
     /{childId}:
-      displayName: OneUserCounterValue
+      displayName: UserCounterValue
       type: common
       get:
         description: Get one user counter value.
@@ -230,7 +230,7 @@ get:
         body:
           application/json:
             schema: !include schemas/counter_value_schema.json
-            example: !include examples/admin/countervalue_example.json
+            example: !include examples/admin/countervalue_post_example.json
       delete:
         description: Delete one user counter value.
     /doc:
@@ -247,7 +247,7 @@ get:
     displayName: GroupUser
     type: common
     /{childId}:
-      displayName: OneGroupUser
+      displayName: GroupUser
       type: common
       put:
         description: Add a group to user.
@@ -299,7 +299,7 @@ get:
     displayName: UserFriends
     type: common
     /{childId}:
-      displayName: OneUserFriend
+      displayName: UserFriend
       type: common
       put:
         description: Add a friend to user.

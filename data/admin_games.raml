@@ -4,7 +4,7 @@ post:
   description: Create a game.
   body:
     application/json:
-      example: !include examples/admin/game_example.json
+      example: !include examples/admin/game_post_example.json
       schema: !include schemas/game_schema.json
 get:
   is: [fields, paginator, ordering]
@@ -26,7 +26,7 @@ get:
           application/json:
             example: !include schemas/game_schema.json            
 /{id}:
-  displayName: OneGame
+  displayName: Game
   type: common
   get:
     is: [fields]
@@ -42,14 +42,14 @@ get:
     body:
       application/json:
         schema: !include schemas/game_schema.json
-        example: !include examples/admin/game_example.json
+        example: !include examples/admin/game_post_example.json
   delete:
     description: Delete a game.
   /notifications:
     displayName: GameNotifications
     type: common
     /{childId}:
-      displayName: OneGameNotification
+      displayName: GameNotification
       type: common
       put:
         description: Add a notification to a game.
@@ -59,7 +59,7 @@ get:
     displayName: GameConditions
     type: common
     /{childId}:
-      displayName: OneGameCondition
+      displayName: GameCondition
       type: common
       put:
         description: Add a condition to a game.

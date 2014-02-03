@@ -5,7 +5,7 @@ post:
     Use this method to create a new achievement. It needs a body and a returns the created object.
   body:
     application/json: 
-      example: !include examples/admin/achievement_example.json
+      example: !include examples/admin/achievement_post_example.json
       schema: !include schemas/admin_achievement_schema.json
   responses:
       200:
@@ -24,7 +24,7 @@ get:
             schema: !include schemas/admin_achievement_schema.json
 /{achievementId}:
   type : common
-  displayName: OneAchievement
+  displayName: Achievement
   get:
     is: [fields]
     description: Get one achievement. 
@@ -38,7 +38,7 @@ get:
     description: Update one achievement. 
     body:
       application/json: 
-        example: !include examples/admin/achievement_example.json
+        example: !include examples/admin/achievement_post_example.json
         schema: !include schemas/admin_achievement_schema.json
   delete:
     description: Delete one achievement. 
@@ -47,7 +47,7 @@ get:
     displayName: AchievementSegments
     /{childId}:
       type : common
-      displayName: OneAchievementSegment
+      displayName: AchievementSegment
       put:    
         description: Add segment to achievement. 
       delete:    
@@ -60,7 +60,7 @@ get:
     body:
       application/json: 
         schema: !include schemas/category_schema.json
-        example: !include examples/admin/achievementcategory_example.json
+        example: !include examples/admin/achievementcategory_post_example.json
     responses:
       200:
         body:
@@ -102,7 +102,7 @@ get:
       body:
         application/json: 
           schema: !include schemas/category_schema.json
-          example: !include examples/admin/achievementcategory_example.json
+          example: !include examples/admin/achievementcategory_post_example.json
     delete:
       description: Delete one achievements category.
     /achievements:
@@ -110,7 +110,7 @@ get:
       displayName: CategoryAchievements
       /{childId}:
         type: common
-        displayName: OneCategoryAchievement
+        displayName: CategoryAchievement
         put:
           description: Add one achievement to achievements category.
         delete:
@@ -123,7 +123,7 @@ get:
     body:
       application/json: 
         schema: !include schemas/achievement_group_schema.json
-        example: !include examples/admin/achievementgroup_example.json     
+        example: !include examples/admin/achievementgroup_post_example.json     
     responses:
       200:
         body:
@@ -150,7 +150,7 @@ get:
             application/json:
               example: !include schemas/achievement_group_schema.json
   /{id}:
-    displayName: OneAchievementsGroup
+    displayName: AchievementsGroup
     type: common
     get:
       description: Get one achievement group. 
@@ -166,7 +166,7 @@ get:
       body:
         application/json: 
           schema: !include schemas/achievement_group_schema.json
-          example: !include examples/admin/achievementgroup_example.json   
+          example: !include examples/admin/achievementgroup_post_example.json   
     delete:
       description: Delete an achievement group.
     /achievements:
@@ -174,7 +174,7 @@ get:
       displayName: GroupAchievements
       /{childId}:
         type: common
-        displayName: OneGroupAchievement
+        displayName: GroupAchievement
         put:
           description: Add one achievement to achievements group.
         delete:
@@ -187,7 +187,7 @@ get:
     body:
       application/json: 
         schema: !include schemas/achievement_progress_schema.json
-        example: !include examples/admin/achievementprogress_example.json   
+        example: !include examples/admin/achievementprogress_post_example.json   
     responses:
       200:
         body:
@@ -215,7 +215,7 @@ get:
             application/json:
               example: !include schemas/achievement_progress_schema.json
   /{id}:
-    displayName: OneAchievementsProgress
+    displayName: AchievementsProgress
     type: common
     get:
       description: Get one achievement progress. 
@@ -230,7 +230,7 @@ get:
       description: Update an achievement progress.
       body:
         application/json: 
-          example: !include examples/admin/achievementprogress_example.json  
+          example: !include examples/admin/achievementprogress_post_example.json  
           schema: !include schemas/achievement_progress_schema.json
     delete:
       description: Delete an achievement progress.

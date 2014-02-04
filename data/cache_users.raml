@@ -10,7 +10,7 @@ get:
           example: !include examples/cache/user_list_example.json
           schema: !include schemas/user_schema.json  
 /{userId}:
-  displayName: OneUser
+  displayName: User
   type: common
   get:
     is: [fields]
@@ -107,7 +107,7 @@ get:
             schema: !include schemas/user_group_schema.json     
   /{groupId}:
     type: common
-    displayName: OneGroup
+    displayName: Group
     get:
       is: [fields]
       description: Get one group. 

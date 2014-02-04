@@ -1,20 +1,24 @@
 [
     {
-        "name": "achievement 0",
-        "updatedAt": 1390236382941,
-        "description": "description",
-        "data": null,
-        "label": "test achievement 0",
-        "displayRank": 1,
-        "importanceRank": 1,
-        "id": 0,
-        "achievementType": "NORMAL",
-        "progress": null,
-        "segments": [54, 52, 53],
-        "createdAt": 1390236382941,
         "achievementGroup": null,
+        "achievementType": "NORMAL",
+        "active": false,
         "counter": null,
+        "data": null,
+        "description": "description",
+        "displayRank": 1,
+        "id": 0,
+        "importanceRank": 1,
+        "label": "test achievement 0",
         "level": 1,
-        "active": false
+        "name": "achievement 0",
+        "progress": null,
+        "segments": [
+            54,
+            52,
+            53
+        ],
+        "updatedAt": 1390236382695,
+        "createdAt": 1390236382695
     }
 ]

@@ -22,7 +22,7 @@ get:
             example: !include examples/cache/segment_list_example.json
             schema: !include schemas/admin_segment_schema.json     
 /{achievementId}:
-  displayName: OneAchievement
+  displayName: Achievement
   type: common
   get:
     is: [fields]
@@ -34,7 +34,7 @@ get:
             example: !include examples/cache/achievement_example.json 
             schema: !include schemas/admin_achievement_schema.json     
   /segments:
-    displayName: OneAchievementSegments
+    displayName: AchievementSegments
     type: common
     get:
       is: [paginator, fields, ordering]

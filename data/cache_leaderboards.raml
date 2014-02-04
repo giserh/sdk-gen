@@ -10,7 +10,7 @@ get:
           schema: !include schemas/leaderboard_schema.json
           example: !include examples/cache/leaderboard_list_example.json
 /{leaderboardId}:
-  displayName: OneLeaderboard
+  displayName: Leaderboard
   type: common
   get:
     is: [fields, segments, paginator, groups, ordering]
@@ -25,7 +25,7 @@ get:
     displayName: LeaderboardUsers
     type: common
     /{userId}:
-      displayName: OneLeaderboardUser
+      displayName: LeaderboardUser
       type: common
       /friends:
         type: common
@@ -44,7 +44,7 @@ get:
     displayName: LeaderboardSegments
     /{segmentId}:
       type: common
-      displayName: OneLeaderboardSegment
+      displayName: LeaderboardSegment
       get:
         is: [fields, segments, paginator, groups, ordering]
         description: Get user's with a segment Id in one of the leaderboards. 
@@ -59,7 +59,7 @@ get:
     displayName: LeaderboardGroups
     /{groupId}:
       type: common
-      displayName: OneLeaderboardGroup
+      displayName: LeaderboardGroup
       get:
         is: [fields, segments, paginator, groups, ordering]
         description: Get user's with a group Id in one of the leaderboards. 

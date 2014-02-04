@@ -1,18 +1,22 @@
 [
     {
+        "active": true,
         "conditions": {},
-        "name": "game0",
-        "updatedAt": 1390236382695,
-        "priority": 1,
-        "description": "game game0",
-        "transactionSource": null,
-        "id": 0,
-        "gameType": "ONE_TIME",
-        "expression": null,
-        "segments": [ 51, 52, 50],
-        "createdAt": 1390236382695,
         "counter": null,
+        "description": "game game0",
+        "expression": null,
+        "gameType": "ONE_TIME",
+        "id": 0,
+        "name": "game0",
         "notifications": [],
-        "active": true
+        "priority": 1,
+        "segments": [
+            51,
+            52,
+            50
+        ],
+        "transactionSource": null,
+        "updatedAt": 1390236382695,
+        "createdAt": 1390236382695
     }
 ]

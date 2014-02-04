@@ -5,7 +5,7 @@ post:
   body:
     application/json:
       schema: !include schemas/function_schema.json
-      example: !include examples/admin/function_example.json
+      example: !include examples/admin/function_post_example.json
 get:
   is: [fields, paginator, ordering]
   description: Get a list of functions.
@@ -14,7 +14,7 @@ get:
       body:
         application/json:
           schema: !include schemas/function_schema.json
-          example: examples/admin/function_list_example.json
+          example: !include examples/admin/function_list_example.json
 /doc:
   displayName: FunctionsDoc
   type: common
@@ -26,7 +26,7 @@ get:
           application/json:
             example: !include schemas/function_schema.json
 /{id}:
-  displayName: OneFunction
+  displayName: Function
   type: common
   get:
     is: [fields]
@@ -42,6 +42,6 @@ get:
     body:
       application/json:
         schema: !include schemas/function_schema.json
-        example: !include examples/admin/function_example.json
+        example: !include examples/admin/function_post_example.json
   delete:
     description: Delete a function.

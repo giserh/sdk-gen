@@ -5,7 +5,7 @@ post:
   body:
     application/json:
       schema: !include schemas/transactiontype_schema.json
-      example: !include examples/admin/transactiontype_example.json
+      example: !include examples/admin/transactiontype_post_example.json
 get:
   is: [fields, paginator, ordering]
   description: Get a list of transaction types.
@@ -26,7 +26,7 @@ get:
           application/json:
             example: !include schemas/transactiontype_schema.json
 /{id}:
-  displayName: OneTransactionType
+  displayName: TransactionType
   type: common
   get:
     is: [fields]
@@ -41,7 +41,7 @@ get:
     description: Update a transaction type.
     body:
       application/json:
-        example: !include examples/admin/transactiontype_example.json
+        example: !include examples/admin/transactiontype_post_example.json
         schema: !include schemas/transactiontype_schema.json
   delete:
     description: Remove a transaction type.
@@ -49,7 +49,7 @@ get:
     displayName: TransactionTypesConditions
     type: common
     /{childId}:
-      displayName: OneTransactionTypesCondition
+      displayName: TransactionTypesCondition
       type: common
       put:
         description: Add a condition for a transaction type.

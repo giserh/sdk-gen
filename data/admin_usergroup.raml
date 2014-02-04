@@ -5,7 +5,7 @@ post:
   body:
     application/json:
       schema: !include schemas/admin_user_group_schema.json
-      example: !include examples/admin/usergroup_example.json
+      example: !include examples/admin/usergroup_post_example.json
 get:
   is: [fields, paginator, ordering, segments]
   description: Get a list of user groups.
@@ -26,7 +26,7 @@ get:
           application/json:
             example: !include schemas/admin_user_group_schema.json
 /{id}:
-  displayName: OneUserGroup
+  displayName: UserGroup
   type: common
   get:
     description: Get a user group.
@@ -41,7 +41,7 @@ get:
     body:
       application/json:
         schema: !include schemas/admin_user_group_schema.json
-        example: !include examples/admin/usergroup_example.json
+        example: !include examples/admin/usergroup_post_example.json
   delete:
     description: Delete a user group.
   /customfields:
@@ -94,7 +94,7 @@ get:
       body:
         application/json:
           schema: !include schemas/externalid_schema.json
-          example: !include examples/admin/externalid_example.json
+          example: !include examples/admin/externalid_post_example.json
     get:
       is: [fields, ordering, paginator]
       description: Get a list of external ids.
@@ -105,7 +105,7 @@ get:
               example: !include examples/admin/externalid_list_example.json
               schema: !include schemas/externalid_schema.json
     /{childId}:
-      displayName: OneUserGroupExternalId
+      displayName: UserGroupExternalId
       type: common
       get:
         description: Get an external group id.
@@ -120,7 +120,7 @@ get:
         body:
           application/json:
             schema: !include schemas/externalid_schema.json
-            example: !include examples/admin/externalid_example.json
+            example: !include examples/admin/externalid_post_example.json
       delete:
         description: Remove an external group id.
     /doc:
@@ -137,7 +137,7 @@ get:
     displayName: UserGroupFriends
     type: common
     /{childId}:
-      displayName: OneUserGroupFriend
+      displayName: UserGroupFriend
       type: common
       put:
         description: Add a user to user group.
@@ -150,7 +150,7 @@ get:
       description: Create a gained achievement for a group.
       body:
         application/json:
-          example: !include examples/admin/gainedachievement_example.json
+          example: !include examples/admin/gainedachievement_post_example.json
           schema: !include schemas/gained_achievement_schema.json
     get:
       is: [fields, paginator, ordering]
@@ -162,7 +162,7 @@ get:
               example: !include examples/admin/gainedachievement_list_example.json
               schema: !include schemas/gained_achievement_schema.json
     /{childId}:
-      displayName: OneUserGroupGainedAchievement
+      displayName: UserGroupGainedAchievement
       type: common
       get:
         description: Get a gained achievement for a group by id.
@@ -177,7 +177,7 @@ get:
         body:
           application/json:
             schema: !include schemas/gained_achievement_schema.json
-            example: !include examples/admin/gainedachievement_example.json
+            example: !include examples/admin/gainedachievement_post_example.json
       delete:
         description: Delete a gained achievement for a group by id.
     /doc:
@@ -198,7 +198,7 @@ get:
       body:
         application/json:
           schema: !include schemas/won_game_schema.json
-          example: !include examples/admin/wongame_example.json
+          example: !include examples/admin/wongame_post_example.json
     get:
       is: [fields, paginator, ordering]
       description: Get a list of user group won games.
@@ -209,7 +209,7 @@ get:
               example: !include examples/admin/wongame_list_example.json
               schema: !include schemas/won_game_schema.json
     /{childId}:
-      displayName: OneUserGroupWonGame
+      displayName: UserGroupWonGame
       type: common
       get:
         description: Get a won game for user group by id.
@@ -224,7 +224,7 @@ get:
         body:
           application/json:
             schema: !include schemas/won_game_schema.json
-            example: !include examples/admin/wongame_example.json
+            example: !include examples/admin/wongame_post_example.json
       delete:
         description: Delete a won game for user group by id.
     /doc:
@@ -241,7 +241,7 @@ get:
     displayName: UserGroupSegments
     type: common
     /{childId}:
-      displayName: OneUserGroupSegment
+      displayName: UserGroupSegment
       type: common
       put:
         description: Add a segment to a user group.
@@ -254,7 +254,7 @@ get:
       description: Create a new counter value.
       body:
         application/json:
-          example: !include examples/admin/countervalue_example.json
+          example: !include examples/admin/countervalue_post_example.json
           schema: !include schemas/counter_value_schema.json
     get:
       is: [fields, paginator, ordering]
@@ -266,7 +266,7 @@ get:
               example: !include examples/admin/countervalue_list_example.json
               schema: !include schemas/counter_value_schema.json
     /{childId}:
-      displayName: OneUserGroupCounterValue
+      displayName: UserGroupCounterValue
       type: common
       get:
         description: Get one counter value for a user group.
@@ -281,11 +281,11 @@ get:
         body:
           application/json:
             schema: !include schemas/counter_value_schema.json
-            example: !include examples/admin/countervalue_example.json
+            example: !include examples/admin/countervalue_post_example.json
       delete:
         description: Remove one counter value from a user group.
     /doc:
-      displayName: OneUserGroupCounterValueDoc
+      displayName: UserGroupCounterValueDoc
       type: common
       get:
         description: Get a schema showing how to make a proper json for user group counter value.

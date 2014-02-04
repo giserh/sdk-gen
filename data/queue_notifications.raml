@@ -10,7 +10,7 @@ get:
           schema: !include schemas/notification_schema.json
           example: !include examples/queue/notification_list_example.json
 /{notificationId}:
-  displayName: OneNotification
+  displayName: Notification
   type: common
   get:
     description: Get notification for a client and set its status to IN_PROGRESS.
@@ -41,7 +41,7 @@ get:
             example: !include examples/queue/notification_list_example.json
             schema: !include schemas/notification_schema.json
   /{notificationId}:
-    displayName: OneErrorNotification
+    displayName: ErrorNotification
     type: common
     get:
       description: Get error notification for a client.

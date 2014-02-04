@@ -5,7 +5,7 @@ post:
   body:
     application/json:
       schema: !include schemas/condition_schema.json
-      example: !include examples/admin/condition_example.json
+      example: !include examples/admin/condition_post_example.json
   responses:
     200:
       body:
@@ -32,7 +32,7 @@ get:
           application/json:
             example: !include schemas/condition_schema.json
 /{id}:
-  displayName: OneCondition
+  displayName: Condition
   type: common
   get:
     is: [fields]
@@ -49,14 +49,14 @@ get:
     body:
       application/json:
         schema: !include schemas/condition_schema.json
-        example: !include examples/admin/condition_example.json
+        example: !include examples/admin/condition_post_example.json
   delete:
     description: Delete one condition.
   /counters:
     displayName: ConditionCounters
     type: common
     /{childId}:
-      displayName: OneConditionCounter
+      displayName: ConditionCounter
       type: common
       put:
         description: Add a counter.

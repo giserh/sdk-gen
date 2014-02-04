@@ -1,32 +1,33 @@
 [
     {
         "name": "leaderboard0",
-        "updatedAt": 1390236383800,
         "description": "Test leaderboard 0",
         "cron": null,
         "id": 0,
-        "createdAt": 1390236383800,
         "script": null,
-        "active": true
+        "active": true,
+        "updatedAt": 1390236383800,
+        "createdAt": 1390236383800,
     },
     {
-        "name": "leaderboard1",
-        "updatedAt": 1390236383803,
+        "name": "leaderboard1",        
         "description": "Test leaderboard 1",
         "cron": null,
-        "id": 1,
-        "createdAt": 1390236383803,
+        "id": 1,        
         "script": null,
-        "active": true
+        "active": true,
+        "updatedAt": 1390236383803,
+        "createdAt": 1390236383803
     },
     {
         "name": "leaderboard2",
         "updatedAt": 1390236383804,
         "description": "Test leaderboard 2",
         "cron": null,
-        "id": 2,
-        "createdAt": 1390236383804,
+        "id": 2,        
         "script": null,
-        "active": true
+        "active": true,
+        "updatedAt": 1390236383804,
+        "createdAt": 1390236383804
     }
 ]

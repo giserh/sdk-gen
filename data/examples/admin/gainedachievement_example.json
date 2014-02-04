@@ -1,6 +1,9 @@
 {
     "achievement": 1,
-    "status": "ACTIVE",
+    "amount": 5,
+    "id": 1,
     "origin": "MANUAL",
-    "amount": 5
+    "status": "ACTIVE",
+    "updatedAt": 1390236382695,
+    "createdAt": 1390236382695
 }

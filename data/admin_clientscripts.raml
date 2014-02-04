@@ -7,7 +7,7 @@ post:
   body:
     application/json:
       schema: !include schemas/clientscript_schema.json
-      example: !include examples/admin/clientscript_example.json 
+      example: !include examples/admin/clientscript_post_example.json 
   responses:
     200:
       body:
@@ -36,7 +36,7 @@ get:
           application/json:
             example: !include schemas/clientscript_schema.json
 /{id}:
-  displayName: OneClientScript
+  displayName: ClientScript
   type: common
   get:
     is: [fields]
@@ -53,7 +53,7 @@ get:
       Use this method to change one client script.
     body:
       application/json:
-        example: !include examples/admin/clientscript_example.json 
+        example: !include examples/admin/clientscript_post_example.json 
         schema: !include schemas/clientscript_schema.json
   delete:
     description: |

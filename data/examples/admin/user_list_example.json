@@ -1,23 +1,48 @@
 [
- 	{
-    "email": "example@ex.pl",
-    "password": "example",
-    "firstName": "Example",
-    "lastName": "Example",
-    "gender": "MALE",
-    "birthDate": null,
-    "status": "ACTIVE",
-    "role": "Example",
-    "friends": [1,2,3],
-    "usersGroups": [1,2],
-    "segments": [1,3],
-    "gainedAchievements": [2,3],
-    "wonGames": [4,5],
-    "counterValues": [5,3],
-    "externalIds": [3,4],
-    "customFields": {
-        "shoes": "45",
-        "system": "Windows"
+    {
+        "birthDate": null,
+        "counterValues": [
+            5,
+            3
+        ],
+        "customFields": {
+            "shoes": "45",
+            "system": "Windows"
+        },
+        "email": "example@ex.pl",
+        "externalIds": [
+            3,
+            4
+        ],
+        "firstName": "Example",
+        "friends": [
+            1,
+            2,
+            3
+        ],
+        "gainedAchievements": [
+            2,
+            3
+        ],
+        "gender": "MALE",
+        "id": 1,
+        "lastName": "Example",
+        "password": "example",
+        "role": "Example",
+        "segments": [
+            1,
+            3
+        ],
+        "status": "ACTIVE",
+        "usersGroups": [
+            1,
+            2
+        ],
+        "wonGames": [
+            4,
+            5
+        ],
+        "updatedAt": 1390236382695,
+        "createdAt": 1390236382695
     }
-}
 ]

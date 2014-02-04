@@ -3,10 +3,9 @@
 <%@ var id : Int %>
 <%@ var methods: List[String] %>
 
-<section data-side-menu="${name}" id="nav-section-${id}" class="active">
 <h1>${name}</h1>
 #for(m <- methods)
 	${m}
 #end	
-</section>
+
 

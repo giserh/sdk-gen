@@ -1,6 +1,9 @@
 [
     {
+        "id": 1,
+        "members": {},
         "name": "Test counter",
-        "members": {}
+        "updatedAt": 1390236382695,
+        "createdAt": 1390236382695
     }
 ]

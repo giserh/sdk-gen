@@ -1,9 +1,15 @@
 {
-    "name": "Example",
+    "counters": [
+        1,
+        2
+    ],
+    "id": 1,
     "leftSide": "hello",
-    "rightSide": "game",
+    "name": "Example",
     "operator": "NE",
-    "counters": [1,2],
+    "rightSide": "game",
+    "transactionSource": 1,
     "type": "NORMAL",
-    "transactionSource": 1
+    "updatedAt": 1390236382695,
+    "createdAt": 1390236382695
 }

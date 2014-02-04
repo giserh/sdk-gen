@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import pl.sointeractive.isaacloud.connection.HttpResponse;
+import pl.sointeractive.isaacloud.exceptions.InvalidConfigException;
 
 /**
  * This class imitates the wrapper class, that is created from the SDK generator.
@@ -18,14 +19,13 @@ public class FakeWrapper {
 	
 	private Connector con;
 	
-	public FakeWrapper(){
-		String baseUrl = "http://api.isaacloud.com";
-		String oauthUrl = "http://oauth.isaacloud.com";
-		String version = "version1";
-		Map<String, String> config = new HashMap<String, String>();
-		config.put("clientId", "86");
-		config.put("secret", "c777bffe0d377a54e5d46a21cace834");
-		this.con = new Connector(baseUrl, oauthUrl, version, config);
+	public FakeWrapper(String baseUrl,String oauthUrl,String version,Map<String, String> config){
+		try {
+			this.con = new Connector(baseUrl, oauthUrl, version, config);
+		} catch (InvalidConfigException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public HttpResponse getAdminUsers() throws IOException, JSONException{

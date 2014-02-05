@@ -25,7 +25,7 @@ get:
         body:
           application/json:
             example: !include schemas/transactionsource_schema.json
-/{id}:
+/{transactionSourceId}:
   displayName: TransactionSource
   type: common
   get:
@@ -48,7 +48,7 @@ get:
   /function:
     displayName: TransactionSourceFunctions
     type: common
-    /{childId}:
+    /{functionId}:
       displayName: TransactionSourceFunction
       type: common
       put:

@@ -1,9 +1,9 @@
 {
+    "id": 1,
     "conditions": [
         1,
         2
     ],
-    "id": 1,
     "name": "Example",
     "transactionSource": 1,
     "updatedAt": 1390236382695,

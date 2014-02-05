@@ -1,9 +1,9 @@
 {
+    "id": 1,
     "data": {
         "key": "value"
     },
     "game": 1,
-    "id": 1,
     "notificationType": 1,
     "segment": 1,
     "updatedAt": 1390236382695,

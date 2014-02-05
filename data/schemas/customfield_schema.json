@@ -1,11 +1,12 @@
 {
-   "$schema":"http://json-schema.org/draft-03/schema",
-   "description":"A representation of a category",
-   "type":"object",
-   "properties":{
-      "key":{
-         "required":true,
-         "type":"string"
-      }      
-   }
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A representation of a category",
+    "properties": {
+        "key": {
+            "required": true,
+            "type": "string",
+            "description": ""
+        }
+    }
 }

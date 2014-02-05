@@ -1,8 +1,8 @@
 {
+    "id": 1,
     "className": "Example",
     "description": "Example description",
     "functionType": "NATIVE",
-    "id": 1,
     "manifesto": {},
     "method": "isExample",
     "name": "Example",

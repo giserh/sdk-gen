@@ -1,4 +1,5 @@
 {
+    "id": 1,
     "achievement": 1,
     "conditions": [
         1,
@@ -7,7 +8,6 @@
     "description": "Example description",
     "eventSettable": true,
     "game": 1,
-    "id": 1,
     "name": "Example",
     "requirement": "ALL",
     "transactionSource": 1,

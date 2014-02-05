@@ -1,6 +1,5 @@
 {
     "achievementGroup": 1,
-    "achievementType": "PROGRESSIVE",
     "active": false,
     "counter": 1,
     "data": "Example data",
@@ -14,5 +13,6 @@
     "segments": [
         1,
         2
-    ]
+    ],
+    "type": "PROGRESSIVE"
 }

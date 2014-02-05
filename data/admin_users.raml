@@ -26,7 +26,7 @@ get:
         body:
           application/json:
             example: !include schemas/admin_user.json
-/{id}:
+/{userId}:
   displayName: User
   type: common
   get:
@@ -63,7 +63,7 @@ get:
             application/json:
               schema: !include schemas/externalid_schema.json
               example: !include examples/admin/externalid_list_example.json
-    /{childId}:
+    /{externalId}:
       displayName: UserExternalId
       type: common
       get:
@@ -110,7 +110,7 @@ get:
             application/json:
               example: !include examples/admin/gainedachievement_list_example.json
               schema: !include schemas/gained_achievement_schema.json
-    /{childId}:
+    /{gainedAchievementId}:
       displayName: UserGainedAchievement
       type: common
       get:
@@ -157,7 +157,7 @@ get:
             application/json:
               example: !include examples/admin/wongame_list_example.json
               schema: !include schemas/won_game_schema.json
-    /{childId}:
+    /{wonGameId}:
       displayName: UserWonGame
       type: common
       get:
@@ -189,7 +189,7 @@ get:
   /segments:
     displayName: UserSegments
     type: common
-    /{childId}:
+    /{segmentId}:
       displayName: UserSegment
       type: common
       put:
@@ -214,7 +214,7 @@ get:
             application/json:
               example: !include examples/admin/countervalue_list_example.json
               schema: !include schemas/counter_value_schema.json
-    /{childId}:
+    /{counterValueId}:
       displayName: UserCounterValue
       type: common
       get:
@@ -246,7 +246,7 @@ get:
   /groups:
     displayName: GroupUser
     type: common
-    /{childId}:
+    /{groupId}:
       displayName: GroupUser
       type: common
       put:
@@ -298,7 +298,7 @@ get:
   /friends:
     displayName: UserFriends
     type: common
-    /{childId}:
+    /{friendId}:
       displayName: UserFriend
       type: common
       put:

@@ -1,57 +1,66 @@
 {
-   "$schema":"http://json-schema.org/draft-03/schema",
-   "description":"A representation of a counter",
-   "type":"object",
-   "properties":{
-      "name":{
-         "required":true,
-         "type":"string"
-      },
-      "description":{
-         "required":false,
-         "type":"string"
-      },
-      "value":{
-         "required":false,
-         "type":"long",
-         "default":"0"
-      },
-      "requirement":{
-         "required":false,
-         "type":"enum",
-         "allowed":{
-            "0":"ALL",
-            "1":"ANY"
-         },
-         "default":"ANY"
-      },
-      "conditions":{
-         "required":false,
-         "type":"id_array"
-      },
-      "achievement":{
-         "required":false,
-         "type":"id"
-      },
-      "game":{
-         "required":false,
-         "type":"id"
-      },
-      "eventSettable":{
-         "required":false,
-         "type":"boolean",
-         "constraint":"Allowed value true/false",
-         "default":"false",
-         "description":"This property determines if counter can be set by event"
-      },
-      "globalCounter":{
-         "required":false,
-         "type":"boolean",
-         "default":"false"
-      },
-      "transactionSource":{
-         "required":false,
-         "type":"id"
-      }
-   }
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A representation of a counter",
+    "properties": {
+        "requirement": {
+            "default": "ANY",
+            "required": false,
+            "type": "enum",
+            "description": "one requirement specs",
+            "allowed": {
+                "1": "ANY",
+                "0": "ALL"
+            }
+        },
+        "name": {
+            "required": true,
+            "type": "string",
+            "description": "name used to describe the resource"
+        },
+        "achievement": {
+            "required": false,
+            "type": "id",
+            "description": "id of the achievement"
+        },
+        "eventSettable": {
+            "default": "false",
+            "required": false,
+            "type": "boolean",
+            "description": "can it be set by an event",
+            "constraint": "Allowed value true/false"
+        },
+        "value": {
+            "default": "0",
+            "required": false,
+            "type": "long",
+            "description": "numerical value"
+        },
+        "game": {
+            "required": false,
+            "type": "id",
+            "description": "id of the game"
+        },
+        "globalCounter": {
+            "default": "false",
+            "required": false,
+            "type": "boolean",
+            "description": "if of the global counter"
+        },
+        "conditions": {
+            "required": false,
+            "type": "id_array",
+            "description": "id of the connected conditions"
+        },
+        "transactionSource": {
+            "required": false,
+            "type": "id",
+            "description": "source of the current transaction"
+        },
+        "description": {
+            "required": false,
+            "type": "string",
+            "description": "string containing the entity's description"
+        }
+    }
 }

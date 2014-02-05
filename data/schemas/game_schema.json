@@ -1,54 +1,64 @@
 {
-   "$schema":"http://json-schema.org/draft-03/schema",
-   "description":"A representation of a game",
-   "type":"object",
-   "properties":{
-      "active":{
-         "required":false,
-         "type":"boolean",
-         "default":"false"
-      },
-      "name":{
-         "required":true,
-         "type":"string"
-      },
-      "description":{
-         "required":false,
-         "type":"string"
-      },
-      "expression":{
-         "required":true,
-         "type":"string"
-      },
-      "priority":{
-         "required":false,
-         "type":"int",
-         "default":"1"
-      },
-      "gameType":{
-         "required":false,
-         "type":"string",
-         "allowed":{
-            "0":"ONE_TIME",
-            "1":"GRADUAL"
-         },
-         "default":"ONE_TIME"
-      },
-      "notifications":{
-         "required":false,
-         "type":"id_array"
-      },
-      "conditions":{
-         "required":false,
-         "type":"id_array"
-      },
-      "counter":{
-         "required":false,
-         "type":"id"
-      },
-      "transactionSource":{
-         "required":false,
-         "type":"id"
-      }
-   }
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A representation of a game",
+    "properties": {
+        "name": {
+            "required": true,
+            "type": "string",
+            "description": "name used to describe the resource"
+        },
+        "expression": {
+            "required": true,
+            "type": "string",
+            "description": "logic expression"
+        },
+        "counter": {
+            "required": false,
+            "type": "id",
+            "description": "id of the counter"
+        },
+        "gameType": {
+            "default": "ONE_TIME",
+            "required": false,
+            "type": "string",
+            "description": "type of the game",
+            "allowed": {
+                "1": "GRADUAL",
+                "0": "ONE_TIME"
+            }
+        },
+        "priority": {
+            "default": "1",
+            "required": false,
+            "type": "int",
+            "description": "priority of this object"
+        },
+        "notifications": {
+            "required": false,
+            "type": "id_array",
+            "description": "id of the connected notifications"
+        },
+        "active": {
+            "default": "false",
+            "required": false,
+            "type": "boolean",
+            "description": "describes wheter it is active"
+        },
+        "conditions": {
+            "required": false,
+            "type": "id_array",
+            "description": "id of the connected conditions"
+        },
+        "transactionSource": {
+            "required": false,
+            "type": "id",
+            "description": "source of the current transaction"
+        },
+        "description": {
+            "required": false,
+            "type": "string",
+            "description": "string containing the entity's description"
+        }
+    }
 }

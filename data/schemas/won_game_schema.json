@@ -1,16 +1,18 @@
 {
-   "$schema":"http://json-schema.org/draft-03/schema",
-   "description":"A representation of a won game",
-   "type":"object",
-   "properties":{
-      "game":{
-         "required":true,
-         "type":"id"
-      },
-      "amount":{
-         "required":false,
-         "type":"long",
-         "default":"1"
-      }
-   }
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A representation of a won game",
+    "properties": {
+        "game": {
+            "required": true,
+            "type": "id",
+            "description": "id of the game"
+        },
+        "amount": {
+            "default": "1",
+            "required": false,
+            "type": "long",
+            "description": ""
+        }
+    }
 }

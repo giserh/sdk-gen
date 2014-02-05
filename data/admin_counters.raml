@@ -25,7 +25,7 @@ get:
         body:
           application/json:
             example: !include schemas/counter_schema.json
-/{id}:
+/{counterId}:
   displayName: Counter
   type: common
   get:
@@ -48,7 +48,7 @@ get:
   /conditions:
     displayName: CounterConditions
     type: common
-    /{childId}:
+    /{conditionId}:
       displayName: CounterCondition
       type: common
       put:

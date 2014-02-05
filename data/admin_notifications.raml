@@ -25,7 +25,7 @@ get:
         body:
           application/json:
             example: !include schemas/admin_notification_schema.json
-/{id}:
+/{notificationId}:
   displayName: Notification
   type: common
   get:
@@ -73,7 +73,7 @@ get:
           body:
             application/json:
               example: !include schemas/admin_notification_type_schema.json
-  /{id}:
+  /{typeId}:
     displayName: NotificationType
     type: common
     get:

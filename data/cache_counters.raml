@@ -9,7 +9,7 @@ get:
         application/json:
           example: !include examples/cache/counter_list_example.json
           schema: !include schemas/counter_schema.json    
-/{eventId}:
+/{counterId}:
   displayName: Counter
   get:
     is: [fields]

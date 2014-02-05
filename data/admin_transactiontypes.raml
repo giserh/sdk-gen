@@ -25,7 +25,7 @@ get:
         body:
           application/json:
             example: !include schemas/transactiontype_schema.json
-/{id}:
+/{transactionTypeId}:
   displayName: TransactionType
   type: common
   get:
@@ -48,7 +48,7 @@ get:
   /conditions:
     displayName: TransactionTypesConditions
     type: common
-    /{childId}:
+    /{conditionId}:
       displayName: TransactionTypesCondition
       type: common
       put:

@@ -25,7 +25,7 @@ get:
         body:
           application/json:
             example: !include schemas/game_schema.json            
-/{id}:
+/{gameId}:
   displayName: Game
   type: common
   get:
@@ -48,7 +48,7 @@ get:
   /notifications:
     displayName: GameNotifications
     type: common
-    /{childId}:
+    /{notificationId}:
       displayName: GameNotification
       type: common
       put:
@@ -58,7 +58,7 @@ get:
   /conditions:
     displayName: GameConditions
     type: common
-    /{childId}:
+    /{conditionId}:
       displayName: GameCondition
       type: common
       put:

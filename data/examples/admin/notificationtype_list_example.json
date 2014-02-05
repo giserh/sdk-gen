@@ -1,8 +1,8 @@
 [
     {
+        "id": 1,
         "action": "COUNTER_INC",
         "config": "Example config",
-        "id": 1,
         "name": "Example",
         "priority": "PRIORITY_MEDIUM",
         "updatedAt": 1390236382695,

@@ -1,19 +1,22 @@
 {
-   "$schema":"http://json-schema.org/draft-03/schema",
-   "description":"A representation of an achievement",
-   "type":"object",
-   "properties":{
-      "id":{
-         "required":false,
-         "type":"integer"
-      },
-      "createdAt":{
-         "required":false,
-         "type":"integer"
-      },
-      "updatedAt":{
-         "required":false,
-         "type":"integer"
-      }
-   }
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A representation of an achievement",
+    "properties": {
+        "id": {
+            "required": false,
+            "type": "integer",
+            "description": "object id"
+        },
+        "createdAt": {
+            "required": false,
+            "type": "integer",
+            "description": "time it was created"
+        },
+        "updatedAt": {
+            "required": false,
+            "type": "integer",
+            "description": "time it was last updated"
+        }
+    }
 }

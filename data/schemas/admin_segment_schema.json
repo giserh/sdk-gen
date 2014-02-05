@@ -1,12 +1,13 @@
 {
-   "$schema":"http://json-schema.org/draft-03/schema",
-   "description":"A representation of a segment",
-   "type":"object",
-   "properties":{
-      "name":{
-         "required":true,
-         "type":"string",
-         "constraint":"unique"
-      }
-   }
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A representation of a segment",
+    "properties": {
+        "name": {
+            "required": true,
+            "type": "string",
+            "description": "name used to describe the resource",
+            "constraint": "unique"
+        }
+    }
 }

@@ -1,23 +1,27 @@
 {
-   "$schema":"http://json-schema.org/draft-03/schema",
-   "description":"A representation of a notification",
-   "type":"object",
-   "properties":{
-      "notificationType":{
-         "required":true,
-         "type":"long"
-      },
-      "segment":{
-         "required":false,
-         "type":"long"
-      },
-      "game":{
-         "required":false,
-         "type":"long"
-      },
-      "data":{
-         "required":true,
-         "type":"string"
-      }
-   }
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A representation of a notification",
+    "properties": {
+        "segment": {
+            "required": false,
+            "type": "long",
+            "description": "segment id"
+        },
+        "game": {
+            "required": false,
+            "type": "long",
+            "description": "id of the game"
+        },
+        "data": {
+            "required": true,
+            "type": "string",
+            "description": "additional useful data"
+        },
+        "notificationType": {
+            "required": true,
+            "type": "long",
+            "description": "type of this notification "
+        }
+    }
 }

@@ -1,57 +1,70 @@
 {
-   "$schema":"http://json-schema.org/draft-03/schema",
-   "properties":{
-      "body":{
-         "type":"object",
-         "required":false
-      },
-      "subjectId":{
-         "type":"integer",
-         "required":false
-      },
-      "subjectType":{
-         "type":"string",
-         "required":false
-      },
-      "sourceId":{
-         "type":"integer",
-         "required":false
-      },
-      "priority":{
-         "type":"string",
-         "required":false
-      },
-      "type":{
-         "type":"string",
-         "required":false
-      },
-      "clientId":{
-         "type":"integer",
-         "required":false
-      },
-      "status":{
-         "type":"string",
-         "required":false
-      },
-      "ttl":{
-         "type":"integer",
-         "required":false
-      },
-      "createdAt":{
-         "type":"integer",
-         "required":false
-      },
-      "updatedAt":{
-         "type":"integer",
-         "required":false
-      },
-      "actionTime":{
-         "type":"integer",
-         "required":false
-      },
-      "data":{
-         "type":"object",
-         "required":false
-      }
-   }
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "properties": {
+        "body": {
+            "required": false,
+            "type": "object",
+            "description": "body of the event"
+        },
+        "status": {
+            "required": false,
+            "type": "string",
+            "description": "current status"
+        },
+        "actionTime": {
+            "required": false,
+            "type": "integer",
+            "description": "time the action actually took place"
+        },
+        "sourceId": {
+            "required": false,
+            "type": "integer",
+            "description": "id of the source"
+        },
+        "type": {
+            "required": false,
+            "type": "string",
+            "description": "type of this object"
+        },
+        "subjectType": {
+            "required": false,
+            "type": "string",
+            "description": "type of the subject"
+        },
+        "subjectId": {
+            "required": false,
+            "type": "integer",
+            "description": "id of the subject"
+        },
+        "priority": {
+            "required": false,
+            "type": "string",
+            "description": "priority of this object"
+        },
+        "clientId": {
+            "required": false,
+            "type": "integer",
+            "description": "id of the client"
+        },
+        "ttl": {
+            "required": false,
+            "type": "integer",
+            "description": ""
+        },
+        "updatedAt": {
+            "required": false,
+            "type": "integer",
+            "description": "time it was last updated"
+        },
+        "data": {
+            "required": false,
+            "type": "object",
+            "description": "additional useful data"
+        },
+        "createdAt": {
+            "required": false,
+            "type": "integer",
+            "description": "time it was created"
+        }
+    }
 }

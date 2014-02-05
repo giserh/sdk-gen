@@ -1,19 +1,22 @@
 {
-   "$schema":"http://json-schema.org/draft-03/schema",
-   "description":"A representation of a transaction source",
-   "type":"object",
-   "properties":{
-      "name":{
-         "required":false,
-         "type":"string"
-      },
-      "transactionSource":{
-         "required":false,
-         "type":"long"
-      },
-      "conditions":{
-         "required":false,
-         "type":"id_array"
-      }
-   }
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A representation of a transaction source",
+    "properties": {
+        "conditions": {
+            "required": false,
+            "type": "id_array",
+            "description": "id of the connected conditions"
+        },
+        "name": {
+            "required": false,
+            "type": "string",
+            "description": "name used to describe the resource"
+        },
+        "transactionSource": {
+            "required": false,
+            "type": "long",
+            "description": "source of the current transaction"
+        }
+    }
 }

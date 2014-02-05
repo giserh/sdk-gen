@@ -1,4 +1,5 @@
 {
+    "id": 1,
     "birthDate": null,
     "counterValues": {},
     "email": "user0@test.com",
@@ -32,7 +33,6 @@
         }
     ],
     "gender": 0,
-    "id": 0,
     "lastName": "user",
     "level": 1,
     "role": null,

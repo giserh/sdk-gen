@@ -1,28 +1,29 @@
 {
-   "$schema":"http://json-schema.org/draft-03/schema",
-   "description":"A representation of a user",
-   "type":"object",
-   "properties":{
-      "lb":{
-         "type":"array",
-         "items":{
-            "type":"object",
-            "properties":{
-               "sc":{
-                  "type":"integer",
-                  "required":true
-               },
-               "i":{
-                  "type":"integer",
-                  "required":true
-               },
-               "id":{
-                  "type":"integer",
-                  "required":true
-               }
-            }
-         },
-         "required":true
-      }
-   }
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A representation of a user",
+    "properties": {
+        "lb": {
+            "items": {
+                "type": "object",
+                "properties": {
+                    "sc": {
+                        "required": true,
+                        "type": "integer"
+                    },
+                    "i": {
+                        "required": true,
+                        "type": "integer"
+                    },
+                    "id": {
+                        "required": true,
+                        "type": "integer"
+                    }
+                }
+            },
+            "required": true,
+            "type": "array",
+            "description": ""
+        }
+    }
 }

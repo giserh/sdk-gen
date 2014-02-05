@@ -1,4 +1,5 @@
 {
+    "id": 1,
     "birthDate": null,
     "counterValues": [
         5,
@@ -24,7 +25,6 @@
         3
     ],
     "gender": "MALE",
-    "id": 1,
     "lastName": "Example",
     "password": "example",
     "role": "Example",

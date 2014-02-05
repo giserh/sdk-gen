@@ -1,43 +1,47 @@
 {
-   "$schema":"http://json-schema.org/draft-03/schema",
-   "description":"A representation of a notification type",
-   "type":"object",
-   "properties":{
-      "name":{
-         "required":false,
-         "type":"string"
-      },
-      "action":{
-         "required":false,
-         "type":"string",
-         "allowed":{
-            "0":"INTERNAL_EVENT",
-            "1":"INTERNAL_GROUP_EVENT",
-            "2":"COUNTER_INC",
-            "3":"COUNTER_MODIFY",
-            "4":"ACHIEVEMENT",
-            "5":"EMAIL",
-            "6":"SOAP",
-            "7":"REST",
-            "8":"CUSTOM"
-         }
-      },
-      "config":{
-         "required":false,
-         "type":"string"
-      },
-      "priority":{
-         "required":false,
-         "type":"string",
-         "allowed":{
-            "0":"PRIORITY_LOW",
-            "1":"PRIORITY_MEDIUM",
-            "2":"PRIORITY_NORMAL",
-            "3":"PRIORITY_HIGH",
-            "4":"PRIORITY_CRITICAL",
-            "5":"PRIORITY_BLOCKER"
-         },
-         "default":"PRIORITY_MEDIUM"
-      }
-   }
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A representation of a notification type",
+    "properties": {
+        "action": {
+            "required": false,
+            "type": "string",
+            "description": "kind of action that will be taken",
+            "allowed": {
+                "1": "INTERNAL_GROUP_EVENT",
+                "0": "INTERNAL_EVENT",
+                "3": "COUNTER_MODIFY",
+                "2": "COUNTER_INC",
+                "5": "EMAIL",
+                "4": "ACHIEVEMENT",
+                "7": "REST",
+                "6": "SOAP",
+                "8": "CUSTOM"
+            }
+        },
+        "priority": {
+            "default": "PRIORITY_MEDIUM",
+            "required": false,
+            "type": "string",
+            "description": "priority of this object",
+            "allowed": {
+                "1": "PRIORITY_MEDIUM",
+                "0": "PRIORITY_LOW",
+                "3": "PRIORITY_HIGH",
+                "2": "PRIORITY_NORMAL",
+                "5": "PRIORITY_BLOCKER",
+                "4": "PRIORITY_CRITICAL"
+            }
+        },
+        "config": {
+            "required": false,
+            "type": "string",
+            "description": ""
+        },
+        "name": {
+            "required": false,
+            "type": "string",
+            "description": "name used to describe the resource"
+        }
+    }
 }

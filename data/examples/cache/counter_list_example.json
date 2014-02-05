@@ -1,5 +1,6 @@
 [
     {
+        "id": 1,
         "achievement": 3,
         "conditions": [
             1
@@ -8,7 +9,6 @@
         "eventSettable": false,
         "game": 4,
         "globalCounter": false,
-        "id": 0,
         "name": "Test counter0",
         "requirement": "ALL",
         "transactionSource": 1,

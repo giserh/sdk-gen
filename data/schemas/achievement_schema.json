@@ -1,65 +1,82 @@
 {
-    "name": {
-        "required": true,
-        "type": "string",
-        "constraint": "minimum 5, maximum 30 chars",
-        "description": "name of achievement"
-    },
-    "label": {
-        "required": true,
-        "type": "string"
-    },
-    "description": {
-        "required": false,
-        "type": "string"
-    },
-    "active": {
-        "required": false,
-        "type": "boolean",
-        "default": "false"
-    },
-    "level": {
-        "required": false,
-        "type": "int",
-        "default": "1"
-    },
-    "displayRank": {
-        "required": false,
-        "type": "int",
-        "default": "1"
-    },
-    "importanceRank": {
-        "required": false,
-        "type": "int",
-        "default": "1"
-    },
-    "data": {
-        "required": false,
-        "type": "string"
-    },
-    "achievementType": {
-        "required": false,
-        "type": "string",
-        "allowed": {
-            "0": "NORMAL",
-            "1": "PROGRESSIVE"
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A representation of a segment",
+    "properties": {
+        "achievementType": {
+            "default": "NORMAL",
+            "required": false,
+            "type": "string",
+            "description": "type of this achievement",
+            "allowed": {
+                "1": "PROGRESSIVE",
+                "0": "NORMAL"
+            }
         },
-        "default": "NORMAL"
-    },
-    "achievementGroup": {
-        "required": false,
-        "type": "long"
-    },
-    "progress": {
-        "required": false,
-        "type": "long"
-    },
-    "counter": {
-        "required": false,
-        "type": "long"
-    },
-    "segments": {
-        "required": false,
-        "type": "id_array"
+        "description": {
+            "required": false,
+            "type": "string",
+            "description": "string containing the entity's description"
+        },
+        "level": {
+            "default": "1",
+            "required": false,
+            "type": "int",
+            "description": "number representing the current level"
+        },
+        "segments": {
+            "required": false,
+            "type": "id_array",
+            "description": "id's the segments it belongs to"
+        },
+        "counter": {
+            "required": false,
+            "type": "long",
+            "description": "id of the counter"
+        },
+        "achievementGroup": {
+            "required": false,
+            "type": "long",
+            "description": "group of the achievement"
+        },
+        "importanceRank": {
+            "default": "1",
+            "required": false,
+            "type": "int",
+            "description": "rank representing the importance"
+        },
+        "label": {
+            "required": true,
+            "type": "string",
+            "description": "short description asikorski"
+        },
+        "displayRank": {
+            "default": "1",
+            "required": false,
+            "type": "int",
+            "description": "rank displayed to others"
+        },
+        "active": {
+            "default": "false",
+            "required": false,
+            "type": "boolean",
+            "description": "describes wheter it is active"
+        },
+        "progress": {
+            "required": false,
+            "type": "long",
+            "description": "id of the progress object"
+        },
+        "data": {
+            "required": false,
+            "type": "string",
+            "description": "additional useful data"
+        },
+        "name": {
+            "required": true,
+            "type": "string",
+            "description": "name used to describe the resource",
+            "constraint": "minimum 5, maximum 30 chars"
+        }
     }
 }

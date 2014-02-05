@@ -1,9 +1,9 @@
 {
+    "id": 1,
     "counters": [
         1,
         2
     ],
-    "id": 1,
     "leftSide": "hello",
     "name": "Example",
     "operator": "NE",

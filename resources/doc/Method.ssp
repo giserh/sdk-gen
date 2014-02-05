@@ -4,6 +4,7 @@
 <%@ var methodId : Int %>
 <%@ var headerId : Int %>
 <%@ var url : String %>
+<%@ var curl : String %>
 <%@ var response : String %>
 <%@ var request: String %>
 <%@ var bodyTable: List[(String,String,String)] %>
@@ -60,6 +61,7 @@ ${url}
 					<thead>
 						<tr>
 							<th>Parameter</th>
+							<th>Description</th>
 						</tr>
  					</thead>
  					<tbody>
@@ -72,6 +74,9 @@ ${url}
  									<em>
  										${p._2} 
  									</em>
+ 								</td>
+ 								<td class="parameter">
+ 									${p._3} 
  								</td>
 							</tr>
 						#end
@@ -89,6 +94,14 @@ ${request}
 				</pre>
 			</div>
 		#end
+			<div class="detail">				
+				<p>
+					Example curl call:
+				</p>
+				<pre class="prettyprint linenums">
+${curl}
+				</pre>
+			</div>
 		#if (response != "example")
 			<div class="detail">	
 				<h3>Response</h3>

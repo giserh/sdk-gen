@@ -1,27 +1,32 @@
 {
-   "$schema":"http://json-schema.org/draft-03/schema",
-   "description":"A representation of a segment",
-   "type":"object",
-   "properties":{
-      "id":{
-         "required":false,
-         "type":"integer"
-      },
-      "createdAt":{
-         "required":false,
-         "type":"integer"
-      },
-      "updatedAt":{
-         "required":false,
-         "type":"integer"
-      },
-      "name":{
-         "required":false,
-         "type":"string"
-      },
-      "description":{
-         "required":false,
-         "type":"string"
-      }
-   }
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A representation of a segment",
+    "properties": {
+        "id": {
+            "required": false,
+            "type": "integer",
+            "description": "object id"
+        },
+        "updatedAt": {
+            "required": false,
+            "type": "integer",
+            "description": "time it was last updated"
+        },
+        "name": {
+            "required": false,
+            "type": "string",
+            "description": "name used to describe the resource"
+        },
+        "createdAt": {
+            "required": false,
+            "type": "integer",
+            "description": "time it was created"
+        },
+        "description": {
+            "required": false,
+            "type": "string",
+            "description": "string containing the entity's description"
+        }
+    }
 }

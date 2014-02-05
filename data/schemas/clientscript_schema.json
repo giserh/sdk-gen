@@ -1,29 +1,33 @@
 {
-   "$schema":"http://json-schema.org/draft-03/schema",
-   "description":"A representation of a client script",
-   "type":"object",
-   "properties":{
-      "name":{
-         "required":true,
-         "type":"string"
-      },
-      "code":{
-         "required":true,
-         "type":"string"
-      },
-      "returnType":{
-         "required":true,
-         "type":"string",
-         "allowed":{
-            "0":"NUMBER",
-            "1":"STRING",
-            "2":"BOOLEAN"
-         },
-         "default":"STRING"
-      },
-      "hash":{
-         "required":false,
-         "type":"string"
-      }
-   }
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A representation of a client script",
+    "properties": {
+        "returnType": {
+            "default": "STRING",
+            "required": true,
+            "type": "string",
+            "description": "return value type",
+            "allowed": {
+                "1": "STRING",
+                "0": "NUMBER",
+                "2": "BOOLEAN"
+            }
+        },
+        "code": {
+            "required": true,
+            "type": "string",
+            "description": ""
+        },
+        "hash": {
+            "required": false,
+            "type": "string",
+            "description": ""
+        },
+        "name": {
+            "required": true,
+            "type": "string",
+            "description": "name used to describe the resource"
+        }
+    }
 }

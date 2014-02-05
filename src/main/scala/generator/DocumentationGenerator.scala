@@ -13,7 +13,10 @@ import scala.util.parsing.json.JSON
 class DocumentationGenerator extends Generator {
 
 	protected var fileName = "documentation.html"
+	var base = ""
+
 	val engine: TemplateEngine = new TemplateEngine
+
 	/**
 	 * Creates the sdk based on Raml
 	 * @param raml - output from raml parser
@@ -25,6 +28,7 @@ class DocumentationGenerator extends Generator {
 	override def generate(raml: Raml, resourcePath: String, baseUrl: String, tempDirectory: String): Boolean = {
 
 		val pack: Package = Analyser.analyseRaml(raml)
+		base = pack.baseUri
 
 		var all = Map[String, Map[String, List[Method]]]()
 		for (clazz <- pack.clazzes) {
@@ -33,7 +37,6 @@ class DocumentationGenerator extends Generator {
 				// group by the second part of url
 				val nameMap = clazz.methods.groupBy(m => m.url.split("/")(2))
 				all += (mapName -> nameMap)
-				
 
 			}
 		}
@@ -54,7 +57,7 @@ class DocumentationGenerator extends Generator {
 								}
 								val generated_header = generateHeaders(methods, resourcePath + "/Header.ssp", headerId, mkey)
 								pages += (key + "_" + mkey) -> generatePage(pack, resourcePath + "/Page.ssp", List(generated_header))
-								
+
 							}
 					}
 
@@ -106,7 +109,7 @@ class DocumentationGenerator extends Generator {
 			case "transactiontypes" => "Transaction Types"
 			case other => other.capitalize
 		}
-		
+
 		context.attributes("methods") = methods
 		context.attributes("name") = mapper(name)
 		context.attributes("id") = headerId
@@ -138,8 +141,8 @@ class DocumentationGenerator extends Generator {
 			case "docs" => "documentation"
 			case other => other
 		}
-		
-		// Name of form "Get notifications"
+
+		// name of form "Get notifications"
 		val name = method.name.split("(?=[A-Z])").map {
 			l => mapper(l.toLowerCase())
 		}.mkString(" ") capitalize
@@ -154,6 +157,7 @@ class DocumentationGenerator extends Generator {
 
 		context.attributes("url") = method.restType.toString().toUpperCase() + " " + method.url
 
+		// add body parameters ******************************************
 		if (method.docs.contains("body")) {
 			val obj = JSON.parseFull(method.docs("body")._2) match {
 				case Some(v) => v
@@ -166,22 +170,45 @@ class DocumentationGenerator extends Generator {
 			val bodyTable = bodypar.map {
 				tupl =>
 					{
-						(tupl._1, tupl._2.asInstanceOf[Map[String, Any]]("type").toString, "")
+						(tupl._1, tupl._2.asInstanceOf[Map[String, Any]]("type").toString, tupl._2.asInstanceOf[Map[String, Any]]("description").toString)
 					}
 			}.toList
-			context.attributes("bodyTable") = bodyTable.sortWith((x,y)=> x._1 < y._1 )
+			context.attributes("bodyTable") = bodyTable.sortWith((x, y) => x._1 < y._1)
 		} else context.attributes("bodyTable") = List[(String, String, String)]()
 
+		// add example response **************************************
 		if (method.docs.contains("example"))
 			context.attributes("response") = method.docs("example")._2
 		else
 			context.attributes("response") = "example"
 
-		if (method.docs.contains("example_body"))
+		// create curl expression ************************************
+		val regex = """\{[a-zA-Z0-9,]+\}""".r
+		var curl = ""
+
+		if (method.docs.contains("example_body")) {
+
+			curl = "curl -X " + method.restType.toString().toUpperCase() +
+				" -H \"Authorization: Bearer d3e5174c60c56797e4fee47f45d39\" -H \"Content-Type: application/json\" -d \\ \n" +
+				method.docs("example_body")._2.replace("\n", " ") +
+				regex.replaceAllIn("\\ \nhttp://" + base + method.url, "1")
+
 			context.attributes("request") = method.docs("example_body")._2
-		else
+
+		} else {
+
+			curl = "curl -X " + method.restType.toString().toUpperCase() +
+				" -H 'Authorization: Bearer d3e5174c60c56797e4fee47f45d39' http://" + regex.replaceAllIn(base + method.url, "1")
 			context.attributes("request") = "example_body"
 
+		}
+
+		val whites = """[ \t]+""".r
+		val curl_ex = whites.replaceAllIn(curl, " ")
+
+		context.attributes("curl") = curl_ex
+
+		// render the entire method
 		templ.render(context)
 
 		buffer.flush()

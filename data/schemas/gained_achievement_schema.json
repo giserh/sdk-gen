@@ -1,35 +1,39 @@
 {
-   "$schema":"http://json-schema.org/draft-03/schema",
-   "description":"A representation of a gained achievement",
-   "type":"object",
-   "properties":{
-      "achievement":{
-         "required":true,
-         "type":"id"
-      },
-      "status":{
-         "required":false,
-         "type":"string",
-         "allowed":{
-            "0":"INACTIVE",
-            "1":"ACTIVE",
-            "2":"REVOKED"
-         },
-         "default":"INACTIVE"
-      },
-      "origin":{
-         "required":false,
-         "type":"string",
-         "allowed":{
-            "0":"AUTO",
-            "1":"MANUAL"
-         },
-         "default":"AUTO"
-      },
-      "amount":{
-         "required":false,
-         "type":"long",
-         "default":"1"
-      }
-   }
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A representation of a gained achievement",
+    "properties": {
+        "status": {
+            "default": "INACTIVE",
+            "required": false,
+            "type": "string",
+            "description": "current status",
+            "allowed": {
+                "1": "ACTIVE",
+                "0": "INACTIVE",
+                "2": "REVOKED"
+            }
+        },
+        "origin": {
+            "default": "AUTO",
+            "required": false,
+            "type": "string",
+            "description": "origin of the object",
+            "allowed": {
+                "1": "MANUAL",
+                "0": "AUTO"
+            }
+        },
+        "amount": {
+            "default": "1",
+            "required": false,
+            "type": "long",
+            "description": ""
+        },
+        "achievement": {
+            "required": true,
+            "type": "id",
+            "description": "id of the achievement"
+        }
+    }
 }

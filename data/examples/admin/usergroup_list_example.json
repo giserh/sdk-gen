@@ -1,5 +1,6 @@
 [
     {
+        "id": 1,
         "counterValues": [
             5,
             3
@@ -16,7 +17,6 @@
             2,
             3
         ],
-        "id": 1,
         "name": "Example",
         "segments": [
             1,

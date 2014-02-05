@@ -17,6 +17,8 @@ dist
 /.cache
 /.target
 /bin
+/resources/java-android/source/isaacloud-android-sdk-test/bin
+/resources/java-android/source/isaacloud-android-sdk/bin
 /logs
 output.log
 error.log

@@ -90,63 +90,12 @@ object Analyser {
 					m.addDoc("", action.getDescription(), DocType.DESCRIPTION)
 
 					/** Analyse the possible values for body **/
-
-					val body = action.getBody
-
-					if (!body.isEmpty()) {
-
-						// setup example body
-						val appjson = body.get("application/json")
-						if (appjson != null) {
-							if (appjson.getExample() != null)
-								m.addDoc("example_body", appjson.getExample(), DocType.OTHER)
-							/** Just to show that we use body */
-							m.addQueryParameter("body", "STRING")
-							m.addDoc("body", appjson.getSchema(), DocType.PARAM)
-						}
-
-					}
+					m.setupBody(action.getBody.asScala)
+					
 
 					/** Analyse the possible values for responses **/
-
-					val responses = action.getResponses()
-
-					if (!responses.isEmpty()) {
-
-						// getting a succesful result - 200
-						val res200 = responses.get("200")
-						if (res200 != null) {
-							val example = res200.getBody().get("application/json")
-							if (example != null) {
-								if (example.getExample() != null)
-									m.addDoc("example", example.getExample(), DocType.OTHER)
-							}
-						}
-
-						// getting a succesful result - 201
-						val res201 = responses.get("201")
-						if (res201 != null) {
-							val example = res201.getBody().get("application/json")
-							if (example != null) {
-								if (example.getExample() != null)
-									m.addDoc("example", example.getExample(), DocType.OTHER)
-							}
-						}
-
-						// get return values schemas
-						var gatherReturn = List[String]()
-						responses.asScala.foreach {
-							response =>
-								{
-									/** Get all mime-types of responses **/
-									val typeSchema = response._2.getBody().asScala.map { tpl => tpl._1 + " : " + tpl._2.getSchema() /*.replace("\n", "\n *")*/ }.mkString(" | ")
-									/** Join all possible responses **/
-									gatherReturn = response._1 + " : " + typeSchema :: gatherReturn
-								}
-						}
-						m.addDoc("return value", gatherReturn.mkString("\n or "), DocType.RETURN)
-					}
-
+					m.setupResponses(action.getResponses().asScala)
+					
 					clazz.add(m)
 				}
 		}

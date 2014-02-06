@@ -9,10 +9,10 @@ def create_get(filename, newfilename):
 
     file1.close()
 
-    if "id" not in js:
-        js["id"] = 1
+    if "id" in js:
+        del js["id"]
 
-    od = collections.OrderedDict(sorted(js.items()))
+    od = collections.OrderedDict([("id", 1)] + sorted(js.items()))
 
     if "updatedAt" in od:
         del od["updatedAt"]
@@ -24,12 +24,11 @@ def create_get(filename, newfilename):
 
     od["createdAt"] = 1390236382695
     ret = json.dumps(od, indent=4, separators=(',', ': '))
-
     file1 = open(newfilename, "w")
     file1.write(ret)
 
 
-def create_post(filename,newfilename):
+def create_post(filename, newfilename):
     file1 = open(filename, "r")
 
     js = json.loads(file1.read())
@@ -58,10 +57,10 @@ def create_list(filename, newfilename):
 
     file1.close()
 
-    if "id" not in js:
-        js["id"] = 1
+    if "id" in js:
+        del js["id"]
 
-    od = collections.OrderedDict(sorted(js.items()))
+    od = collections.OrderedDict([("id", 1)] + sorted(js.items()))
 
     if "updatedAt" in od:
         del od["updatedAt"]

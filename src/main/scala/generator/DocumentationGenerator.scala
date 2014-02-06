@@ -17,6 +17,13 @@ class DocumentationGenerator extends Generator {
 
 	val engine: TemplateEngine = new TemplateEngine
 
+	def methodSorter( a : Method, b : Method) : Boolean = {
+		val an = a.name.toLowerCase.replace("get", "").replace("post", "").replace("delete", "").replace("patch", "").replace("put", "")
+		val bn = b.name.toLowerCase.replace("get", "").replace("post", "").replace("delete", "").replace("patch", "").replace("put", "")
+		if (bn.length > an.length) true
+		else if (bn.length < an.length) false
+		else an > bn
+	}
 	/**
 	 * Create all the pages to write to output
 	 */
@@ -30,9 +37,10 @@ class DocumentationGenerator extends Generator {
 					mkey =>
 						{
 							var methodId = -1
-							val methods = all(key)(mkey).map {
+							val methods = all(key)(mkey).sortWith(methodSorter).map {
 								m => methodId += 1; generateMethod(m, resourcePath + "/Method.ssp", methodId, headerId)
 							}
+							
 							val generated_header = generateHeaders(methods, resourcePath + "/Header.ssp", headerId, mkey)
 							(key + "_" + mkey) -> generatePage(pack, resourcePath + "/Page.ssp", List(generated_header))
 						}
@@ -54,6 +62,13 @@ class DocumentationGenerator extends Generator {
 
 		val pack: Package = Analyser.analyseRaml(raml)
 		base = pack.baseUri
+		
+		def mapper(s: String) = s match {
+			case "clientscripts" => "client_scripts"
+			case "transactionsources" => "transaction_sources"
+			case "transactiontypes" => "transaction_types"
+			case other => other
+		}
 
 		var all = Map[String, Map[String, List[Method]]]()
 		for (clazz <- pack.clazzes) {
@@ -63,10 +78,10 @@ class DocumentationGenerator extends Generator {
 				val nameMap = clazz.methods.groupBy{
 					m => {
 						val mets = m.url.split("/")
-						if (mapName.equals("admin") && mets.length > 3 && mets(2).equals("users") && mets(3).equals("groups"))
-							"usergroups"					
+						if (mets.length > 3 && mets(2).equals("users") && mets(3).equals("groups"))
+							"user_groups"					
 						else
-							mets(2)
+							mapper(mets(2))
 					}
 				}
 
@@ -120,10 +135,10 @@ class DocumentationGenerator extends Generator {
 		val context = new DefaultRenderContext("/", engine, buffer)
 
 		def mapper(s: String) = s match {
-			case "clientscripts" => "Client Scripts"
-			case "transactionsources" => "Transaction Sources"
-			case "transactiontypes" => "Transaction Types"
-			case "usergroups" => "User Groups"
+			case "client_scripts" => "Client scripts"
+			case "transaction_sources" => "Transaction sources"
+			case "transaction_types" => "Transaction types"
+			case "user_groups" => "User groups"
 			case other => other.capitalize
 		}
 

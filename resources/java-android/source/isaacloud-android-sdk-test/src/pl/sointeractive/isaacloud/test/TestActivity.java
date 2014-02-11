@@ -24,15 +24,14 @@ public class TestActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		wrapper = new FakeWrapper();
-		
 		String baseUrl = "http://api.isaacloud.com";
 		String oauthUrl = "http://oauth.isaacloud.com";
 		String version = "version1";
 		Map<String, String> config = new HashMap<String, String>();
 		config.put("clientId", "86");
 		config.put("secret", "c777bffe0d377a54e5d46a21cace834");
-		connector = new Connector(baseUrl, oauthUrl, version, config);
+		wrapper = new FakeWrapper(baseUrl, oauthUrl, version, config);
+		
 		
 		runTestAsyncTask();
 	}
@@ -53,9 +52,6 @@ public class TestActivity extends Activity{
 		try {
 			String result;
 			
-			result = connector.getAuthentication();
-			Log.d(TAG,result);
-			
 			result = wrapper.getAdminUsers().toString();
 			Log.d(TAG, result);
 			
@@ -74,10 +70,7 @@ public class TestActivity extends Activity{
 		} catch (JSONException e) {
 			e.printStackTrace();
 			Log.e(TAG, "JSONException");
-		} catch (NullPointerException e){
-			e.printStackTrace();
-			Log.e(TAG, "NullPointerException");
-		}
+		} 
 	}
 	
 	

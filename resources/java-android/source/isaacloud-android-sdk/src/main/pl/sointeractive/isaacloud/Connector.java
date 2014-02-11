@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.Date;
 import java.util.Map;
@@ -15,7 +17,9 @@ import org.json.JSONException;
 
 import pl.sointeractive.isaacloud.connection.HttpResponse;
 import pl.sointeractive.isaacloud.connection.HttpToken;
+import pl.sointeractive.isaacloud.exceptions.InvalidConfigException;
 import android.util.Base64;
+import android.util.Log;
 
 /**
  * Connector class for the Android SDK.
@@ -32,33 +36,59 @@ public class Connector {
 	private String oauthUrl;
 	private String clientId;
 	private String clientSecret;
-	
 
+	/**
+	 * Base constructor.
+	 * 
+	 * @param baseUrl
+	 *            The base URL address of the API.
+	 * @param oauthUrl
+	 *            The OAuth URL of the API. Used to generate access token.
+	 * @param version
+	 *            Version of the API.
+	 * @param config
+	 *            COnfiguration parameters. Requires "clientId" and "secret"
+	 *            keys and their respective values.
+	 * @throws InvalidConfigException
+	 *             Thrown when "clientId" or "secret" are not found in the
+	 *             parameters.
+	 */
 	public Connector(String baseUrl, String oauthUrl, String version,
-			Map<String, String> config) {
+			Map<String, String> config) throws InvalidConfigException {
 		this.baseUrl = baseUrl;
 		this.oauthUrl = oauthUrl;
 		this.setVersion(version);
+
 		httpToken = new HttpToken();
 
 		if (config.containsKey("clientId")) {
 			this.clientId = config.get("clientId");
 		} else {
-			System.out.println("Did not define clientId");
+			throw new InvalidConfigException("clientId");
 		}
 
 		if (config.containsKey("secret")) {
 			this.clientSecret = config.get("secret");
 		} else {
-			System.out.println("Did not define secret");
+			throw new InvalidConfigException("secret");
 		}
 
 	}
 
 	// I think this method could be private. The authentication process should
+	// be
 	// transparent for the user, he doesnt need to know how it is done or when.
 	// He will never have to get authentication himself, the getService method
 	// will do that for him. Please verify.
+	/**
+	 * Returns the authentication token.
+	 * 
+	 * @return Authentication header in format: <token_type> <access_token>
+	 * @throws JSONException
+	 *             Thrown when an error occurs during JSON operations
+	 * @throws IOException
+	 *             Thrown when an error occurs during IO operations
+	 */
 	public String getAuthentication() throws JSONException, IOException {
 		if (!isTokenValid()) {
 			getAccessTokenData();
@@ -80,6 +110,8 @@ public class Connector {
 		connection.setRequestMethod("POST");
 		connection.setDoOutput(true);
 		connection.setDoInput(true);
+		connection.setConnectTimeout(Config.TIMEOUT);
+		connection.setReadTimeout(Config.TIMEOUT);
 		// setup headers
 		connection.setRequestProperty("Content-Type",
 				"application/x-www-form-urlencoded");
@@ -93,6 +125,7 @@ public class Connector {
 		connection.connect();
 		// check response code
 		int responseCode = connection.getResponseCode();
+		Log.d("TEST", "" + responseCode);
 		// get result string
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				connection.getInputStream()));
@@ -122,8 +155,34 @@ public class Connector {
 				.setTokenType(response.getJSONObject().getString("token_type"));
 	}
 
+	/**
+	 * Call required service from the API. For the future implementation of the
+	 * wrapper: catch the SocketTimeoutException and MalformedURLException when
+	 * using this method in order to gain more control over the exception
+	 * handling process
+	 * 
+	 * Caution: In case an IOException is NOT thrown, but the http response code
+	 * is still pointing at an error, an adequate information is stored in the
+	 * HttpResponse.
+	 * 
+	 * @param uri
+	 *            Uri of the method. Used together with the base Uri of the API
+	 *            to get the whole address.
+	 * @param methodName
+	 *            Name of the method.
+	 * @param parameters
+	 *            Parameters to switch with the uri fragments.
+	 * @param body
+	 *            Request body.
+	 * @return Request response in form of a HttpResponse class.
+	 * @throws JSONException
+	 *             Thrown when an error occurs during JSON operations
+	 * @throws IOException
+	 *             Thrown when an error occurs during IO operations
+	 */
 	public HttpResponse callService(String uri, String methodName,
-			Map<String, Object> parameters, String body) throws IOException,
+			Map<String, Object> parameters, String body)
+			throws SocketTimeoutException, MalformedURLException, IOException,
 			JSONException {
 		// parse parameters
 		String targetUri = baseUrl + uri;
@@ -147,6 +206,8 @@ public class Connector {
 		}
 		connection.setDoInput(true);
 		connection.setRequestMethod(methodName);
+		connection.setConnectTimeout(Config.TIMEOUT);
+		connection.setReadTimeout(Config.TIMEOUT);
 		// setup headers
 		connection.setRequestProperty("Content-Type", "application/json");
 		connection.setRequestProperty("Authorization", getAuthentication());
@@ -166,6 +227,7 @@ public class Connector {
 		String resultString = reader.readLine();
 		// check response code
 		int responseCode = connection.getResponseCode();
+		Log.d("TEST", "" + responseCode);
 		// disconnect
 		connection.disconnect();
 		// build response
@@ -192,6 +254,11 @@ public class Connector {
 	}
 
 	// Same as getAuthentication(), this method could be private. Please verify.
+	/**
+	 * Checks the validity of the token.
+	 * 
+	 * @return
+	 */
 	public static boolean isTokenValid() {
 		long currentTime = new Date().getTime();
 		if (currentTime > httpToken.getUpdateTime()

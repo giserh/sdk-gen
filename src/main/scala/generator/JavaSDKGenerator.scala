@@ -14,7 +14,7 @@ import analyser.DocType
 
 class JavaSDKGenerator extends SourceGenerator(".java"){
 	
-
+	
 	val engine : TemplateEngine = new TemplateEngine
 	
 	/**

@@ -20,7 +20,7 @@ object Analyser {
 	 * @return Package representing the sdk to be generated.
 	 */
 	def analyseRaml(raml: Raml): Package = {
-
+			
 		val baseUri = raml.getBaseUri()
 		val mediaType = raml.getMediaType()
 		val securedBy = raml.getSecuredBy().get(0)

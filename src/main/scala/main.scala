@@ -12,6 +12,8 @@ import generator.PhpSDKGenerator
 import java.io.File
 import generator.JavaSDKGenerator
 import generator.DocumentationGenerator
+import org.raml.emitter.RamlEmitter
+import java.io.PrintWriter
 
 object Main {
 
@@ -31,6 +33,9 @@ object Main {
 			}
 			case ("--output" | "-o") :: value :: tail => {
 				Map("output" -> value) ++ nextOption(tail)
+			}
+			case ("--save" | "-s") :: tail => {
+				Map("save" -> true) ++ nextOption(tail)
 			}
 			case ("--resources" | "-r") :: value :: tail => {
 				Map("resources" -> value) ++ nextOption(tail)
@@ -68,11 +73,10 @@ object Main {
 			if (!options.contains("raml")) throw new InvalidParameterException("RAML files are not defined!")
 
 			/**from command line -g --generator, -o --output raml */
-			val ramlFile : String = options("raml").asInstanceOf[String]
-			val outputDirectory : String = options("output").asInstanceOf[String]
-			val codeGenerator : Generator = options("generator").asInstanceOf[Generator]
+			val ramlFile: String = options("raml").asInstanceOf[String]
+			val outputDirectory: String = options("output").asInstanceOf[String]
+			val codeGenerator: Generator = options("generator").asInstanceOf[Generator]
 
-			
 			/** Get configuration for application*/
 			var application = config.getConfig("application")
 
@@ -84,18 +88,26 @@ object Main {
 			/** Get data from configuration*/
 			val baseUrl = application.getString("baseUrl")
 			var resourcePath = application.getString("resourcePath")
-			
-			if( options.contains("resources") )
+
+			if (options.contains("resources"))
 				resourcePath = options("resources").asInstanceOf[String]
-			
+
 			val tempDirectory = application.getString("tempDirectory")
 
-			var includePath : String = null
-			if( options.contains("include") )
+			var includePath: String = null
+			if (options.contains("include"))
 				includePath = options("include").asInstanceOf[String]
-			
+
 			var raml: Raml = new RamlDocumentBuilder().build(new File(ramlFile))
 
+			if (options.contains("save")) {
+				val emitter = new RamlEmitter
+				val writer = new PrintWriter("whole_api.raml")
+//				println(emitter.dump(raml));
+				writer.write(emitter.dump(raml))
+				writer.flush()
+			}
+			
 			/**Invoke code generator*/
 			var composer: CodeContext = new CodeContext()
 			val worker = composer.withBaseUrl(baseUrl)
@@ -106,7 +118,7 @@ object Main {
 				.withTempDirectory(tempDirectory)
 				.withIncludePath(includePath)
 				.compose
-				
+
 			worker.run()
 
 		} else {

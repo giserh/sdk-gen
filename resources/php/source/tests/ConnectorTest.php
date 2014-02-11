@@ -4,16 +4,23 @@
  * @author asikorski
  */
 class ConnectorTest extends PHPUnit_Framework_TestCase {
+	
+	private $testBaseApiUrl = "http://api.dev.isaacloud.com";
+	private $testBaseOAuthUrl = "http://oauth.dev.isaacloud.com";
+	private $testVersion = "v1";
+	private $testClientId = "123";
+	private $testSecret = "123";
+	
 
     public function constructorValidProvider() {
         $dataProvider = array(
             array(
-                "https://api.isaacloud.com/",
-                "https://oauth.isaacloud.com/",
-                "1.0.1",
+                "{$this->testBaseApiUrl}",
+                "{$this->testBaseOAuthUrl}",
+                "{$this->testVersion}",
                 array(
-                    "clientId" => 123,
-                    "secret" => 123
+                    "clientId" => $this->testClientId,
+                    "secret" => $this->testSecret,
                 ))
         );
         return $dataProvider;
@@ -38,7 +45,7 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
         $stub = $this->getMockForAbstractClass("IsaaCloud\Connector", array($baseApiPath, $baseOauthPath, $version, $configuration));
         $this->assertEquals($stub->getClientId(), $configuration["clientId"]);
         $this->assertEquals($stub->getSecret(), $configuration["secret"]);
-        $this->assertEquals($stub->getBaseOuathUrl(), $baseOauthPath);
+        $this->assertEquals($stub->getBaseOAuthUrl(), $baseOauthPath);
         $this->assertEquals($stub->getBaseApiUrl(), $baseApiPath);
         $this->assertEquals($stub->getVersion(), $version);
     }
@@ -52,21 +59,21 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
          * Setup constructor parameters
          */
         $args = array(
-            "https://api.isaacloud.com",
-            "https://oauth.isaacloud.com",
-            "1.0.0",
+            "{$this->testBaseApiUrl}",
+            "{$this->testBaseOAuthUrl}",
+            "{$this->testVersion}",
             array(
-                "clientId" => 123,
-                "secret" => 123
+                "clientId" => $this->testClientId,
+                "secret" => $this->testSecret,
         ));
         /**
          * Build Mock
          */
         $stub = $this->getMockBuilder("IsaaCloud\Connector")
-                ->setMethods(array("curlIt"))
+                ->setMethods(array("curlIt", "getAuthentication"))
                 ->setConstructorArgs($args)
                 ->getMockForAbstractClass();
-
+		
         /**
          * Expected responder
          */
@@ -75,23 +82,25 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
         /**
          * Set up callback function
          */
-        $callback = function(array $header, $method, $url, array $body = null) use($responder) {
+        $test = $this;
+        $callback = function(array $header, $method, $url, array $body = null) use($responder, $test) {
             //Assert that has been defined keys
-            $this->assertArrayHasKey("Authentication", $header);
-            $this->assertArrayHasKey("Content-type", $header);
+            
+            $test->assertArrayHasKey("Authorization", $header);
+            $test->assertArrayHasKey("Content-type", $header);
 
             //Assert that url is valid
             if ((filter_var($url, FILTER_VALIDATE_URL) == false)) {
-                $this->fail("{$url} url is not valid!");
+                $test->fail("{$url} url is not valid!");
             }
 
             //Assert method is valid
-            $this->assertTrue(in_array($method, array("GET", "POST", "PUT", "PATH", "OPTIONS", "DELETE")));
+            $test->assertTrue(in_array($method, array("GET", "POST", "PUT", "PATH", "OPTIONS", "DELETE")));
 
             if (in_array($method, array("GET", "DELETE"))) {
-                $this->assertNull($body);
+                $test->assertNull($body);
             }
-
+			
             return $responder;
         };
         /**
@@ -100,6 +109,10 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
         $stub->expects($this->any())
                 ->method('curlIt')
                 ->will($this->returnCallback($callback));
+				
+		$stub->expects($this->any())
+				->method('getAuthentication')
+				->will($this->returnValue("Bearer 6edcd1bd25e0b798ccc8523f7e3e9c5e"));
 
         /**
          * Call into orginal method
@@ -109,29 +122,177 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($response, $responder);
     }
 
+	public function getAuthenticationProvider() {
+		$dataProvider = array(
+			array(
+				array(
+					"token_type" => "Bearer",
+					"expires_in" => "3600",
+					"access_token" => "965c8d4d29717ad3ad8e82447c55b1e"
+				),
+			),
+			array(
+				array(
+					"token_type" => "Bearer",
+					"expires_in" => "1800",
+					"access_token" => "47c55b8d4d2965c3ad8e8249717ad1e"
+				),
+			),
+			array(
+				array(
+					"token_type" => "Basic",
+					"expires_in" => "3600",
+					"access_token" => "717ad3ad899e824e65c8d4d47c55b12"
+				),
+			),
+			array(
+				array(
+					"error" => "Invalid client",
+				),
+				false
+			)
+		);
+		
+		return $dataProvider;
+	}
+
     /**
      * Test get authentication string
+	 * @dataProvider getAuthenticationProvider
      */
-    public function testGetAuthentication($type = "Barer") {
+    public function testGetAuthentication($token, $tokenOk = true) {
         $args = array(
-            "https://api.isaacloud.com",
-            "https://oauth.isaacloud.com",
-            "1.0.0",
+            "{$this->testBaseApiUrl}",
+            "{$this->testBaseOAuthUrl}",
+            "{$this->testVersion}",
             array(
-                "clientId" => 123,
-                "secret" => 123
+                "clientId" => $this->testClientId,
+                "secret" => $this->testSecret,
         ));
         /**
          * Build mock object
          */
         $stub = $this->getMockBuilder("IsaaCloud\Connector")
+				->setMethods(array("obtainOAuthToken","setCookieData"))
                 ->setConstructorArgs($args)
                 ->getMockForAbstractClass();
+		
+		$test = $this;
+		$callback = function() use($token, $test, $tokenOk) {
+			
+			if( $tokenOk ) {
+				$test->assertArrayHasKey("token_type", $token);
+				$test->assertArrayHasKey("expires_in", $token);
+				$test->assertArrayHasKey("access_token", $token);
+				
+				return $token;
+			} else {
+				$test->assertArrayHasKey("error", $token);
+				return null;
+			}
+		};
+        /**
+         * Set up excepts
+         */
+        $stub->expects($this->any())
+                ->method("obtainOAuthToken")
+                ->will($this->returnCallback($callback));
+		
+		$callbackSetCookie = function() use($token) {
+			$_COOKIE["test"] = json_encode($token);
+			return $token;
+		};
+		
+		$stub->expects($this->any())
+				->method("setCookieData")
+				->will($this->returnCallback($callbackSetCookie));
 
         $authentcationString = $stub->getAuthentication();
+		
+		if( $tokenOk ) {
+			$this->assertNotNull($authentcationString);
+        	$this->assertNotEmpty($authentcationString);
+		}
+		else {
+			$this->assertNull($authentcationString);
+		}
+    }
+	
+	public function obtainOAuthTokenProvider() {
+		$dataProvider = array(
+			array(
+				200,
+				array(
+					"token_type" => "Bearer",
+					"expires_in" => "3600",
+					"access_token" => "965c8d4d29717ad3ad8e82447c55b1e"
+				),
+				array(),
+			),
+			array(
+				403,
+				array(
+					"error" => "Invalid client",
+				),
+				array(),
+				new Exception("Error while obtaining OAuth Token: Invalid client", 403)
+			)
+		);
+		
+		return $dataProvider;
+	}
 
-        $this->assertNotNull($authentcationString);
-        $this->assertNotEmpty($authentcationString);
+	/**
+     * Test obtain oauth token error
+	 * @dataProvider obtainOAuthTokenProvider
+     */
+    public function testObtainOAuthToken($code, $body, $headers, $expectedException = null) {
+        $args = array(
+            "{$this->testBaseApiUrl}",
+            "$this->testBaseOAuthUrl",
+            "{$this->testVersion}",
+            array(
+                "clientId" => $this->testClientId,
+                "secret" => $this->testSecret,
+        ));
+        
+        $responder = new IsaaCloud\Response($code, $body, $headers);
+				
+        /**
+         * Build mock object
+         */
+		$stub = $this->getMockBuilder("IsaaCloud\Connector")
+				->setMethods(array("curlIt"))
+                ->setConstructorArgs($args)
+                ->getMockForAbstractClass();
+			
+		/**
+         * Set up callback function
+         */
+        $callback = function(array $header, $method, $url, array $body = null) use($responder) {
+            return $responder;
+        };
+        /**
+         * Set up expects
+         */
+        $stub->expects($this->any())
+                ->method("curlIt")
+                ->will($this->returnCallback($callback));
+		
+		try {
+        	$token = $stub->obtainOAuthToken();
+	        $this->assertNotNull($token);
+	        $this->assertNotEmpty($token);
+			$this->assertArrayHasKey("token_type", $token);
+			$this->assertArrayHasKey("expires_in", $token);
+			$this->assertArrayHasKey("access_token", $token);
+		} catch( Exception $e ) {
+			$expectedCode = $expectedException->getCode();
+			$expectedMsg = $expectedException->getMessage();
+			
+			if( $expectedCode ) $this->assertEquals($e->getCode(), $expectedCode);
+			if( $expectedMsg ) $this->assertEquals($e->getMessage(), $expectedMsg);
+		}
     }
 
     public function mergeProvider() {
@@ -179,12 +340,12 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
      */
     public function testMerge($string, $parameters, $expected) {
         $args = array(
-            "https://api.isaacloud.com",
-            "https://oauth.isaacloud.com",
-            "1.0.0",
+            "{$this->testBaseApiUrl}",
+            "{$this->testBaseOAuthUrl}",
+            "{$this->testVersion}",
             array(
-                "clientId" => 123,
-                "secret" => 123
+                "clientId" => $this->testClientId,
+                "secret" => $this->testSecret,
         ));
         /**
          * Build mock object
@@ -206,12 +367,12 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
      */
     public function testGetSessionData() {
         $args = array(
-            "https://api.isaacloud.com",
-            "https://oauth.isaacloud.com",
-            "1.0.0",
+            "{$this->testBaseApiUrl}",
+            "{$this->testBaseOAuthUrl}",
+            "{$this->testVersion}",
             array(
-                "clientId" => 123,
-                "secret" => 123
+                "clientId" => $this->testClientId,
+                "secret" => $this->testSecret,
         ));
         /**
          * Prepare session and cookie
@@ -235,7 +396,7 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
         $_COOKIE[$cookieName] = json_encode($mockArray);
 
 
-        $sessionData = $stub->getCookieData($cookieName);
+        $sessionData = $stub->getCookieData();
 
         $this->assertNotNull($sessionData);
 
@@ -248,12 +409,12 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
 
     public function testIsValidToken() {
         $args = array(
-            "https://api.isaacloud.com",
-            "https://oauth.isaacloud.com",
-            "1.0.0",
+            "{$this->testBaseApiUrl}",
+            "{$this->testBaseOAuthUrl}",
+            "{$this->testVersion}",
             array(
-                "clientId" => 123,
-                "secret" => 123
+                "clientId" => $this->testClientId,
+                "secret" => $this->testSecret,
         ));
         /**
          * Prepare session and cookie
@@ -279,12 +440,12 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
 
     public function testBuildTokenByCookie() {
         $args = array(
-            "https://api.isaacloud.com",
-            "https://oauth.isaacloud.com",
-            "1.0.0",
+            "{$this->testBaseApiUrl}",
+            "{$this->testBaseOAuthUrl}",
+            "{$this->testVersion}",
             array(
-                "clientId" => 123,
-                "secret" => 123
+                "clientId" => $this->testClientId,
+                "secret" => $this->testSecret,
         ));
         /**
          * Prepare session and cookie
@@ -345,12 +506,12 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
      */
     public function testEncodeCredential($clientId, $secret, $encoded) {
         $args = array(
-            "https://api.isaacloud.com",
-            "https://oauth.isaacloud.com",
-            "1.0.0",
+            "{$this->testBaseApiUrl}",
+            "{$this->testBaseOAuthUrl}",
+            "{$this->testVersion}",
             array(
-                "clientId" => 123,
-                "secret" => 123
+                "clientId" => $this->testClientId,
+                "secret" => $this->testSecret,
         ));
         /**
          * Prepare session and cookie
@@ -368,12 +529,12 @@ class ConnectorTest extends PHPUnit_Framework_TestCase {
 
     public function testDecodePaginator() {
         $args = array(
-            "https://api.isaacloud.com",
-            "https://oauth.isaacloud.com",
-            "1.0.0",
+            "{$this->testBaseApiUrl}",
+            "{$this->testBaseOAuthUrl}",
+            "{$this->testVersion}",
             array(
-                "clientId" => 123,
-                "secret" => 123
+                "clientId" => $this->testClientId,
+                "secret" => $this->testSecret,
         ));
         /**
          * Prepare session and cookie

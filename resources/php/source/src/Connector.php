@@ -8,7 +8,7 @@ namespace IsaaCloud;
  */
 class Response {
 
-    public function __construct($code, array $body, array $header) {
+    public function __construct($code, $body, $header) {
         if (!is_numeric($code)) {
             throw new ConnectorException("Code should be valid numeric!");
         }
@@ -62,11 +62,12 @@ class ConnectorException extends \RuntimeException {
  */
 abstract class Connector {
 
-    private $baseOuathUrl = null;
+    private $baseOAuthUrl = null;
     private $baseApiUrl = null;
     private $version = null;
     private $contentType = "application/json charset=utf-8";
     private $methods = array("GET", "POST", "PUT", "PATH", "OPTIONS");
+	private $cookieName = "test";
 
     /**
      * Credentials configuration
@@ -83,11 +84,11 @@ abstract class Connector {
      * Constructor of connector, set up all connection parameters
      * 
      * @param string $baseApiUrl Base url path to api server
-     * @param string $baseOuathUrl Base url path to authenticate server
+     * @param string $baseOAuthUrl Base url path to authenticate server
      * @param string $version Version compatible API (in pattern x.y.z)
      * @param array $config Array of configutation
      */
-    public function __construct($baseApiUrl, $baseOuathUrl, $version, $config) {
+    public function __construct($baseApiUrl, $baseOAuthUrl, $version, $config) {
 
         if ((filter_var($baseApiUrl, FILTER_VALIDATE_URL) == true)) {
             $this->baseApiUrl = $baseApiUrl;
@@ -95,10 +96,10 @@ abstract class Connector {
             throw new ConnectorException("{$baseApiUrl} is invalid url!");
         }
 
-        if ((filter_var($baseOuathUrl, FILTER_VALIDATE_URL) == true)) {
-            $this->baseOuathUrl = $baseOuathUrl;
+        if ((filter_var($baseOAuthUrl, FILTER_VALIDATE_URL) == true)) {
+            $this->baseOAuthUrl = $baseOAuthUrl;
         } else {
-            throw new ConnectorException("{$baseOuathUrl} is invalid url!");
+            throw new ConnectorException("{$baseOAuthUrl} is invalid url!");
         }
 
         $this->version = $version;
@@ -212,8 +213,8 @@ abstract class Connector {
         $this->secret = $secret;
     }
 
-    public function getBaseOuathUrl() {
-        return $this->baseOuathUrl;
+    public function getBaseOAuthUrl() {
+        return $this->baseOAuthUrl;
     }
 
     public function getBaseApiUrl() {
@@ -269,7 +270,8 @@ abstract class Connector {
          */
         if ((null != $body) && (count($body) > 0)) {
             $bodyAsJson = json_encode($body);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $bodyAsJson);
+			$bodyquery = http_build_query($body,null,'&');
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $bodyquery);
         }
         /**
          * Response IT!
@@ -285,6 +287,7 @@ abstract class Connector {
         /**
          * Build response object
          */
+         
         if ($curlResponse === null) {
             throw new ConnectorException("The response is empty, and cannot be parse!");
         } else {
@@ -292,7 +295,8 @@ abstract class Connector {
                 list($curlResponseHeader, $curlBody) = explode("\r\n\r\n", $curlResponse, 2);
                 list($curlHttpCode) = explode("\r", $curlResponseHeader, 2);
 
-                $jsonCurlBody = json_decode($curlBody);
+                $jsonCurlBody = json_decode($curlBody, true);
+				
                 $response = new Response($curlHttpCode, $jsonCurlBody, $curlResponseHeader);
                 return $response;
             } catch (Exception $exc) {
@@ -304,20 +308,76 @@ abstract class Connector {
     /**
      * 
      * Build authentication data
+	 * Firstly check cookie data, if cookie not exists or is invalid - make request to oauth server, to obtain token
+	 * At the end build token string
      * @return string Authentication Token
      */
     public function getAuthentication() {
 
         $cookieData = $this->getCookieData();
         $token = "Bearer 6edcd1bd25e0b798ccc8523f7e3e9c5e";
-	
-        if (is_array($cookieData) && $this->isValidCookieData($cookieData)) {
-            $token = $this->buildTokenByCookie($cookieData);
-        } else {
-            //Request into OAuth server and get
-        }
+		
+		if( !is_array($cookieData) || !$this->isValidCookieData($cookieData)) {
+			//Request into OAuth server and get authentication token
+			try {
+				$token = $cookieData = $this->obtainOAuthToken();
+				if( !is_array($token) ) return null; // if invalid token data, return null
+			} catch(Exception $e) {
+				return null; // if some exception catched, return null
+			}
+		}
+        
+		// build token string
+        $token = $this->buildTokenByCookie($cookieData);
         return $token;
     }
+	
+	/**
+	 * Create request into OAuth server, to get authentication token
+	 * @return string Authentication Token
+	 * @throws ConnectorException
+	 */
+	public function obtainOAuthToken($authMethod = "Basic") {
+			
+		// Build http headers
+		$header = array(
+			$authMethod . " " . $this->encodeCredential($this->clientId, $this->secret),
+		);
+		
+		// set http method
+		$method = "POST";
+		
+		// prepare url to call
+		$url = $this->baseOAuthUrl . "/token";
+		
+		// set http fields - grant type for obtaining oauth token	
+		$body = array(
+			"grant_type" => "client_credentials",
+		);
+		
+		// curlIt to get response from oauth server
+		$response = $this->curlIt($header, $method, $url, $body);
+		
+		// get body
+		$body = $response->getBody();
+		
+		// if body contains good token data create token, and return it
+		if( isset($body["token_type"]) && isset($body["expires_in"]) && isset($body["access_token"]) ) {
+			$token = array(
+				"token_type" => $body["token_type"],
+				"expires_in" => $body["expires_in"],
+				"access_token" => $body["access_token"]
+			);
+			
+			return $token;
+		} elseif( isset($body["error"]) ) {
+			// Throw new exception with oauth error
+			throw new ConnectorException("Error while obtaining OAuth Token: " . $body["error"], $response->getCode());
+		} else {
+			// TODO: Check http response headers and throw exception with error that occured
+			throw new ConnectorException("Unknown error while obtaining OAuth Token", $response->getCode());
+		}
+	}
 
     /**
      * Encode credintial into valid base64 string
@@ -372,11 +432,11 @@ abstract class Connector {
     /**
      * Get sesssion data @todo Refactor this method with better secure protection!
      * 
-     * @param type $session_name
-     * @param type $session_save_handler
      */
-    public function getCookieData($name = null) {
-
+    public function getCookieData() {
+		
+		$name = $this->cookieName;
+		
         $cookieData = array();
         if (array_key_exists($name, $_COOKIE)) {
             try {
@@ -390,9 +450,13 @@ abstract class Connector {
 
     /**
      * 
-     * @param type $name
+     * @param string $access_token
+	 * @param integer $expires_in
+	 * @param srting $token_type
      */
-    public function setCookieData($name, $access_token, $expires_in, $token_type) {
+    public function setCookieData($access_token, $expires_in, $token_type) {
+        $name = $this->cookieName;
+		
         try {
             $data = array(
                 "access_token" => $access_token,

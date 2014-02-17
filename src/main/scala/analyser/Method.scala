@@ -99,8 +99,12 @@ class Method(val restType: RestType.Value, val url: String, private var _name: S
 				{
 					var getId = id.replace("{", "")
 					getId = getId.replace("}", "")
-					addQueryParameter(getId, "String")
-
+					
+					if( url.contains("eventId") || url.contains("notificationId"))
+						addQueryParameter(getId, "String")
+					else
+						addQueryParameter(getId, "Number")
+						
 					// get the name of the object
 					val start = this.url.take(this.url.indexOf(id) - 1)
 					var name = start.drop(start.lastIndexOf("/") + 1)

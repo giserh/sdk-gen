@@ -103,7 +103,6 @@ object Main {
 			if (options.contains("save")) {
 				val emitter = new RamlEmitter
 				val writer = new PrintWriter("whole_api.raml")
-//				println(emitter.dump(raml));
 				writer.write(emitter.dump(raml))
 				writer.flush()
 			}

@@ -17,39 +17,68 @@ class DocumentationGenerator extends Generator {
 
 	val engine: TemplateEngine = new TemplateEngine
 
-	def methodSorter( a : Method, b : Method) : Boolean = {
+	def methodSorter(a: Method, b: Method): Boolean = {
 		val an = a.name.toLowerCase.replace("get", "").replace("post", "").replace("delete", "").replace("patch", "").replace("put", "")
 		val bn = b.name.toLowerCase.replace("get", "").replace("post", "").replace("delete", "").replace("patch", "").replace("put", "")
 		if (bn.length > an.length) true
 		else if (bn.length < an.length) false
 		else an > bn
 	}
+
+	def methodGrouper(m: Method): String = {
+		val res = m.url.split("/")
+		if (res.length > 3 && !res(3).equals("doc") && !res(3).contains("{")) {
+			res(2) + " " + res(3)
+		} else {
+			res(2)
+		}
+	}
+
 	/**
 	 * Create all the pages to write to output
 	 */
 	private def createPages(all: Map[String, Map[String, List[Method]]], resourcePath: String, pack: Package) = {
 		all.keys.map {
 			key =>
-			{
-				var headerId = 0
-				val sortedKeys = all(key).keys.toList
-				val headers = sortedKeys.map {
-					mkey =>
-						{
-							var methodId = -1
-							val methods = all(key)(mkey).sortWith(methodSorter).map {
-								m => methodId += 1; generateMethod(m, resourcePath + "/Method.ssp", methodId, headerId)
+				{
+
+					val sortedKeys = all(key).keys.toList
+					val headers = sortedKeys.map {
+						mkey =>
+							{
+								//generate methods
+								var methodId = -1
+								var headerId = -1
+
+								val groupedMethods = all(key)(mkey).groupBy(methodGrouper)
+
+								val generatedMethods = groupedMethods.map {
+									g =>
+										headerId += 1; (g._1,g._2.sortWith(methodSorter).map {
+											m => methodId += 1; generateMethod(m, resourcePath + "/Method.ssp", methodId, headerId)
+										})
+								}.toList
+
+								//generate headers
+								headerId = -1
+								val header_list = generatedMethods.map {
+									ms =>
+										{
+											headerId += 1
+											generateHeaders(ms._2, resourcePath + "/Header.ssp", headerId, ms._1)
+
+										}
+								}
+
+								//generate page
+								(key + "_" + mkey) -> generatePage(pack, resourcePath + "/Page.ssp", header_list)
 							}
-							
-							val generated_header = generateHeaders(methods, resourcePath + "/Header.ssp", headerId, mkey)
-							(key + "_" + mkey) -> generatePage(pack, resourcePath + "/Page.ssp", List(generated_header))
-						}
+					}
+					headers
 				}
-				headers
-			}
 		}
 	}
-	
+
 	/**
 	 * Creates the sdk based on Raml
 	 * @param raml - output from raml parser
@@ -62,7 +91,7 @@ class DocumentationGenerator extends Generator {
 
 		val pack: Package = Analyser.analyseRaml(raml)
 		base = pack.baseUri
-		
+
 		def mapper(s: String) = s match {
 			case "clientscripts" => "client_scripts"
 			case "transactionsources" => "transaction_sources"
@@ -75,14 +104,15 @@ class DocumentationGenerator extends Generator {
 			{
 				val mapName = clazz.methods(0).url.split("/")(1)
 				// group by the second part of url
-				val nameMap = clazz.methods.groupBy{
-					m => {
-						val mets = m.url.split("/")
-						if (mets.length > 3 && mets(2).equals("users") && mets(3).equals("groups"))
-							"user_groups"					
-						else
-							mapper(mets(2))
-					}
+				val nameMap = clazz.methods.groupBy {
+					m =>
+						{
+							val mets = m.url.split("/")
+							if (mets.length > 3 && mets(2).equals("users") && mets(3).equals("groups"))
+								"user_groups"
+							else
+								mapper(mets(2))
+						}
 				}
 
 				all += (mapName -> nameMap)

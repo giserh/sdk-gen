@@ -30,4 +30,10 @@ error.log
 /resources/php/source/nbproject/private/
 *~
 *.jar
+src/main/scala/url_tester_worksheet.sc
+
+
+
+
+
 

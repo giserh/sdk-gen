@@ -1,6 +1,8 @@
 <% escapeMarkup = false %>
 <%@ var headers: List[String] %>
- 
+<%@ var name : String %>
+
+<h1>${name}</h1>
 #for(h <- headers)
 	${h}
 #end		

@@ -1,9 +1,8 @@
 <% escapeMarkup = false %>
 <%@ var name : String %>
-<%@ var id : Int %>
 <%@ var methods: List[String] %>
 
-<h1>${name}</h1>
+<div class="group-sep">${name}</div>
 #for(m <- methods)
 	${m}
 #end	

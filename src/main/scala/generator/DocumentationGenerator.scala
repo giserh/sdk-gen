@@ -27,11 +27,40 @@ class DocumentationGenerator extends Generator {
 
 	def methodGrouper(m: Method): String = {
 		val res = m.url.split("/")
-		if (res.length > 3 && !res(3).equals("doc") && !res(3).contains("{")) {
+		if (res(2).equals("users") && res.length > 5 && res(3).equals("groups")) {
+			"users group " + res(5)
+		} else if (res.length > 3 && !res(3).equals("doc") && !res(3).contains("{")) {
 			res(2) + " " + res(3)
+		} else if (res(2).equals("users") && res.length > 4) {
+
+			"user " + res(4)
 		} else {
+
 			res(2)
 		}
+	}
+
+	def title(s: String) = s match {
+		case "client_scripts" => "Client scripts"
+		case "events error" => "Error events"
+		case "notifications error" => "Error notifications"
+		case "clientscripts" => "Client scripts"
+		case "transaction_sources" => "Transaction sources"
+		case "transactionsources" => "Transaction sources"
+		case "transaction_types" => "Transaction types"
+		case "transactiontypes" => "Transaction types"	
+		case "user_groups" => "User groups"
+		case "user customfields" => "User custom fields"
+		case "user externalids" => "User external ids"
+		case "user gainedachievements" => "User gained achievements"
+		case "user countervalues" => "User counter values"
+		case "user wongames" => "User won games"
+		case "users group customfields" => "User group custom fields"
+		case "users group externalids" => "User group external ids"
+		case "users group gainedachievements" => "User group gained achievements"
+		case "users group countervalues" => "User group counter values"
+		case "users group wongames" => "User group won games"
+		case other => other.capitalize
 	}
 
 	/**
@@ -54,7 +83,7 @@ class DocumentationGenerator extends Generator {
 
 								val generatedMethods = groupedMethods.map {
 									g =>
-										headerId += 1; (g._1,g._2.sortWith(methodSorter).map {
+										headerId += 1; (g._1, g._2.sortWith(methodSorter).map {
 											m => methodId += 1; generateMethod(m, resourcePath + "/Method.ssp", methodId, headerId)
 										})
 								}.toList
@@ -71,7 +100,7 @@ class DocumentationGenerator extends Generator {
 								}
 
 								//generate page
-								(key + "_" + mkey) -> generatePage(pack, resourcePath + "/Page.ssp", header_list)
+								(key + "_" + mkey) -> generatePage(pack, resourcePath + "/Page.ssp", header_list, mkey)
 							}
 					}
 					headers
@@ -139,7 +168,7 @@ class DocumentationGenerator extends Generator {
 	 * @param headers - a list of generated subpages.
 	 * @return generated package in a string
 	 */
-	def generatePage(pack: Package, pageFile: String, headers: List[String]): String = {
+	def generatePage(pack: Package, pageFile: String, headers: List[String], name: String): String = {
 		val templ = engine.load(pageFile)
 
 		val result = new StringWriter()
@@ -147,6 +176,7 @@ class DocumentationGenerator extends Generator {
 		val context = new DefaultRenderContext("/", engine, buffer)
 
 		context.attributes("headers") = headers
+		context.attributes("name") = title(name)
 
 		templ.render(context)
 
@@ -164,17 +194,8 @@ class DocumentationGenerator extends Generator {
 		val buffer = new PrintWriter(result)
 		val context = new DefaultRenderContext("/", engine, buffer)
 
-		def mapper(s: String) = s match {
-			case "client_scripts" => "Client scripts"
-			case "transaction_sources" => "Transaction sources"
-			case "transaction_types" => "Transaction types"
-			case "user_groups" => "User groups"
-			case other => other.capitalize
-		}
-
 		context.attributes("methods") = methods
-		context.attributes("name") = mapper(name)
-		context.attributes("id") = headerId
+		context.attributes("name") = title(name)
 
 		templ.render(context)
 

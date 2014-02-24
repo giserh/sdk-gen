@@ -249,17 +249,23 @@ class DocumentationGenerator extends Generator {
 
 			val obj = JSON.parseFull(m.docs("body")._2) match {
 				case Some(v) => v
-				case None =>
+				case None => throw new Exception("Wrong body:\n"+m.docs("body")._2)
 			}
 
+//			println(obj)
 			var bodypar = obj.asInstanceOf[Map[String, Any]]
 
 			if (bodypar.contains("properties"))
 				bodypar = bodypar("properties").asInstanceOf[Map[String, Any]]
 
+			
 			val bodyTable = bodypar.map {
 				tupl =>
 					{
+						
+						if(!tupl._2.asInstanceOf[Map[String, Any]].contains("description")) {
+							throw new NoSuchElementException("No description found for "+tupl._1+" in "+m.name)
+						}
 						(tupl._1, tupl._2.asInstanceOf[Map[String, Any]]("type").toString, tupl._2.asInstanceOf[Map[String, Any]]("description").toString)
 					}
 			}.toList

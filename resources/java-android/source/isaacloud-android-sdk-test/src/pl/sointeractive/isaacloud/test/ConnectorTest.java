@@ -25,7 +25,7 @@ public class ConnectorTest extends AndroidTestCase {
 		config.put("clientId", "86");
 		config.put("secret", "c777bffe0d377a54e5d46a21cace834");
 		try {
-			con = new Connector(baseUrl, oauthUrl, version, config);
+			con = new Connector(getContext(),baseUrl, oauthUrl, version, config);
 		} catch (InvalidConfigException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,7 +44,7 @@ public class ConnectorTest extends AndroidTestCase {
 		Map<String, String> config = new HashMap<String, String>();
 		config.put("secret", "c777bffe0d377a54e5d46a21cace834");
 		try {
-			new Connector(baseUrl, oauthUrl, version, config);
+			new Connector(getContext(),baseUrl, oauthUrl, version, config);
 			assertTrue("No exception", false);
 		} catch (InvalidConfigException e) {
 			assertEquals("clientId", e.getMissingConfig());
@@ -58,7 +58,7 @@ public class ConnectorTest extends AndroidTestCase {
 		Map<String, String> config = new HashMap<String, String>();
 		config.put("clientId", "86");
 		try {
-			new Connector(baseUrl, oauthUrl, version, config);
+			new Connector(getContext(),baseUrl, oauthUrl, version, config);
 			assertTrue("No exception", false);
 		} catch (InvalidConfigException e) {
 			assertEquals("secret", e.getMissingConfig());

@@ -23,8 +23,10 @@ public class AuthenticationTest extends AndroidTestCase{
 		config.put("clientId", "86");
 		config.put("secret", "c777bffe0d377a54e5d46a21cace834");
 		Connector con = null;
+		
+		
 		try {
-			con = new Connector(baseUrl, oauthUrl, version, config);
+			con = new Connector(getContext(), baseUrl, oauthUrl, version, config);
 		} catch (InvalidConfigException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

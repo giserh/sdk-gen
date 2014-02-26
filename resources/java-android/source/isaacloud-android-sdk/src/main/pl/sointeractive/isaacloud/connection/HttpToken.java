@@ -1,5 +1,7 @@
 package pl.sointeractive.isaacloud.connection;
 
+import android.util.Log;
+
 public class HttpToken {
 
 	private String tokenType;
@@ -56,7 +58,9 @@ public class HttpToken {
 	}
 	
 	public String getAuthorizationHeader(){
-		return tokenType + " " + accessToken;
+		String result =  tokenType + " " + accessToken;
+		Log.d("HttpToken","getAuthorizationHeader() returns: " + result);
+		return result;
 	}
 	
 	

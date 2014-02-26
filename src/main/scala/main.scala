@@ -34,8 +34,8 @@ object Main {
 			case ("--output" | "-o") :: value :: tail => {
 				Map("output" -> value) ++ nextOption(tail)
 			}
-			case ("--save" | "-s") :: tail => {
-				Map("save" -> true) ++ nextOption(tail)
+			case ("--save" | "-s") :: value :: tail => {
+				Map("save" -> value) ++ nextOption(tail)
 			}
 			case ("--resources" | "-r") :: value :: tail => {
 				Map("resources" -> value) ++ nextOption(tail)
@@ -102,7 +102,7 @@ object Main {
 
 			if (options.contains("save")) {
 				val emitter = new RamlEmitter
-				val writer = new PrintWriter("whole_api.raml")
+				val writer = new PrintWriter(options("save").asInstanceOf[String])
 				writer.write(emitter.dump(raml))
 				writer.flush()
 			}

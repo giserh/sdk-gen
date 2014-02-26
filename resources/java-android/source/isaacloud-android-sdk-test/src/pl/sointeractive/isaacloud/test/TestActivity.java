@@ -30,7 +30,7 @@ public class TestActivity extends Activity{
 		Map<String, String> config = new HashMap<String, String>();
 		config.put("clientId", "86");
 		config.put("secret", "c777bffe0d377a54e5d46a21cace834");
-		wrapper = new FakeWrapper(baseUrl, oauthUrl, version, config);
+		wrapper = new FakeWrapper(getApplicationContext(), baseUrl, oauthUrl, version, config);
 		
 		
 		runTestAsyncTask();

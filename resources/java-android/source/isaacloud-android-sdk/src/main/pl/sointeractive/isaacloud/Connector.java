@@ -1,23 +1,37 @@
 package pl.sointeractive.isaacloud;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 
 import org.json.JSONException;
 
 import pl.sointeractive.isaacloud.connection.HttpResponse;
 import pl.sointeractive.isaacloud.connection.HttpToken;
 import pl.sointeractive.isaacloud.exceptions.InvalidConfigException;
+import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
 
@@ -36,6 +50,7 @@ public class Connector {
 	private String oauthUrl;
 	private String clientId;
 	private String clientSecret;
+	private SSLContext sslContext;
 
 	/**
 	 * Base constructor.
@@ -53,8 +68,9 @@ public class Connector {
 	 *             Thrown when "clientId" or "secret" are not found in the
 	 *             parameters.
 	 */
-	public Connector(String baseUrl, String oauthUrl, String version,
-			Map<String, String> config) throws InvalidConfigException {
+	public Connector(Context appContext, String baseUrl, String oauthUrl,
+			String version, Map<String, String> config)
+			throws InvalidConfigException {
 		this.baseUrl = baseUrl;
 		this.oauthUrl = oauthUrl;
 		this.setVersion(version);
@@ -73,13 +89,54 @@ public class Connector {
 			throw new InvalidConfigException("secret");
 		}
 
-	}
+		// certificate hangling
+		CertificateFactory cf;
 
-	// I think this method could be private. The authentication process should
-	// be
-	// transparent for the user, he doesnt need to know how it is done or when.
-	// He will never have to get authentication himself, the getService method
-	// will do that for him. Please verify.
+		try {
+			// Load trusted IsaaCloud certificate
+			cf = CertificateFactory.getInstance("X.509");
+			InputStream caInput = new BufferedInputStream(appContext
+					.getResources().openRawResource(R.raw.ca));
+			Certificate ca;
+			ca = cf.generateCertificate(caInput);
+			System.out.println("ca=" + ((X509Certificate) ca).getSubjectDN());
+			caInput.close();
+
+			// Create a KeyStore containing our trusted CAs
+			String keyStoreType = KeyStore.getDefaultType();
+			KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+			keyStore.load(null, null);
+			keyStore.setCertificateEntry("ca", ca);
+
+			// Create a TrustManager that trusts the CAs in our KeyStore
+			String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+			TrustManagerFactory tmf = TrustManagerFactory
+					.getInstance(tmfAlgorithm);
+			tmf.init(keyStore);
+
+			// Create an SSLContext that uses our TrustManager
+			sslContext = SSLContext.getInstance("TLS");
+			sslContext.init(null, tmf.getTrustManagers(), null);
+			
+		} catch (CertificateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyManagementException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
 	/**
 	 * Returns the authentication token.
 	 * 
@@ -106,12 +163,14 @@ public class Connector {
 		String auth = "Basic " + base64EncodedCredentials;
 		// setup connection
 		URL url = new URL(this.oauthUrl + "/token");
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 		connection.setRequestMethod("POST");
 		connection.setDoOutput(true);
 		connection.setDoInput(true);
 		connection.setConnectTimeout(Config.TIMEOUT);
 		connection.setReadTimeout(Config.TIMEOUT);
+		// set socket
+		connection.setSSLSocketFactory(sslContext.getSocketFactory());
 		// setup headers
 		connection.setRequestProperty("Content-Type",
 				"application/x-www-form-urlencoded");
@@ -185,7 +244,7 @@ public class Connector {
 			throws SocketTimeoutException, MalformedURLException, IOException,
 			JSONException {
 		// parse parameters
-		String targetUri = baseUrl + uri;
+		String targetUri = baseUrl + "/" + version + uri;
 		for (Entry<String, Object> entry : parameters.entrySet()) {
 			String entryKey = "{" + entry.getKey() + "}";
 			System.out.println(entryKey);
@@ -198,7 +257,7 @@ public class Connector {
 		System.out.println(targetUri);
 		// setup connection
 		URL url = new URL(targetUri);
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 		if (methodName.equals("POST")) {
 			connection.setDoOutput(true);
 		} else {
@@ -208,6 +267,8 @@ public class Connector {
 		connection.setRequestMethod(methodName);
 		connection.setConnectTimeout(Config.TIMEOUT);
 		connection.setReadTimeout(Config.TIMEOUT);
+		// set socket
+		connection.setSSLSocketFactory(sslContext.getSocketFactory());
 		// setup headers
 		connection.setRequestProperty("Content-Type", "application/json");
 		connection.setRequestProperty("Authorization", getAuthentication());
@@ -253,7 +314,6 @@ public class Connector {
 		this.version = version;
 	}
 
-	// Same as getAuthentication(), this method could be private. Please verify.
 	/**
 	 * Checks the validity of the token.
 	 * 

@@ -80,7 +80,7 @@ public class FakeWrapper {
 	}
 	
 	public HttpResponse getUserAchievements(int userId) throws IOException, JSONException{
-		String uri = " /cache/users/{userId}/achievements";
+		String uri = "/cache/users/{userId}/achievements";
 		String methodName = "GET";
 		final Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("userId", userId);
@@ -89,12 +89,37 @@ public class FakeWrapper {
 	}
 	
 	public HttpResponse getUser(int userId) throws IOException, JSONException{
-		String uri = " /cache/users/{userId}";
+		String uri = "/cache/users/{userId}";
 		String methodName = "GET";
 		final Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("userId", userId);
 		String body = null;
 		return con.callService(uri, methodName, parameters, body);
+	}
+	
+	public HttpResponse getUsers() throws IOException, JSONException{
+		String uri = "/cache/users";
+		String methodName = "GET";
+		final Map<String, Object> parameters = new HashMap<String, Object>();
+		String body = null;
+		return con.callService(uri, methodName, parameters, body);
+	}
+	
+	public HttpResponse postUser(JSONObject jsonBody) throws IOException, JSONException{
+		String uri = "/admin/users";
+		String methodName = "POST";
+		final Map<String, Object> parameters = new HashMap<String, Object>();
+		String body = jsonBody.toString();
+		return con.callService(uri, methodName, parameters, body);
+	}
+	
+	public boolean tryLogin() throws IOException, JSONException{
+		String auth = con.getAuthentication();
+		if(auth != null){
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	

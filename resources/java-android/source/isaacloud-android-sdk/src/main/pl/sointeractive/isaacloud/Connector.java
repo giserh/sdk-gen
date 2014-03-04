@@ -50,6 +50,9 @@ public class Connector {
 	private String oauthUrl;
 	private String clientId;
 	private String clientSecret;
+	private String userEmail;
+	private String userPassword;
+	
 	private SSLContext sslContext;
 
 	/**
@@ -76,7 +79,7 @@ public class Connector {
 		this.setVersion(version);
 
 		httpToken = new HttpToken();
-
+		
 		if (config.containsKey("clientId")) {
 			this.clientId = config.get("clientId");
 		} else {
@@ -88,10 +91,23 @@ public class Connector {
 		} else {
 			throw new InvalidConfigException("secret");
 		}
-
+		
+		/*
+		if (config.containsKey("userEmail")) {
+			this.userEmail = config.get("userEmail");
+		} else {
+			throw new InvalidConfigException("userEmail");
+		}
+		
+		if (config.containsKey("userPassword")) {
+			this.userPassword = config.get("userPassword");
+		} else {
+			throw new InvalidConfigException("userPassword");
+		}
+		*/
+		
 		// certificate hangling
 		CertificateFactory cf;
-
 		try {
 			// Load trusted IsaaCloud certificate
 			cf = CertificateFactory.getInstance("X.509");
@@ -157,11 +173,11 @@ public class Connector {
 	public void getAccessTokenData() throws JSONException, IOException {
 		// generate credentials
 		String base64EncodedCredentials = null;
-		base64EncodedCredentials = Base64.encodeToString(
-				(clientId + ":" + clientSecret).getBytes("US-ASCII"),
-				Base64.DEFAULT);
+		//base64EncodedCredentials = Base64.encodeToString((userEmail + ":" + userPassword).getBytes("US-ASCII"),Base64.DEFAULT);
+		base64EncodedCredentials = Base64.encodeToString((clientId + ":" + clientSecret).getBytes("US-ASCII"),Base64.DEFAULT);
 		String auth = "Basic " + base64EncodedCredentials;
 		// setup connection
+		//URL url = new URL(this.oauthUrl + "/gamification/12/application/29/authorize");
 		URL url = new URL(this.oauthUrl + "/token");
 		HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 		connection.setRequestMethod("POST");
@@ -172,9 +188,9 @@ public class Connector {
 		// set socket
 		connection.setSSLSocketFactory(sslContext.getSocketFactory());
 		// setup headers
-		connection.setRequestProperty("Content-Type",
-				"application/x-www-form-urlencoded");
+		connection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
 		connection.setRequestProperty("Authorization", auth);
+		//connection.setRequestProperty("Authorization", "Basic MTI6YmUzYWY5NDY5MmRkMjllY2JkZTAzNGUxNjBjOTMyZDE=");
 		// set body
 		OutputStream os = new BufferedOutputStream(connection.getOutputStream());
 		os.write("grant_type=client_credentials".getBytes("UTF-8"));
@@ -244,7 +260,8 @@ public class Connector {
 			throws SocketTimeoutException, MalformedURLException, IOException,
 			JSONException {
 		// parse parameters
-		String targetUri = baseUrl + "/" + version + uri;
+		//String targetUri = baseUrl + "/" + version + uri;
+		String targetUri = baseUrl + version + uri;
 		for (Entry<String, Object> entry : parameters.entrySet()) {
 			String entryKey = "{" + entry.getKey() + "}";
 			System.out.println(entryKey);

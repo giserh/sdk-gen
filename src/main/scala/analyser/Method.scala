@@ -100,7 +100,7 @@ class Method(val restType: RestType.Value, val url: String, private var _name: S
 					var getId = id.replace("{", "")
 					getId = getId.replace("}", "")
 					
-					if( getId.equals("eventId") || getId.equals("notificationId") || getId.equals("key"))
+					if( getId.equals("eventId") || getId.equals("notificationId") || getId.equals("externalIdName") || getId.equals("externalId"))
 						addQueryParameter(getId, "String")
 					else 
 						addQueryParameter(getId, "Number")

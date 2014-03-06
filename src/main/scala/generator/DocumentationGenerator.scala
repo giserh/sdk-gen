@@ -17,14 +17,25 @@ class DocumentationGenerator extends Generator {
 
 	val engine: TemplateEngine = new TemplateEngine
 
-	def methodSorter(a: Method, b: Method): Boolean = {
-		val an = a.name.toLowerCase.replace("get", "").replace("post", "").replace("delete", "").replace("patch", "").replace("put", "")
-		val bn = b.name.toLowerCase.replace("get", "").replace("post", "").replace("delete", "").replace("patch", "").replace("put", "")
-		if (bn.length > an.length) true
-		else if (bn.length < an.length) false
-		else an > bn
+	/**
+	 * Checks how the method begins and uses order list to determine the order of Methods
+	 * @param a first method
+	 * @param b second method
+	 * @return correct order of methods
+	 */
+	def methodSorter(a: Method, b: Method): Boolean = {				
+		
+		val order = List("post","get","put","patch","delete")
+		val ia = order.indexOf(order.filter( beg => a.name.startsWith(beg))(0))
+		val ib = order.indexOf(order.filter( beg => b.name.startsWith(beg))(0))
+		ia <= ib
 	}
 
+	/**
+	 * Groups method to segregate them
+	 * @param m method we are going to group
+	 * @return group it belongs to
+	 */
 	def methodGrouper(m: Method): String = {
 		val res = m.url.split("/")
 		if (res(2).equals("users") && res.length > 5 && res(3).equals("groups")) {
@@ -40,6 +51,9 @@ class DocumentationGenerator extends Generator {
 		}
 	}
 
+	/**
+	 * Get the title for resource.
+	 */
 	def title(s: String) = s match {
 		case "client_scripts" => "Client scripts"
 		case "events error" => "Error events"
@@ -79,7 +93,7 @@ class DocumentationGenerator extends Generator {
 								var methodId = -1
 								var headerId = -1
 
-								val groupedMethods = all(key)(mkey).groupBy(methodGrouper)
+								val groupedMethods = all(key)(mkey).groupBy(methodGrouper).toList.sortBy( a => a._1.length())
 
 								val generatedMethods = groupedMethods.map {
 									g =>
@@ -98,7 +112,6 @@ class DocumentationGenerator extends Generator {
 
 										}
 								}
-
 								//generate page
 								(key + "_" + mkey) -> generatePage(pack, resourcePath + "/Page.ssp", header_list, mkey)
 							}
@@ -252,7 +265,6 @@ class DocumentationGenerator extends Generator {
 				case None => throw new Exception("Wrong body:\n"+m.docs("body")._2)
 			}
 
-//			println(obj)
 			var bodypar = obj.asInstanceOf[Map[String, Any]]
 
 			if (bodypar.contains("properties"))
@@ -262,11 +274,18 @@ class DocumentationGenerator extends Generator {
 			val bodyTable = bodypar.map {
 				tupl =>
 					{
-						
-						if(!tupl._2.asInstanceOf[Map[String, Any]].contains("description")) {
+						val props = tupl._2.asInstanceOf[Map[String, Any]]
+						if(!props.contains("description")) {
 							throw new NoSuchElementException("No description found for "+tupl._1+" in "+m.name)
 						}
-						(tupl._1, tupl._2.asInstanceOf[Map[String, Any]]("type").toString, tupl._2.asInstanceOf[Map[String, Any]]("description").toString)
+						
+						if (props.contains("allowed")){
+								val all =props("allowed").asInstanceOf[Map[String, Any]]
+								val add = "<br>allowed values are:<br>" + all.map( tpl => tpl._1 + " : " + tpl._2 ).mkString(", ")						
+								(tupl._1, props("type").toString, props("description").toString + add)
+							}
+						else
+							(tupl._1, props("type").toString, props("description").toString)
 					}
 			}.toList
 

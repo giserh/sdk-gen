@@ -10,6 +10,6 @@
 * last parameter is the path to main raml file
 
 ## Example run parameters:
-'''
+```
 --save whole_api.raml -g doc -o generated/docs  -r resources/doc ../api.raml/api.raml
-'''
+```

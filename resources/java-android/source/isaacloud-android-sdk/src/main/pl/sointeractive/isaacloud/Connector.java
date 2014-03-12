@@ -50,9 +50,7 @@ public class Connector {
 	private String oauthUrl;
 	private String clientId;
 	private String clientSecret;
-	private String userEmail;
-	private String userPassword;
-	
+
 	private SSLContext sslContext;
 
 	/**
@@ -65,7 +63,7 @@ public class Connector {
 	 * @param version
 	 *            Version of the API.
 	 * @param config
-	 *            COnfiguration parameters. Requires "clientId" and "secret"
+	 *            Configuration parameters. Requires "clientId" and "secret"
 	 *            keys and their respective values.
 	 * @throws InvalidConfigException
 	 *             Thrown when "clientId" or "secret" are not found in the
@@ -77,36 +75,19 @@ public class Connector {
 		this.baseUrl = baseUrl;
 		this.oauthUrl = oauthUrl;
 		this.setVersion(version);
-
 		httpToken = new HttpToken();
-		
+		// check config
 		if (config.containsKey("clientId")) {
 			this.clientId = config.get("clientId");
 		} else {
 			throw new InvalidConfigException("clientId");
 		}
-
 		if (config.containsKey("secret")) {
 			this.clientSecret = config.get("secret");
 		} else {
 			throw new InvalidConfigException("secret");
 		}
-		
-		/*
-		if (config.containsKey("userEmail")) {
-			this.userEmail = config.get("userEmail");
-		} else {
-			throw new InvalidConfigException("userEmail");
-		}
-		
-		if (config.containsKey("userPassword")) {
-			this.userPassword = config.get("userPassword");
-		} else {
-			throw new InvalidConfigException("userPassword");
-		}
-		*/
-		
-		// certificate hangling
+		// certificate handling
 		CertificateFactory cf;
 		try {
 			// Load trusted IsaaCloud certificate
@@ -117,42 +98,32 @@ public class Connector {
 			ca = cf.generateCertificate(caInput);
 			System.out.println("ca=" + ((X509Certificate) ca).getSubjectDN());
 			caInput.close();
-
 			// Create a KeyStore containing our trusted CAs
 			String keyStoreType = KeyStore.getDefaultType();
 			KeyStore keyStore = KeyStore.getInstance(keyStoreType);
 			keyStore.load(null, null);
 			keyStore.setCertificateEntry("ca", ca);
-
 			// Create a TrustManager that trusts the CAs in our KeyStore
 			String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
 			TrustManagerFactory tmf = TrustManagerFactory
 					.getInstance(tmfAlgorithm);
 			tmf.init(keyStore);
-
 			// Create an SSLContext that uses our TrustManager
 			sslContext = SSLContext.getInstance("TLS");
 			sslContext.init(null, tmf.getTrustManagers(), null);
-			
 		} catch (CertificateException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (KeyManagementException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
-	
+
 	/**
 	 * Returns the authentication token.
 	 * 
@@ -173,13 +144,14 @@ public class Connector {
 	public void getAccessTokenData() throws JSONException, IOException {
 		// generate credentials
 		String base64EncodedCredentials = null;
-		//base64EncodedCredentials = Base64.encodeToString((userEmail + ":" + userPassword).getBytes("US-ASCII"),Base64.DEFAULT);
-		base64EncodedCredentials = Base64.encodeToString((clientId + ":" + clientSecret).getBytes("US-ASCII"),Base64.DEFAULT);
+		base64EncodedCredentials = Base64.encodeToString(
+				(clientId + ":" + clientSecret).getBytes("US-ASCII"),
+				Base64.DEFAULT);
 		String auth = "Basic " + base64EncodedCredentials;
 		// setup connection
-		//URL url = new URL(this.oauthUrl + "/gamification/12/application/29/authorize");
 		URL url = new URL(this.oauthUrl + "/token");
-		HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+		HttpsURLConnection connection = (HttpsURLConnection) url
+				.openConnection();
 		connection.setRequestMethod("POST");
 		connection.setDoOutput(true);
 		connection.setDoInput(true);
@@ -188,9 +160,9 @@ public class Connector {
 		// set socket
 		connection.setSSLSocketFactory(sslContext.getSocketFactory());
 		// setup headers
-		connection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+		connection.setRequestProperty("Content-Type",
+				"application/x-www-form-urlencoded");
 		connection.setRequestProperty("Authorization", auth);
-		//connection.setRequestProperty("Authorization", "Basic MTI6YmUzYWY5NDY5MmRkMjllY2JkZTAzNGUxNjBjOTMyZDE=");
 		// set body
 		OutputStream os = new BufferedOutputStream(connection.getOutputStream());
 		os.write("grant_type=client_credentials".getBytes("UTF-8"));
@@ -238,15 +210,15 @@ public class Connector {
 	 * 
 	 * Caution: In case an IOException is NOT thrown, but the http response code
 	 * is still pointing at an error, an adequate information is stored in the
-	 * HttpResponse.
+	 * returned HttpResponse.
 	 * 
 	 * @param uri
 	 *            Uri of the method. Used together with the base Uri of the API
 	 *            to get the whole address.
 	 * @param methodName
-	 *            Name of the method.
+	 *            Name of the method (GET, POST, PUT, DELETE).
 	 * @param parameters
-	 *            Parameters to switch with the uri fragments.
+	 *            Url parameters to add to the uri (like limit or fields).
 	 * @param body
 	 *            Request body.
 	 * @return Request response in form of a HttpResponse class.
@@ -259,26 +231,24 @@ public class Connector {
 			Map<String, Object> parameters, String body)
 			throws SocketTimeoutException, MalformedURLException, IOException,
 			JSONException {
-		// parse parameters
-		//String targetUri = baseUrl + "/" + version + uri;
+		// generate uri
 		String targetUri = baseUrl + version + uri;
-		for (Entry<String, Object> entry : parameters.entrySet()) {
-			String entryKey = "{" + entry.getKey() + "}";
-			System.out.println(entryKey);
-			if (targetUri.contains(entryKey))
-				System.out.println("Replace " + entryKey + " with "
-						+ entry.getValue());
-			targetUri = targetUri
-					.replace(entryKey, entry.getValue().toString());
+		if (parameters != null) {
+			targetUri += "?";
+			for (Entry<String, Object> entry : parameters.entrySet()) {
+				targetUri += entry.getKey() + "=" + entry.getValue() + "&";
+			}
+			targetUri = targetUri.substring(0, targetUri.length() - 1);
 		}
 		System.out.println(targetUri);
 		// setup connection
 		URL url = new URL(targetUri);
-		HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-		if (methodName.equals("POST")) {
-			connection.setDoOutput(true);
-		} else {
+		HttpsURLConnection connection = (HttpsURLConnection) url
+				.openConnection();
+		if (methodName.equals("GET") || methodName.equals("DELETE")) {
 			connection.setDoOutput(false);
+		} else {
+			connection.setDoOutput(true);
 		}
 		connection.setDoInput(true);
 		connection.setRequestMethod(methodName);

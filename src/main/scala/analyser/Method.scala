@@ -101,9 +101,9 @@ class Method(val restType: RestType.Value, val url: String, private var _name: S
 					getId = getId.replace("}", "")
 					
 					if( getId.equals("eventId") || getId.equals("notificationId") || getId.equals("externalIdName") || getId.equals("externalId"))
-						addQueryParameter(getId, "String")
+						addQueryParameter(getId, "STRING")
 					else 
-						addQueryParameter(getId, "Number")
+						addQueryParameter(getId, "NUMBER")
 						
 					// get the name of the object
 					val start = this.url.take(this.url.indexOf(id) - 1)

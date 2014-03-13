@@ -1,0 +1,42 @@
+<% escapeMarkup = false %>
+<%@ var className:String %>
+<%@ var docs:Map[String,String] %>
+<%@ var methods: List[String] %>
+<%@ var baseUrl: String %>
+<%@ var baseOauthUrl: String %>
+<%@ var version: String %>
+
+package isaacloud;
+import java.util.Map;
+import java.util.HashMap;
+import net.minidev.json.JSONObject;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+
+/**
+#for(doc <- docs)
+* @${doc._1} ${doc._2}
+#end 
+ */ 
+public class ${className} extends Connector{
+
+	public ${className}(Map<String,String> config)
+    {
+        super( "${baseUrl}", "${baseOauthUrl}", "${version}", config);
+        try {
+			setupSSL(null);
+		} catch (KeyManagementException | NoSuchAlgorithmException
+				| CertificateException
+				| KeyStoreException | IOException e) {
+			System.out.println("Cannot initialize SSL connection " + e.getMessage() + "\n");
+		}
+    }
+
+	#for (method<- methods)
+		${method}
+	#end 
+ 
+ } 

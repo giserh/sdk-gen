@@ -14,6 +14,7 @@ import generator.JavaSDKGenerator
 import generator.DocumentationGenerator
 import org.raml.emitter.RamlEmitter
 import java.io.PrintWriter
+import generator.JavaScriptSDKGenerator
 
 object Main {
 
@@ -28,6 +29,7 @@ object Main {
 				/** @TODO add new generators */
 				case "php" => Map("generator" -> new PhpSDKGenerator) ++ nextOption(tail)
 				case "java" => Map("generator" -> new JavaSDKGenerator) ++ nextOption(tail)
+				case "js" => Map("generator" -> new JavaScriptSDKGenerator) ++ nextOption(tail)
 				case "doc" => Map("generator" -> new DocumentationGenerator) ++ nextOption(tail)
 				case _ => throw new InvalidParameterException(s"Not found generator: $value")
 			}

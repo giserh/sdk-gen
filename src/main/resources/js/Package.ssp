@@ -1,0 +1,8 @@
+<% escapeMarkup = false %>
+<%@ var content: List[String] %>
+
+IC.methods = {
+	#for(c <- content)
+		${c}
+	#end 
+}

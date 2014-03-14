@@ -1,0 +1,7 @@
+<% escapeMarkup = false %>
+<%@ var url : String %>
+<%@ var rtype : String %>
+
+${rtype}: function(reqData, reqHeaders, scc, err) {
+				IC.actions.callService(${url}, '${rtype.toUpperCase()}', reqData, scc, err, reqHeaders);
+}

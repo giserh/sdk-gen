@@ -1,0 +1,12 @@
+<% escapeMarkup = false %>
+<%@ var name:String %>
+<%@ var idName:String %>
+<%@ var blocks: List[String] %>
+
+id: function(${idName}) {
+		return {
+			#for(block <- blocks)
+				${block}
+			#end 			
+		}
+	}

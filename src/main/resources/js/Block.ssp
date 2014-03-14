@@ -1,0 +1,9 @@
+<% escapeMarkup = false %>
+<%@ var name:String %>
+<%@ var blocks: List[String] %>
+
+${name}:{
+		#for(block <- blocks)
+			${block}
+		#end 				
+}

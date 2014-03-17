@@ -1,10 +1,8 @@
 package pl.sointeractive.isaacloud;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
@@ -16,8 +14,6 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -42,16 +38,20 @@ import android.util.Log;
  * 
  */
 public class Connector {
+	
+	private static final String TAG = "Connector";
 	private String baseUrl;
 	private String version;
 
 	private static HttpToken httpToken;
 
 	private String oauthUrl;
-	private String clientId;
-	private String clientSecret;
+	private String memberId;
+	private String appSecret;
 
 	private SSLContext sslContext;
+
+	private boolean hasValidCertificate;
 
 	/**
 	 * Base constructor.
@@ -77,27 +77,26 @@ public class Connector {
 		this.setVersion(version);
 		httpToken = new HttpToken();
 		// check config
-		if (config.containsKey("clientId")) {
-			this.clientId = config.get("clientId");
+		if (config.containsKey("memberId")) {
+			this.memberId = config.get("memberId");
 		} else {
-			throw new InvalidConfigException("clientId");
+			throw new InvalidConfigException("memberId");
 		}
-		if (config.containsKey("secret")) {
-			this.clientSecret = config.get("secret");
+		if (config.containsKey("appSecret")) {
+			this.appSecret = config.get("appSecret");
 		} else {
-			throw new InvalidConfigException("secret");
+			throw new InvalidConfigException("appSecret");
 		}
+		//set valid certificate to false
+		hasValidCertificate = false;
+	}
+
+	private void initializeSSLContext() {
 		// certificate handling
-		CertificateFactory cf;
 		try {
 			// Load trusted IsaaCloud certificate
-			cf = CertificateFactory.getInstance("X.509");
-			InputStream caInput = new BufferedInputStream(appContext
-					.getResources().openRawResource(R.raw.ca));
 			Certificate ca;
-			ca = cf.generateCertificate(caInput);
-			System.out.println("ca=" + ((X509Certificate) ca).getSubjectDN());
-			caInput.close();
+			ca = SSLCertificateFactory.getCertificate(Config.PORT, Config.HOST);
 			// Create a KeyStore containing our trusted CAs
 			String keyStoreType = KeyStore.getDefaultType();
 			KeyStore keyStore = KeyStore.getInstance(keyStoreType);
@@ -145,7 +144,7 @@ public class Connector {
 		// generate credentials
 		String base64EncodedCredentials = null;
 		base64EncodedCredentials = Base64.encodeToString(
-				(clientId + ":" + clientSecret).getBytes("US-ASCII"),
+				(memberId + ":" + appSecret).getBytes("US-ASCII"),
 				Base64.DEFAULT);
 		String auth = "Basic " + base64EncodedCredentials;
 		// setup connection
@@ -172,7 +171,7 @@ public class Connector {
 		connection.connect();
 		// check response code
 		int responseCode = connection.getResponseCode();
-		Log.d("TEST", "" + responseCode);
+		Log.d(TAG, "" + responseCode);
 		// get result string
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				connection.getInputStream()));
@@ -231,6 +230,13 @@ public class Connector {
 			Map<String, Object> parameters, String body)
 			throws SocketTimeoutException, MalformedURLException, IOException,
 			JSONException {
+		// check for valid ceritificate
+		Log.d(TAG, "Check for certificate");
+		if(!hasValidCertificate){
+			Log.d(TAG, "No valid certificate found, downloading new certificate");
+			initializeSSLContext();
+			hasValidCertificate = true;
+		}
 		// generate uri
 		String targetUri = baseUrl + version + uri;
 		if (parameters != null) {

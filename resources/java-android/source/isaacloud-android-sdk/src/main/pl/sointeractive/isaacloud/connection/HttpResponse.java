@@ -45,7 +45,6 @@ public class HttpResponse {
 		try {
 			json = new JSONObject(responseString);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return json;
@@ -56,7 +55,6 @@ public class HttpResponse {
 		try {
 			json = new JSONArray(responseString);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return json;

@@ -38,19 +38,12 @@ import android.util.Log;
  * 
  */
 public class Connector {
-	
+
 	private static final String TAG = "Connector";
-	private String baseUrl;
-	private String version;
 
+	private String baseUrl, version, oauthUrl, memberId, appSecret;
 	private static HttpToken httpToken;
-
-	private String oauthUrl;
-	private String memberId;
-	private String appSecret;
-
 	private SSLContext sslContext;
-
 	private boolean hasValidCertificate;
 
 	/**
@@ -66,7 +59,7 @@ public class Connector {
 	 *            Configuration parameters. Requires "clientId" and "secret"
 	 *            keys and their respective values.
 	 * @throws InvalidConfigException
-	 *             Thrown when "clientId" or "secret" are not found in the
+	 *             Thrown when "memberId" or "appSecret" are not found in the
 	 *             parameters.
 	 */
 	public Connector(Context appContext, String baseUrl, String oauthUrl,
@@ -87,7 +80,7 @@ public class Connector {
 		} else {
 			throw new InvalidConfigException("appSecret");
 		}
-		//set valid certificate to false
+		// set valid certificate to false
 		hasValidCertificate = false;
 	}
 
@@ -136,7 +129,7 @@ public class Connector {
 		if (!isTokenValid()) {
 			getAccessTokenData();
 		}
-		System.out.println(httpToken.getAuthorizationHeader());
+		Log.d(TAG, httpToken.getAuthorizationHeader());
 		return httpToken.getAuthorizationHeader();
 	}
 
@@ -232,8 +225,9 @@ public class Connector {
 			JSONException {
 		// check for valid ceritificate
 		Log.d(TAG, "Check for certificate");
-		if(!hasValidCertificate){
-			Log.d(TAG, "No valid certificate found, downloading new certificate");
+		if (!hasValidCertificate) {
+			Log.d(TAG,
+					"No valid certificate found, downloading new certificate");
 			initializeSSLContext();
 			hasValidCertificate = true;
 		}
@@ -246,7 +240,7 @@ public class Connector {
 			}
 			targetUri = targetUri.substring(0, targetUri.length() - 1);
 		}
-		System.out.println(targetUri);
+		Log.d(TAG, targetUri);
 		// setup connection
 		URL url = new URL(targetUri);
 		HttpsURLConnection connection = (HttpsURLConnection) url
@@ -281,7 +275,7 @@ public class Connector {
 		String resultString = reader.readLine();
 		// check response code
 		int responseCode = connection.getResponseCode();
-		Log.d("TEST", "" + responseCode);
+		Log.d(TAG, "" + responseCode);
 		// disconnect
 		connection.disconnect();
 		// build response
@@ -299,14 +293,6 @@ public class Connector {
 		return response;
 	}
 
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
 	/**
 	 * Checks the validity of the token.
 	 * 
@@ -319,6 +305,14 @@ public class Connector {
 			return false;
 		} else
 			return true;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 }

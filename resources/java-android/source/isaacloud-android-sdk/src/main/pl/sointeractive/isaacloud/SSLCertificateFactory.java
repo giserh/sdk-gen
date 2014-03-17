@@ -20,6 +20,11 @@ import javax.net.ssl.X509TrustManager;
 
 import android.util.Base64;
 
+/**
+ * Helper class for downloading the IsaaCloud certificate.
+ * @author Mateusz Renes
+ *
+ */
 class SSLCertificateFactory {
 
 	/**

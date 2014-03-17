@@ -12,7 +12,12 @@ import android.content.Context;
 
 /**
  * This class imitates the wrapper class, that is created from the SDK
- * generator.
+ * generator. Please not that this class will be replaced with an actual Wrapper
+ * class, when the sdk generation is finalized.
+ * 
+ * Each method in this class parses a different service call to the API. Since
+ * network operations on Android are not allowed on the main thread, please
+ * remember that each of these methods MUST be called in separate AsyncTasks.
  * 
  * @author Mateusz Renes
  * 
@@ -27,7 +32,6 @@ public class FakeWrapper {
 			this.con = new Connector(appContext, baseUrl, oauthUrl, version,
 					config);
 		} catch (InvalidConfigException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

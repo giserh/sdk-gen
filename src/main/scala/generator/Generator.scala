@@ -1,6 +1,7 @@
 package generator
 
 import org.raml.model.Raml
+import org.fusesource.scalate.TemplateEngine
 
 /**
  * Exception only thrown by the generator
@@ -11,5 +12,8 @@ class GeneratorException(message: String = null, cause: Throwable = null) extend
  * Base trait representing code generators
  */
 trait Generator {
-  def generate(raml:Raml,resourcePath: String, baseUrl: String, tempDirectory: String): Boolean
+
+	val engine: TemplateEngine = new TemplateEngine
+	val sdkFileName : String = ""
+	def generate(raml: Raml, resourcePath: String, baseUrl: String, tempDirectory: String): Boolean
 }

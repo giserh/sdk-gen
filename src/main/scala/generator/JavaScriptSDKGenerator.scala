@@ -13,19 +13,23 @@ import analyser.Method
 
 class JavaScriptSDKGenerator extends Generator {
 
-	protected var fileName = "isaacloud-sdk.js"
-	val engine: TemplateEngine = new TemplateEngine
+	//local variables for purposes of generators
+	override val sdkFileName = "isaacloud-sdk.js"		
 	val pc = "Package.ssp"
 	val bl = "Block.ssp"
 	val fc = "Function.ssp"
 	val me = "Method.ssp"
+
+	/**
+	 * Generator main method inherited from Generator trait.
+	 */
+	override def generate(raml: Raml, resourcePath: String, baseUrl: String, tempDirectory: String): Boolean = {
 		
-	def generate(raml: Raml, resourcePath: String, baseUrl: String, tempDirectory: String): Boolean = {
 		val pack = Analyser.analyseRaml(raml)
 
 		val templ = engine.load(resourcePath + "/" + pc)
 
-		val buffer = new PrintWriter(new File(tempDirectory + "/" + fileName))
+		val buffer = new PrintWriter(new File(tempDirectory + "/" + sdkFileName))
 		val context = new DefaultRenderContext("/", engine, buffer)
 
 		context.attributes("content") = pack.clazzes.flatMap {
@@ -39,16 +43,17 @@ class JavaScriptSDKGenerator extends Generator {
 		true
 	}
 
+	/**
+	 * Create blocks for subresource.
+	 */
 	def createBlocks(methods: List[Method], depth: Int, resourcePath: String): List[String] = {
 
 		val toCreate = methods.filter {
 			m =>
-//				println(m.url)
-//				println(m.url.split("/").length + " " + (depth+1))
-				m.url.split("/").length == depth +1
+				m.url.split("/").length == depth + 1
 		}
 
-		val created = toCreate.map{
+		val created = toCreate.map {
 			m => createMethod(m, resourcePath)
 		}
 
@@ -57,21 +62,24 @@ class JavaScriptSDKGenerator extends Generator {
 		// create blocks
 
 		if (!currentBlock.contains("{")) {
-			createBasicBlocks(methods, depth, resourcePath, currentBlock,created)
+			createBasicBlocks(methods, depth, resourcePath, currentBlock, created)
 
 		} else {
-			createFunctionBlocks(methods, depth, resourcePath, currentBlock,created)
+			createFunctionBlocks(methods, depth, resourcePath, currentBlock, created)
 		}
 	}
 
-	def createBasicBlocks(methods: List[Method], depth: Int, resourcePath: String, currentBlock: String, created : List[String]): List[String] = {
+	/**
+	 * Static blocks
+	 */
+	def createBasicBlocks(methods: List[Method], depth: Int, resourcePath: String, currentBlock: String, created: List[String]): List[String] = {
 		val templ = engine.load(resourcePath + "/" + bl)
 
 		val res = new StringWriter()
 		val buffer = new PrintWriter(res)
 		val context = new DefaultRenderContext("/", engine, buffer)
 		context.attributes("name") = currentBlock
-		context.attributes("blocks") =  created ::: methods
+		context.attributes("blocks") = created ::: methods
 			.filter(a => a.url.split("/").length > depth + 1)
 			.groupBy(a => a.url.split("/")(depth + 1))
 			.flatMap {
@@ -86,7 +94,10 @@ class JavaScriptSDKGenerator extends Generator {
 		// join and return 
 	}
 
-	def createFunctionBlocks(methods: List[Method], depth: Int, resourcePath: String, currentBlock: String, created : List[String]): List[String] = {
+	/**
+	 * Function blocks
+	 */
+	def createFunctionBlocks(methods: List[Method], depth: Int, resourcePath: String, currentBlock: String, created: List[String]): List[String] = {
 		val ohne = currentBlock.replace("{", "").replace("}", "")
 		val templ = engine.load(resourcePath + "/" + fc)
 		val res = new StringWriter()
@@ -102,7 +113,7 @@ class JavaScriptSDKGenerator extends Generator {
 				ms =>
 					createBlocks(ms._2, depth + 1, resourcePath)
 			}.toList
-			
+
 		templ.render(context)
 
 		buffer.flush()
@@ -111,18 +122,21 @@ class JavaScriptSDKGenerator extends Generator {
 
 		List(res.toString())
 	}
-	
-	def createMethod(m : Method, resourcePath : String) : String = {
-		
+
+	/**
+	 * Create HTTP methods
+	 */
+	def createMethod(m: Method, resourcePath: String): String = {
+
 		var url = "'" + m.url.replace("{", "' +").replace("}", "+ '")
-		
-		if (url.endsWith("+ '")){
+
+		if (url.endsWith("+ '")) {
 			url = url.dropRight(3)
-			
+
 		} else {
 			url = url + "'"
 		}
-			
+
 		val templ = engine.load(resourcePath + "/" + me)
 		val res = new StringWriter()
 		val buffer = new PrintWriter(res)
@@ -130,8 +144,7 @@ class JavaScriptSDKGenerator extends Generator {
 
 		context.attributes("rtype") = m.restType.toString()
 		context.attributes("url") = url
-		
-			
+
 		templ.render(context)
 
 		buffer.flush()

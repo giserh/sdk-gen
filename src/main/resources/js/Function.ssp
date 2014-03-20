@@ -5,8 +5,6 @@
 
 id: function(${idName}) {
 		return {
-			#for(block <- blocks)
-				${block}
-			#end 			
+				${blocks.mkString(",\n")}				
 		}
 	}

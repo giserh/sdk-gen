@@ -11,10 +11,9 @@ import org.raml.model.Raml
 import analyser.Analyser
 import java.io.File
 import analyser.DocType
+import analyser.ReturnType
 
-class JavaSDKGenerator extends SourceGenerator(".java") {
-
-	val engine: TemplateEngine = new TemplateEngine
+class JavaSDKGenerator extends Generator {
 
 	/**
 	 * Creates the sdk based on Raml
@@ -25,6 +24,7 @@ class JavaSDKGenerator extends SourceGenerator(".java") {
 	 * @return whether SDK was generated
 	 */
 	override def generate(raml: Raml, resourcePath: String, baseUrl: String, tempDirectory: String): Boolean = {
+		
 		val pack: Package = Analyser.analyseRaml(raml)
 
 		val classes: List[(String, String)] = pack.clazzes.map {
@@ -47,24 +47,13 @@ class JavaSDKGenerator extends SourceGenerator(".java") {
 	}
 
 	/**
-	 * Generates the package for sdk based on a template for package in a language and previously generated classes
-	 * @param pack - Package object representing the entire SDK
-	 * @param packageFile - path to package template
-	 * @param classes - list of generated classes
-	 * @return generated package in a string
-	 */
-	override def generatePackage(pack: Package, packageFile: String, clazzes: List[String]): String = {
-		""
-	}
-
-	/**
 	 * Generates Class string based on template for class in a language and previously generated methods.
 	 * @param clazz - Clazz object representing a class for SDK
 	 * @param classFile - path to class template
 	 * @param methods - list of previously generated methods
 	 * @return generated class in a string
 	 */
-	override def generateClass(clazz: Clazz, classFile: String, methods: List[String]): String = {
+	def generateClass(clazz: Clazz, classFile: String, methods: List[String]): String = {
 
 		val templ = engine.load(classFile)
 
@@ -90,12 +79,14 @@ class JavaSDKGenerator extends SourceGenerator(".java") {
 	 * @param methodFile - path to method template
 	 * @return generated method in a string
 	 */
-	override def generateMethod(method: Method, methodFile: String): String = {
+	def generateMethod(method: Method, methodFile: String): String = {
 
-		def nameChanger(name: String): String = name match {
-			case "STRING" => "String"
-			case "NUMBER" => "Long"
-			case other => println(other); other
+		def nameChanger(name: ReturnType.Value): String = name match {
+			case ReturnType.STRING => "String"
+			case ReturnType.NUMBER => "Long"
+			case ReturnType.NUMBER_LIST => "List<Long>"
+			case ReturnType.STRING_LIST => "List<String>"
+			case ReturnType.MAP => "Map<String,String>"
 		}
 
 		val templ = engine.load(methodFile)

@@ -21,6 +21,17 @@ object RestType extends Enumeration {
 }
 
 /**
+ * Type of parameters.
+ */
+object ReturnType extends Enumeration {
+	val STRING = Value("string")
+	val STRING_LIST = Value("string_list")
+	val NUMBER_LIST = Value("number_list")
+	val MAP = Value("map")
+	val NUMBER = Value("number")
+}
+
+/**
  * Represents the type of documentation
  */
 object DocType extends Enumeration {
@@ -44,7 +55,7 @@ class Method(val restType: RestType.Value, val url: String, private var _name: S
 	// Optional body to be sent with the request.
 	private var _body: Option[String] = None
 	// All needed query parameters
-	private var _query: Map[String, String] = Map()
+	private var _query: Map[String, ReturnType.Value] = Map()
 
 	// check url for ids and then add to query parameters
 	addIdToQuery()
@@ -66,7 +77,7 @@ class Method(val restType: RestType.Value, val url: String, private var _name: S
 	/**
 	 * Add additional parameter to method.
 	 */
-	def addQueryParameter(key: String, value: String) {
+	def addQueryParameter(key: String, value: ReturnType.Value) {
 		_query = query + (key -> value)
 	}
 
@@ -92,6 +103,9 @@ class Method(val restType: RestType.Value, val url: String, private var _name: S
 
 	}
 
+	/**
+	 * Looks for ids in url and sets them as parameters
+	 */
 	private def addIdToQuery() {
 		val regex = """\{[a-zA-Z0-9,]+\}""".r
 		regex.findAllIn(this.url).foreach {
@@ -99,12 +113,12 @@ class Method(val restType: RestType.Value, val url: String, private var _name: S
 				{
 					var getId = id.replace("{", "")
 					getId = getId.replace("}", "")
-					
-					if( getId.equals("eventId") || getId.equals("notificationId") || getId.equals("externalIdName") || getId.equals("externalId"))
-						addQueryParameter(getId, "STRING")
-					else 
-						addQueryParameter(getId, "NUMBER")
-						
+
+					if (getId.equals("eventId") || getId.equals("notificationId") || getId.equals("externalIdName") || getId.equals("externalId"))
+						addQueryParameter(getId, ReturnType.STRING)
+					else
+						addQueryParameter(getId, ReturnType.NUMBER)
+
 					// get the name of the object
 					val start = this.url.take(this.url.indexOf(id) - 1)
 					var name = start.drop(start.lastIndexOf("/") + 1)
@@ -122,8 +136,23 @@ class Method(val restType: RestType.Value, val url: String, private var _name: S
 
 		traits.foreach {
 			param =>
-				addQueryParameter(param._1, param._2.getType().toString)
-				addDoc(param._1, param._2.getDescription(), DocType.PARAM)
+				param match {
+					case ("groups", t) =>
+						addQueryParameter("groups", ReturnType.NUMBER_LIST)
+						addDoc("groups", t.getDescription(), DocType.PARAM)
+					case ("segments", t) =>
+						addQueryParameter("segments", ReturnType.NUMBER_LIST)
+						addDoc("segments", t.getDescription(), DocType.PARAM)
+					case ("fields", t) =>
+						addQueryParameter("fields", ReturnType.STRING_LIST)
+						addDoc("fields", t.getDescription(), DocType.PARAM)
+					case ("order", t) =>
+						addQueryParameter("order", ReturnType.MAP)
+						addDoc("order", t.getDescription(), DocType.PARAM)
+					case (o, t) =>
+						addQueryParameter(o, ReturnType.withName(t.getType().name().toLowerCase()))
+						addDoc(o, t.getDescription(), DocType.PARAM)
+				}
 		}
 
 	}
@@ -140,7 +169,7 @@ class Method(val restType: RestType.Value, val url: String, private var _name: S
 					this.addDoc("example_body", appjson.getExample(), DocType.OTHER)
 
 				/** Just to show that we use body */
-				this.addQueryParameter("body", "STRING")
+				this.addQueryParameter("body", ReturnType.STRING)
 				this.addDoc("body", appjson.getSchema(), DocType.PARAM)
 			}
 
@@ -187,8 +216,7 @@ class Method(val restType: RestType.Value, val url: String, private var _name: S
 			this.addDoc("return value", gatherReturn.mkString("\n or "), DocType.RETURN)
 		}
 	}
-	
-	
+
 	/**
 	 * Returns the name of the method.
 	 */

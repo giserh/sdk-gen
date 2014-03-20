@@ -3,7 +3,5 @@
 <%@ var blocks: List[String] %>
 
 ${name}:{
-		#for(block <- blocks)
-			${block}
-		#end 				
+		${blocks.mkString(",\n")}				
 }

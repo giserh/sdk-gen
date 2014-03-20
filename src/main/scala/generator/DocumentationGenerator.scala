@@ -12,10 +12,10 @@ import java.io.StringWriter
 import scala.util.parsing.json.JSON
 class DocumentationGenerator extends Generator {
 
-	protected var fileName = "documentation.html"
+	override val sdkFileName = "documentation.html"
 	var base = ""
+	var version = ""
 
-	val engine: TemplateEngine = new TemplateEngine
 
 	/**
 	 * Checks how the method begins and uses order list to determine the order of Methods
@@ -133,6 +133,7 @@ class DocumentationGenerator extends Generator {
 
 		val pack: Package = Analyser.analyseRaml(raml)
 		base = pack.baseUri
+		version = pack.docs("version")
 
 		def mapper(s: String) = s match {
 			case "clientscripts" => "client_scripts"
@@ -167,7 +168,7 @@ class DocumentationGenerator extends Generator {
 
 		// write to file
 		for (p <- pages) {
-			val dest = new PrintWriter(new File(tempDirectory + "/" + p._1 + "_" + fileName))
+			val dest = new PrintWriter(new File(tempDirectory + "/" + p._1 + "_" + sdkFileName))
 			dest.print(p._2)
 			dest.flush()
 		}
@@ -229,15 +230,15 @@ class DocumentationGenerator extends Generator {
 			val curl = "curl -X " + m.restType.toString().toUpperCase() +
 				" -H \"Authorization: Bearer d3e5174c60c56797e4fee47f45d39\" -H \"Content-Type: application/json\" -d \\ \n" +
 				m.docs("example_body")._2.replace("\n", " ") +
-				regex.replaceAllIn("\\ \nhttp://" + base + m.url, "1")
+				regex.replaceAllIn("\\ \n" + base + "/" + version+ m.url, "1")
 
 			whites.replaceAllIn(curl, " ")
 
 		} else {
 
 			val curl = "curl -X " + m.restType.toString().toUpperCase() +
-				" -H 'Authorization: Bearer d3e5174c60c56797e4fee47f45d39' http://" +
-				regex.replaceAllIn(base + m.url, "1")
+				" -H 'Authorization: Bearer d3e5174c60c56797e4fee47f45d39' " +
+				regex.replaceAllIn( base + "/" +  version + m.url, "1")
 
 			whites.replaceAllIn(curl, " ")
 		}
@@ -317,7 +318,7 @@ class DocumentationGenerator extends Generator {
 	 */
 	private def createQueryParameters(m: Method): List[(String, String, String)] = {
 		m.query.toList.filter(tpl => tpl._1 != "body").map {
-			tpl => (tpl._1, tpl._2.toLowerCase(), m.docs(tpl._1)._2)
+			tpl => (tpl._1, tpl._2.toString().toLowerCase(), m.docs(tpl._1)._2)
 		}
 	}
 

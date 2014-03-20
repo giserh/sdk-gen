@@ -11,7 +11,9 @@
 #end 
  */ 
 public Response ${methodName}( ${parameters.map(tuple => tuple._2 + " " + tuple._1 ).mkString(", ")} ) throws Exception { 
+	#if(!parameters.filter(_._1 != "body").isEmpty)
 	Map<String,Object> array = new HashMap<String,Object>();
+        
     #for(param <- parameters.filter(_._1 != "body"))
 	array.put("${param._1}",${param._1});
 	#end 
@@ -20,5 +22,17 @@ public Response ${methodName}( ${parameters.map(tuple => tuple._2 + " " + tuple.
   		return this.callService( "${url}", "${rtype}",  array , body);
 	#else
 		return this.callService( "${url}", "${rtype}",  array, null);
+	#end
+	
+	#end
+	
+	#if(parameters.filter(_._1 != "body").isEmpty)
+	
+	#if (parameters.contains("body"))
+  		return this.callService( "${url}", "${rtype}",  null , body);
+	#else
+		return this.callService( "${url}", "${rtype}",  null, null);
+	#end
+	
 	#end	
 	}

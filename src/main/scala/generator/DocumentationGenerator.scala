@@ -228,16 +228,16 @@ class DocumentationGenerator extends Generator {
 		if (m.docs.contains("example_body")) {
 
 			val curl = "curl -X " + m.restType.toString().toUpperCase() +
-				" -H \"Authorization: Bearer d3e5174c60c56797e4fee47f45d39\" -H \"Content-Type: application/json\" -d \\ \n" +
+				" -H \"Authorization: Bearer :YOUR_CLIENT_TOKEN:\" -H \"Content-Type: application/json\" -d \\ \n" +
 				m.docs("example_body")._2.replace("\n", " ") +
-				regex.replaceAllIn("\\ \n" + base + "/" + version+ m.url, "1")
+				regex.replaceAllIn("\\ \n" + base + "/" + version + m.url, "1")
 
 			whites.replaceAllIn(curl, " ")
 
 		} else {
 
 			val curl = "curl -X " + m.restType.toString().toUpperCase() +
-				" -H 'Authorization: Bearer d3e5174c60c56797e4fee47f45d39' " +
+				" -H 'Authorization: Bearer :YOUR_CLIENT_TOKEN:' " +
 				regex.replaceAllIn( base + "/" +  version + m.url, "1")
 
 			whites.replaceAllIn(curl, " ")

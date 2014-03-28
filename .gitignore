@@ -24,6 +24,7 @@ output.log
 error.log
 /.worksheet/
 /*.sc
+.cache
 /conf/dev.conf
 /conf/test.conf
 /generated

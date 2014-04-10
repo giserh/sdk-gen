@@ -3,7 +3,7 @@ import Keys._
 
 object Build extends Build {
 
-  lazy val raml = RootProject(uri("https://github.com/asikorski/raml-scala-parser.git#%s".format("v0.8.1")))
+  lazy val raml = RootProject(file("../raml-scala-parser"))
 
   lazy val defaultSettings =
     Defaults.defaultSettings ++

@@ -29,6 +29,7 @@ object ReturnType extends Enumeration {
 	val NUMBER_LIST = Value("number_list")
 	val MAP = Value("map")
 	val NUMBER = Value("number")
+  val BOOLEAN = Value("boolean")
 }
 
 /**

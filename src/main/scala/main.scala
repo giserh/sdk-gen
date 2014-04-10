@@ -1,10 +1,11 @@
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.security.InvalidParameterException
+import org.raml.parser.rule.ValidationResult
 import scala.io.BufferedSource
 import scala.io.Source
 import org.raml.model.Raml
-import org.raml.parser.visitor.RamlDocumentBuilder
+import org.raml.parser.visitor.{RamlValidationService, RamlDocumentBuilder}
 import com.typesafe.config.ConfigFactory
 import generator.CodeContext
 import generator.Generator
@@ -26,7 +27,7 @@ object Main {
 	def nextOption(list: List[String]): Map[String, Any] = {
 		list match {
 			case ("--generator" | "-g") :: value :: tail => value match {
-				/** @TODO add new generators */
+				/** @todo add new generators */
 				case "php" => Map("generator" -> new PhpSDKGenerator) ++ nextOption(tail)
 				case "java" => Map("generator" -> new JavaSDKGenerator) ++ nextOption(tail)
 				case "js" => Map("generator" -> new JavaScriptSDKGenerator) ++ nextOption(tail)
@@ -45,9 +46,12 @@ object Main {
 			case ("--include" | "-i") :: value :: tail => {
 				Map("include" -> value) ++ nextOption(tail)
 			}
+      case ("--validate" | "-v") :: tail => {
+        Map("validate" -> true) ++ nextOption(tail)
+      }
 			/**get last parameter - path to RAML file */
 			case ramlFile :: Nil => {
-				/** @TODO in future get file from remote resource*/
+				/** @todo in future get file from remote resource*/
 				if (!Files.exists(Paths.get(ramlFile))) throw new InvalidParameterException(s"File does not exists: $ramlFile")
 				else Map("raml" -> ramlFile)
 			}
@@ -64,6 +68,9 @@ object Main {
 
 	def main(args: Array[String]): Unit = {
 
+//    if (args.contains("validate")){
+//     val validation = RamlValidationService.createDefault().validate(ramlLocation)
+//    }
 		/**Check whether we have any parameters*/
 		if (args.length != 0) {
 
@@ -80,7 +87,7 @@ object Main {
 			val codeGenerator: Generator = options("generator").asInstanceOf[Generator]
 
 			/** Get configuration for application*/
-			var application = config.getConfig("application")
+			val application = config.getConfig("application")
 
 			/**Load RAML file*/
 			var buf: Option[BufferedSource] = None
@@ -100,7 +107,12 @@ object Main {
 			if (options.contains("include"))
 				includePath = options("include").asInstanceOf[String]
 
-			var raml: Raml = new RamlDocumentBuilder().build(new File(ramlFile))
+      if (options.contains("validate")){
+        val validation = RamlValidationService.createDefault().validate(ramlFile)
+        println(validation)
+      }
+
+			val raml: Raml = new RamlDocumentBuilder().build(new File(ramlFile))
 
 			if (options.contains("save")) {
 				val emitter = new RamlEmitter
@@ -110,7 +122,7 @@ object Main {
 			}
 			
 			/**Invoke code generator*/
-			var composer: CodeContext = new CodeContext()
+			val composer: CodeContext = new CodeContext()
 			val worker = composer.withBaseUrl(baseUrl)
 				.withGenerator(codeGenerator)
 				.withOutputDirectory(outputDirectory)

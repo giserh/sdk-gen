@@ -27,13 +27,6 @@ public class ${className} extends Connector{
 	public ${className}(Map<String,String> config)
     {
         super( "${baseUrl}", "${baseOauthUrl}", "${version}", config);
-        try {
-			setupSSL(null);
-		} catch (KeyManagementException | NoSuchAlgorithmException
-				| CertificateException
-				| KeyStoreException | IOException e) {
-			System.out.println("Cannot initialize SSL connection " + e.getMessage() + "\n");
-		}
     }
 
 	#for (method<- methods)

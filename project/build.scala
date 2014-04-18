@@ -10,7 +10,7 @@ object Build extends Build {
       Seq(
         name := "sdk-gen",
         version := "1.0",
-        scalaVersion := "2.10.1",
+        scalaVersion := "2.10.3",
         scalacOptions := Seq(
           "-feature",
           "-language:implicitConversions",
@@ -33,7 +33,9 @@ object Build extends Build {
         "com.typesafe" % "config" % "1.0.2",
         "com.github.scopt" %% "scopt" % "3.2.0",
         "org.apache.httpcomponents" % "httpclient" % "4.3.1",
-        "org.json" % "json" % "20131018"
+        "org.json" % "json" % "20131018",
+        "org.fusesource.scalate" % "scalate-core_2.10" % "1.6.1",
+        "org.mockito" % "mockito-all" % "1.9.5"
         )))
     .dependsOn(raml)
 

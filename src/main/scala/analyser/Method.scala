@@ -166,14 +166,10 @@ class Method(val restType: RestType.Value, val path: String) {
 
         val example = appjson.getExample
 
-        addDoc("example_body", example, DocType.OTHER)
-
-
         /** Just to show that we use body */
         query += "body" -> ReturnType.STRING
 
         val schema = appjson.getSchema
-        addDoc("body", schema, DocType.PARAM)
         body = Some((example, schema))
       }
 

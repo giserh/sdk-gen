@@ -53,7 +53,9 @@ class DocumentationGenerator extends Generator {
   }
 
   /**
-   * Get the title for resource.
+   * Gets title for method
+   * @param s nontile string
+   * @return title string
    */
   def title(s: String) = s match {
     case "client_scripts" => "Client scripts"
@@ -80,6 +82,10 @@ class DocumentationGenerator extends Generator {
 
   /**
    * Create all the pages to write to output
+   * @param all all the pages in a map
+   * @param resourcePath path to ssp resource
+   * @param pack package class
+   * @return list of pages
    */
   private def createPages(all: Map[String, Map[String, List[Method]]], resourcePath: String, pack: Package) = {
     all.keys.map {
@@ -96,7 +102,7 @@ class DocumentationGenerator extends Generator {
 
             val generatedMethods = groupedMethods.map {
               g =>
-                headerId += 1;
+                headerId += 1
                 (g._1, g._2.sortWith(methodSorter).map {
                   m => methodId += 1; generateMethod(m, resourcePath + "/Method.ssp", methodId, headerId)
                 })
@@ -219,19 +225,22 @@ class DocumentationGenerator extends Generator {
     result.toString
   }
 
+
   /**
-   * Creating curl expression
+   * Create curl expression for method
+   * @param m method class
+   * @return curl as string
    */
   private def createCurl(m: Method): String = {
 
     val regex = """\{[a-zA-Z0-9,]+\}""".r
     val whites = """[ \t]+""".r
 
-    if (m.docs.contains("example_body")) {
+    if (m.body.isDefined) {
 
       val curl = "curl -k -X " + m.restType.toString.toUpperCase +
         " -H \"Authorization: Bearer :YOUR_CLIENT_TOKEN:\" -H \"Content-Type: application/json\" -d \\ \n" +
-        m.docs("example_body")._2.replace("\n", " ") +
+        m.body.get._1.replace("\n", " ") +
         regex.replaceAllIn("\\ \n" + base + "/" + version + m.path, "1")
 
       whites.replaceAllIn(curl, " ")
@@ -249,29 +258,35 @@ class DocumentationGenerator extends Generator {
 
   /**
    * Creating example request body.
+   * @param m method class
+   * @return example request as string
    */
   private def createExampleRequest(m: Method): String = {
-    if (m.docs.contains("example_body"))
-      m.docs("example_body")._2
+    if (m.body.isDefined)
+      m.body.get._1
     else
       "example_body"
   }
 
   /**
    * Create body parameters for json schema.
+   * @param m method class
+   * @return body parameters as list of tuples
    */
   private def createBodyParameters(m: Method): List[(String, String, String)] = {
-    if (m.docs.contains("body")) {
+    if (m.body.isDefined) {
 
-      val obj = JSON.parseFull(m.docs("body")._2) match {
+      val obj = JSON.parseFull(m.body.get._2) match {
         case Some(v) => v
-        case None => throw new Exception("Wrong body:\n" + m.docs("body")._2)
+        case None => throw new Exception("Wrong body:\n" + m.body.get._2)
       }
 
-      var bodypar = obj.asInstanceOf[Map[String, Any]]
+      val inner = obj.asInstanceOf[Map[String, Any]]
 
-      if (bodypar.contains("properties"))
-        bodypar = bodypar("properties").asInstanceOf[Map[String, Any]]
+      val bodypar = if (inner.contains("properties"))
+        inner("properties").asInstanceOf[Map[String, Any]]
+      else
+        inner
 
 
       val bodyTable = bodypar.map {
@@ -304,7 +319,9 @@ class DocumentationGenerator extends Generator {
   }
 
   /**
-   * Create name for method title
+   * Create name for method title based on rest type
+   * @param m method class
+   * @return new name
    */
   private def createName(m: Method): String = {
 
@@ -323,6 +340,8 @@ class DocumentationGenerator extends Generator {
 
   /**
    * Create query path parameters for the table.
+   * @param m method class
+   * @return query parameters as a list of tuples
    */
   private def createQueryParameters(m: Method): List[(String, String, String)] = {
     m.query.toList.filter(tpl => tpl._1 != "body").map {
@@ -331,14 +350,12 @@ class DocumentationGenerator extends Generator {
   }
 
   /**
-   * Create example response
+   * Create example responses
+   * @param m method class
+   * @return example responses as string
    */
   private def createExampleResponse(m: Method): String = {
-
-    if (m.docs.contains("example"))
-      m.docs("example")._2
-    else
-      "example"
+    m.responses.map(tpl => tpl._1 + ":\n  Example:\n" + tpl._2 + "\n  Schema:\n" + tpl._3 + "\n").mkString("")
   }
 
   /**

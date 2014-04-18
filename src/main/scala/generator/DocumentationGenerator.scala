@@ -38,7 +38,7 @@ class DocumentationGenerator extends Generator {
    * @return group it belongs to
    */
   def methodGrouper(m: Method): String = {
-    val res = m.url.split("/")
+    val res = m.path.split("/")
     if (res(2).equals("users") && res.length > 5 && res(3).equals("groups")) {
       "users group " + res(5)
     } else if (res.length > 3 && !res(3).equals("doc") && !res(3).contains("{")) {
@@ -124,7 +124,7 @@ class DocumentationGenerator extends Generator {
    * Creates the sdk based on Raml
    * @param raml - output from raml parser
    * @param resourcePath - path to templates
-   * @param baseUrl - url to api
+   * @param baseUrl - path to api
    * @param tempDirectory - temporary directory
    * @return whether SDK was generated
    */
@@ -144,11 +144,11 @@ class DocumentationGenerator extends Generator {
     var all = Map[String, Map[String, List[Method]]]()
     for (clazz <- pack.clazzes) {
       {
-        val mapName = clazz.methods(0).url.split("/")(1)
-        // group by the second part of url
+        val mapName = clazz.methods(0).path.split("/")(1)
+        // group by the second part of path
         val nameMap = clazz.methods.groupBy {
           m => {
-            val mets = m.url.split("/")
+            val mets = m.path.split("/")
             if (mets.length > 3 && mets(2).equals("users") && mets(3).equals("groups"))
               "user_groups"
             else
@@ -176,7 +176,6 @@ class DocumentationGenerator extends Generator {
   /**
    * Generates documentation page for chosen methods.
    * @param pack - Package object representing the entire SDK.
-   * @param packageFile - path to package template.
    * @param headers - a list of generated subpages.
    * @return generated package in a string
    */
@@ -198,6 +197,11 @@ class DocumentationGenerator extends Generator {
 
   /**
    * Create headers
+   * @param methods all methods under header
+   * @param pageFile - entire page
+   * @param headerId current header id
+   * @param name name of the header
+   * @return
    */
   def generateHeaders(methods: List[String], pageFile: String, headerId: Int, name: String): String = {
     val templ = engine.load(pageFile)
@@ -228,7 +232,7 @@ class DocumentationGenerator extends Generator {
       val curl = "curl -k -X " + m.restType.toString.toUpperCase +
         " -H \"Authorization: Bearer :YOUR_CLIENT_TOKEN:\" -H \"Content-Type: application/json\" -d \\ \n" +
         m.docs("example_body")._2.replace("\n", " ") +
-        regex.replaceAllIn("\\ \n" + base + "/" + version + m.url, "1")
+        regex.replaceAllIn("\\ \n" + base + "/" + version + m.path, "1")
 
       whites.replaceAllIn(curl, " ")
 
@@ -236,7 +240,7 @@ class DocumentationGenerator extends Generator {
 
       val curl = "curl -k -X " + m.restType.toString.toUpperCase +
         " -H 'Authorization: Bearer :YOUR_CLIENT_TOKEN:' " +
-        regex.replaceAllIn(base + "/" + version + m.url, "1")
+        regex.replaceAllIn(base + "/" + version + m.path, "1")
 
       whites.replaceAllIn(curl, " ")
     }
@@ -318,7 +322,7 @@ class DocumentationGenerator extends Generator {
   }
 
   /**
-   * Create query url parameters for the table.
+   * Create query path parameters for the table.
    */
   private def createQueryParameters(m: Method): List[(String, String, String)] = {
     m.query.toList.filter(tpl => tpl._1 != "body").map {
@@ -352,11 +356,11 @@ class DocumentationGenerator extends Generator {
     val context = new DefaultRenderContext("/", engine, buffer)
 
     context.attributes("methodName") = createName(method)
-    context.attributes("desc") = method.docs("")._2
+    context.attributes("desc") = method.docs("description")._2
     context.attributes("headerId") = headerId
     context.attributes("methodId") = methodId
     context.attributes("queryParameters") = createQueryParameters(method)
-    context.attributes("url") = method.restType.toString.toUpperCase + " " + method.url
+    context.attributes("url") = method.restType.toString.toUpperCase + " " + method.path
     context.attributes("bodyTable") = createBodyParameters(method)
     context.attributes("response") = createExampleResponse(method)
     context.attributes("request") = createExampleRequest(method)

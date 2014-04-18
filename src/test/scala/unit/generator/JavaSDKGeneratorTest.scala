@@ -15,7 +15,7 @@ class JavaSDKGeneratorTest extends FunSuite{
 
 	test("generate methods") {
 		val generator = new JavaSDKGenerator
-		val ret = generator.generateMethod(new Method(RestType.GET, "/events/{id}", null, List()), "resources/java/Method.ssp")
+		val ret = generator.generateMethod(new Method(RestType.GET, "/events/{id}"), "resources/java/Method.ssp")
 		assert(ret.contains("id"))
 		assert(ret.contains("/events/{id}"))
 		assert(ret.contains("getOneEvent"))
@@ -27,7 +27,7 @@ class JavaSDKGeneratorTest extends FunSuite{
 		val base = "api.isaacloud.com"
 		val oauth = "oauth.isaacloud.com"
 		val version = "0.1"
-		val ret = generator.generateClass(new Clazz("/events", base, oauth, version, "Events"), "resources/java/Class.ssp", List())
+		val ret = generator.generateClass(new Clazz("/events", base, oauth, version), "resources/java/Class.ssp", List())
 		assert(ret.contains("public class Events extends Connector{"))
 		assert(ret.contains(s"""super( "http://${base}", "http://${oauth}", "${version}", config);"""))
 	}

@@ -1,3 +1,4 @@
+import java.net.URLClassLoader
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.security.InvalidParameterException
@@ -71,9 +72,6 @@ object Main {
 
   def main(args: Array[String]): Unit = {
 
-    //    if (args.contains("validate")){
-    //     val validation = RamlValidationService.createDefault().validate(ramlLocation)
-    //    }
     /** Check whether we have any parameters */
     if (args.length != 0) {
 
@@ -92,28 +90,24 @@ object Main {
       /** Get configuration for application */
       val application = config.getConfig("application")
 
-      /** Load RAML file */
-      var buf: Option[BufferedSource] = None
-      buf = Some(Source.fromFile(ramlFile))
-      val source: String = buf.get.getLines mkString "\n"
-
       /** Get data from configuration */
       val baseUrl = application.getString("baseUrl")
-      var resourcePath = application.getString("resourcePath")
 
-      if (options.contains("resources"))
-        resourcePath = options("resources").asInstanceOf[String]
+      val resourcePath = if (options.contains("resources"))
+        options("resources").asInstanceOf[String]
+      else
+        application.getString("resourcePath")
 
       val tempDirectory = application.getString("tempDirectory")
 
       //could change it to val you know
-      var includePath: String = null
-      if (options.contains("include"))
-        includePath = options("include").asInstanceOf[String]
+      val includePath = if (options.contains("include"))
+        options("include").asInstanceOf[String]
+      else null
 
       if (options.contains("validate")) {
         val validation = RamlValidationService.createDefault().validate(ramlFile)
-        //        println(ValidationLogger.history.head)
+        println(validation)
       }
 
       Try(new RamlDocumentBuilder().build(new File(ramlFile))) match {
@@ -139,7 +133,8 @@ object Main {
         }
         case Failure(e) => {
           println("Failed in parsing your raml")
-          println(ValidationLogger.history.head)
+          if (!ValidationLogger.history.isEmpty)
+            println(ValidationLogger.history.head)
           println("Exception message : \n" + e.getMessage)
         }
       }

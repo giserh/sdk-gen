@@ -79,7 +79,7 @@ traits:
   get:
    is: [ paginator, fields, ordering]
    description: Get events for a client.
-   responses:
+   methodResponse:
     200:
      body:
       schema: events
@@ -107,7 +107,7 @@ traits:
 	  assert(clazz.methods.length==1)
 	  val meth = clazz.methods(0)
 	  assert(meth.restType == RestType.GET)
-	  assert(meth.url == "/queue/events")
+	  assert(meth.path == "/queue/events")
 	  assert(meth.docs("")._2.contains("Get events for a client"))
 	  assert(meth.query.contains("fields"))
 	  assert(meth.query.contains("limit"))

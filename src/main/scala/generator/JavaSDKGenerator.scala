@@ -19,7 +19,7 @@ class JavaSDKGenerator extends Generator {
 	 * Creates the sdk based on Raml
 	 * @param raml - output from raml parser
 	 * @param resourcePath - path to templates
-	 * @param baseUrl - url to api
+	 * @param baseUrl - path to api
 	 * @param tempDirectory - temporary directory
 	 * @return whether SDK was generated
 	 */
@@ -118,7 +118,7 @@ class JavaSDKGenerator extends Generator {
 		context.attributes("docs") = docs
 
 		context.attributes("methodName") = method.name
-		context.attributes("url") = method.url
+		context.attributes("url") = method.path
 		context.attributes("rtype") = method.restType.toString()
 
 		templ.render(context)

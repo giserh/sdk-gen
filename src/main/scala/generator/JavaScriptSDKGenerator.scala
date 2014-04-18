@@ -50,14 +50,14 @@ class JavaScriptSDKGenerator extends Generator {
 
 		val toCreate = methods.filter {
 			m =>
-				m.url.split("/").length == depth + 1
+				m.path.split("/").length == depth + 1
 		}
 
 		val created = toCreate.map {
 			m => createMethod(m, resourcePath)
 		}
 
-		val currentBlock = methods(0).url.split("/")(depth)
+		val currentBlock = methods(0).path.split("/")(depth)
 
 		// create blocks
 
@@ -80,8 +80,8 @@ class JavaScriptSDKGenerator extends Generator {
 		val context = new DefaultRenderContext("/", engine, buffer)
 		context.attributes("name") = currentBlock
 		context.attributes("blocks") = created ::: methods
-			.filter(a => a.url.split("/").length > depth + 1)
-			.groupBy(a => a.url.split("/")(depth + 1))
+			.filter(a => a.path.split("/").length > depth + 1)
+			.groupBy(a => a.path.split("/")(depth + 1))
 			.flatMap {
 				ms =>
 					createBlocks(ms._2, depth + 1, resourcePath)
@@ -107,8 +107,8 @@ class JavaScriptSDKGenerator extends Generator {
 		context.attributes("name") = ohne
 		context.attributes("idName") = ohne
 		context.attributes("blocks") = created ::: methods
-			.filter(a => a.url.split("/").length > depth + 1)
-			.groupBy(a => a.url.split("/")(depth + 1))
+			.filter(a => a.path.split("/").length > depth + 1)
+			.groupBy(a => a.path.split("/")(depth + 1))
 			.flatMap {
 				ms =>
 					createBlocks(ms._2, depth + 1, resourcePath)
@@ -128,7 +128,7 @@ class JavaScriptSDKGenerator extends Generator {
 	 */
 	def createMethod(m: Method, resourcePath: String): String = {
 
-		var url = "'" + m.url.replace("{", "' +").replace("}", "+ '")
+		var url = "'" + m.path.replace("{", "' +").replace("}", "+ '")
 
 		if (url.endsWith("+ '")) {
 			url = url.dropRight(3)

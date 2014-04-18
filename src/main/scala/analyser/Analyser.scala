@@ -14,143 +14,138 @@ import scala.util.parsing.json.JSON
  */
 object Analyser {
 
-	/**
-	 * Takes a Raml parser output and returns a Package object representing the SDK
-	 * @param raml : Raml object representing a raml document
-	 * @return Package representing the sdk to be generated.
-	 */
-	def analyseRaml(raml: Raml): Package = {
-			
-		val baseUri = raml.getBaseUri()
-		val mediaType = raml.getMediaType()
-		val securedBy = raml.getSecuredBy().get(0)
+  /**
+   * Takes a Raml parser output and returns a Package object representing the SDK
+   * @param raml : Raml object representing a raml document
+   * @return Package representing the sdk to be generated.
+   */
+  def analyseRaml(raml: Raml): Package = {
 
-		val oauth = raml.getSecuritySchemes().get(0).get("oauth_2_0").getSettings().get("baseUri").get(0)
+    val baseUri = raml.getBaseUri
+    val mediaType = raml.getMediaType
+    val securedBy = raml.getSecuredBy.get(0)
 
-		val pack = new Package(baseUri, mediaType, securedBy, oauth)
+    val oauth = raml.getSecuritySchemes.get(0).get("oauth_2_0").getSettings.get("baseUri").get(0)
 
-		val version = raml.getVersion()
-		pack.addDoc("version", version)
+    val pack = new Package(baseUri, mediaType, securedBy, oauth)
 
-		val title = raml.getTitle()
-		pack.addDoc("title", title)
+    val version = raml.getVersion
+    pack.addDoc("version", version)
 
-		/* @TODO Should be logged*/
-		println(s"Building SDK package for API version ${pack.docs("version")}")
+    val title = raml.getTitle
+    pack.addDoc("title", title)
 
-		for { child <- raml.getResources().asScala } {
-			analyseResource(child, pack)
-		}
+    /* @TODO Should be logged*/
+    println(s"Building SDK package for API version ${pack.docs("version")}")
 
-		pack
-	}
+    for {child <- raml.getResources.asScala} {
+      analyseResource(child, pack)
+    }
 
-	/**
-	 * Maps raml REST method type to the one used by the analyser
-	 * @param atype : ActionType enum representing the type of rest method
-	 * @return enum from analyser package
-	 */
-	private def mapRestType(atype: ActionType): analyser.RestType.Value = {
-		atype match {
-			case ActionType.GET => RestType.GET
-			case ActionType.POST => RestType.POST
-			case ActionType.PUT => RestType.PUT
-			case ActionType.PATCH => RestType.PATCH
-			case ActionType.DELETE => RestType.DELETE
-			case ActionType.HEAD => RestType.HEAD
-			case ActionType.OPTIONS => RestType.OPTIONS
-			case ActionType.TRACE => RestType.TRACE
-		}
-	}
+    pack
+  }
 
-	/**
-	 *  Adds Method's to clazz object.
-	 *  @param methods : map of actionTypes to actions with all the needed information.
-	 *  @param clazz : Clazz object to which we want to add methods
-	 *  @param resourceUrl : url of the resource containing the methods in map
-	 *  @param resourceName : name of the resource containing the methods in map
-	 */
-	private def createMethods(methods: java.util.Map[ActionType, Action], clazz: Clazz, resourceUrl: String, resourceName: String) {
+  /**
+   * Maps raml REST method type to the one used by the analyser
+   * @param atype : ActionType enum representing the type of rest method
+   * @return enum from analyser package
+   */
+  private def mapRestType(atype: ActionType): analyser.RestType.Value = {
+    atype match {
+      case ActionType.GET => RestType.GET
+      case ActionType.POST => RestType.POST
+      case ActionType.PUT => RestType.PUT
+      case ActionType.PATCH => RestType.PATCH
+      case ActionType.DELETE => RestType.DELETE
+      case ActionType.HEAD => RestType.HEAD
+      case ActionType.OPTIONS => RestType.OPTIONS
+      case ActionType.TRACE => RestType.TRACE
+    }
+  }
 
-		/** We check each method*/
-		methods.asScala.foreach {
-			action_tuple =>
-				{
+  /**
+   * Adds Method's to clazz object.
+   * @param methods : map of actionTypes to actions with all the needed information.
+   * @param clazz : Clazz object to which we want to add methods
+   * @param resourceUrl : path of the resource containing the methods in map
+   */
+  private def createMethods(methods: java.util.Map[ActionType, Action], clazz: Clazz, resourceUrl: String) {
 
-					val actionType = action_tuple._1
-					val action = action_tuple._2
+    /** We check each method */
+    methods.asScala.foreach {
+      action_tuple => {
 
-					/** Create new method with all the needed parameters. */
-					val m = new Method(mapRestType(actionType), resourceUrl, resourceName, action.getSecuredBy().asScala.toList)
+        val actionType = action_tuple._1
+        val action = action_tuple._2
 
-					/** Add the traits */
-					m.setupTraits(action.getQueryParameters().asScala.toMap)
+        /** Create new method with all the needed parameters. */
+        val m = new Method(mapRestType(actionType), resourceUrl)
 
-					/** Add basic doc - description*/
-					m.addDoc("", action.getDescription(), DocType.DESCRIPTION)
+        /** Add the traits */
+        m.setupTraits(action.getQueryParameters.asScala.toMap)
 
-					/** Analyse the possible values for body **/
-					m.setupBody(action.getBody.asScala)
-					
+        /** Add basic doc - description */
+        m.addDoc("description" ,action.getDescription, DocType.DESCRIPTION)
 
-					/** Analyse the possible values for responses **/
-					m.setupResponses(action.getResponses().asScala)
-					
-					clazz.add(m)
-				}
-		}
-	}
+        /** Analyse the possible values for body **/
+        m.setupBody(action.getBody.asScala)
 
-	/**
-	 * Analyses resources and adds it to Package class object
-	 * @param resourceTuple : tuple containing url of the resource and the resource class
-	 * @param pack : Package to add all the classes to
-	 */
-	private def analyseResource(resourceTuple: (String, Resource), pack: Package) {
 
-		/*Base uri*/
-		val url = resourceTuple._2.getUri()
+        /** Analyse the possible values for methodResponse **/
+        m.setupResponses(action.getResponses.asScala)
 
-		/*Actual resource*/
-		val resource = resourceTuple._2
+        clazz.methods = m :: clazz.methods
+      }
+    }
+  }
 
-		val methods = resource.getActions()
-		val name = resource.getDisplayName()
+  /**
+   * Analyses resources and adds it to Package class object
+   * @param resourceTuple : tuple containing path of the resource and the resource class
+   * @param pack : Package to add all the classes to
+   */
+  private def analyseResource(resourceTuple: (String, Resource), pack: Package) {
 
-		/** create a new clazz object*/
-		var clazz: Clazz = null
-		if (name != null) clazz = new Clazz(url, pack.baseUri, pack.baseOauthUri, pack.docs("version"), name)
-		else clazz = new Clazz(url, pack.baseUri, pack.baseOauthUri, pack.docs("version"))
+    /*Base uri*/
+    val url = resourceTuple._2.getUri
 
-		createMethods(methods, clazz, url, name)
+    /*Actual resource*/
+    val resource = resourceTuple._2
 
-		pack.addClazz(clazz)
+    val methods = resource.getActions
 
-		/* Analyze the subresources */
-		for { child <- resource.getResources().asScala } {
-			analyzeSubresource(child, clazz)
-		}
-	}
+    /** create a new clazz object */
+    val clazz = new Clazz(url, pack.baseUri, pack.baseOauthUri, pack.docs("version"))
 
-	/**
-	 * Analyses subresources and adds it to Clazz class object.
-	 * @param resourceTuple : tuple containing url of the resource and the resource class.
-	 * @param clazz : Clazz to add all the methods to.
-	 */
-	private def analyzeSubresource(resourceTuple: (String, Resource), clazz: Clazz) {
+    createMethods(methods, clazz, url)
 
-		/* base uri*/
-		val url = resourceTuple._2.getUri()
+    pack.addClazz(clazz)
 
-		/* actual resource */
-		val resource = resourceTuple._2
+    /* Analyze the subresources */
+    for {child <- resource.getResources.asScala} {
+      analyzeSubresource(child, clazz)
+    }
+  }
 
-		/* actions for a uri */
-		val methods = resource.getActions()
-		createMethods(methods, clazz, url, resource.getDisplayName())
+  /**
+   * Analyses subresources and adds it to Clazz class object.
+   * @param resourceTuple : tuple containing path of the resource and the resource class.
+   * @param clazz : Clazz to add all the methods to.
+   */
+  private def analyzeSubresource(resourceTuple: (String, Resource), clazz: Clazz) {
 
-		for { child <- resource.getResources().asScala } {
-			analyzeSubresource(child, clazz)
-		}
-	}
+    /* base uri*/
+    val url = resourceTuple._2.getUri()
+
+    /* actual resource */
+    val resource = resourceTuple._2
+
+    /* actions for a uri */
+    val methods = resource.getActions()
+    createMethods(methods, clazz, url)
+
+    for {child <- resource.getResources().asScala} {
+      analyzeSubresource(child, clazz)
+    }
+  }
 }

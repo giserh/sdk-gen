@@ -15,7 +15,7 @@ import org.junit.runner.RunWith
 class PhpGeneratorTest extends FunSuite {
 	test("generate methods") {
 		val generator = new PhpSDKGenerator
-		val ret = generator.generateMethod(new Method(RestType.GET, "/events/{id}", null, List()), "resources/php/Method.ssp")
+		val ret = generator.generateMethod(new Method(RestType.GET, "/events/{id}"), "resources/php/Method.ssp")
 		assert(ret.contains("id"))
 		assert(ret.contains("/events/{id}"))
 		assert(ret.contains("getOneEvent"))
@@ -23,7 +23,7 @@ class PhpGeneratorTest extends FunSuite {
 
 	test("generate classes") {
 		val generator = new PhpSDKGenerator
-		val ret = generator.generateClass(new Clazz("/events", "api.isaacloud.com", "oauth.isaacloud.com", "0.1", "Events"), "resources/php/Class.ssp", List())
+		val ret = generator.generateClass(new Clazz("/events", "api.isaacloud.com", "oauth.isaacloud.com", "0.1"), "resources/php/Class.ssp", List())
 		assert(ret.contains("public function __construct($config)"))
 		assert(ret.contains("""parent::__construct( "http://api.isaacloud.com", "http://oauth.isaacloud.com", "0.1", $config);"""))
 	}

@@ -11,10 +11,10 @@ import org.junit.runner.RunWith
 @RunWith(classOf[JUnitRunner])
 class ClazzTest extends FunSuite {
 	test("extract id from url and create a correct name") {
-		var clazz = new Clazz("/events", "", "", "", null)
+		var clazz = new Clazz("/events", "", "", "")
 		assert(clazz.name.equals("Events"))
 
-		clazz = new Clazz("/events/{id}/errors", "", "", "", null)
+		clazz = new Clazz("/events/{id}/errors", "", "", "")
 		assert(clazz.name.equals("EventErrors"))
 	}
 }

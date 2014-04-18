@@ -3,39 +3,29 @@ package analyser
 /**
  * Class containing all needed information to create a class.
  */
-class Clazz(val url: String, val baseUrl : String, val oauthUrl : String,val version : String, private var _name : String = null) {
+class Clazz(val url: String, val baseUrl : String, val oauthUrl : String,val version : String) {
 
 	//create a name for generated class
-	if (_name == null) _name = createName(url)
-	private var _methods : List[Method] = List()
-	private var _docs: Map[String,String] = Map()
-	
-	def name = _name
-	def docs = _docs	
-	def methods = _methods
-	
-	def add( method : Method) {
-		_methods = method :: _methods
-	}
-	
-	def addDoc(name : String, description: String){
-		_docs += (name -> description)
-	}
-	
-	/**
-	 * Creates name from url
-	 */
-	private def createName(url: String): String = {
+	val name = createName(url)
+	var methods : List[Method] = List()
+	var docs: Map[String,String] = Map()
+
+  /**
+   * Creates name for class
+   * @param path path identifying the resource
+   * @return
+   */
+	private def createName(path: String): String = {
 		
 		val regexEnds = """\{[a-zA-Z0-9,]+\}$""".r
 		val regex = """\{[a-zA-Z0-9,]+\}""".r
-		val urlNew = regexEnds.findFirstIn(url) match{
-			case Some(v) => "one" + regex.replaceAllIn(url, "#") 
-			case None => regex.replaceAllIn(url, "#") 
+		val urlNew = regexEnds.findFirstIn(path) match{
+			case Some(v) => "one" + regex.replaceAllIn(path, "#")
+			case None => regex.replaceAllIn(path, "#")
 		}				
 		
 		def singularize(list : List[String], remove : Boolean) : String = list match{
-			case head::tail if (remove && head.endsWith("s")) => singularize(tail, false) +  head.substring(0,head.length()-1).toString().capitalize
+			case head::tail if remove && head.endsWith("s") => singularize(tail, false) +  head.substring(0,head.length()-1).capitalize
 			case "#"::tail => singularize(tail,true)
 			case Nil => ""
 			case head::tail => singularize(tail, false) + head.capitalize 
@@ -44,8 +34,6 @@ class Clazz(val url: String, val baseUrl : String, val oauthUrl : String,val ver
 		
 	}
 	
-	override def toString = name
-	
-	
+	override def toString = name	
 	
 }

@@ -10,7 +10,7 @@ object Build extends Build {
       Seq(
         name := "sdk-gen",
         version := "1.0",
-        scalaVersion := "2.10.3",
+        scalaVersion := "2.10.2",
         scalacOptions := Seq(
           "-feature",
           "-language:implicitConversions",

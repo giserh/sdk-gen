@@ -102,7 +102,7 @@ class PhpSDKGenerator extends Generator{
 		context.attributes("parameters") = method.query
 		context.attributes("docs") = method.docs.map{tpl => (tpl._1,tpl._2._2)}
 		context.attributes("methodName") = method.name
-		context.attributes("url") = method.url
+		context.attributes("url") = method.path
 		context.attributes("rtype") = method.restType.toString()
 		
 		templ.render(context)

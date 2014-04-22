@@ -74,26 +74,23 @@ object Analyser {
     /** We check each method */
     methods.asScala.foreach {
       action_tuple => {
-
         val actionType = action_tuple._1
         val action = action_tuple._2
 
-        /** Create new method with all the needed parameters. */
+        /** create new method with all the needed parameters. */
         val m = new Method(mapRestType(actionType), resourceUrl)
 
-        /** Add the traits */
+        /** add the traits */
         m.setupTraits(action.getQueryParameters.asScala.toMap)
 
-        /** Add basic doc - description */
+        /** add basic doc - description */
         m.addDoc("description" ,action.getDescription, DocType.DESCRIPTION)
 
-        /** Analyse the possible values for body **/
+        /** analyse the possible values for body **/
         m.setupBody(action.getBody.asScala)
 
-
-        /** Analyse the possible values for methodResponse **/
+        /** analyse the possible values for methodResponse **/
         m.setupResponses(action.getResponses.asScala)
-
         clazz.methods = m :: clazz.methods
       }
     }
@@ -105,23 +102,19 @@ object Analyser {
    * @param pack : Package to add all the classes to
    */
   private def analyseResource(resourceTuple: (String, Resource), pack: Package) {
-
-    /*Base uri*/
+    /** uri */
     val url = resourceTuple._2.getUri
 
-    /*Actual resource*/
+    /** actual resource*/
     val resource = resourceTuple._2
-
     val methods = resource.getActions
 
     /** create a new clazz object */
     val clazz = new Clazz(url, pack.baseUri, pack.baseOauthUri, pack.docs("version"))
-
     createMethods(methods, clazz, url)
-
     pack.addClazz(clazz)
 
-    /* Analyze the subresources */
+    /** analyze the subresources */
     for {child <- resource.getResources.asScala} {
       analyzeSubresource(child, clazz)
     }
@@ -134,17 +127,17 @@ object Analyser {
    */
   private def analyzeSubresource(resourceTuple: (String, Resource), clazz: Clazz) {
 
-    /* base uri*/
-    val url = resourceTuple._2.getUri()
+    /** uri */
+    val url = resourceTuple._2.getUri
 
-    /* actual resource */
+    /** actual resource */
     val resource = resourceTuple._2
 
-    /* actions for a uri */
-    val methods = resource.getActions()
+    /** actions for a uri */
+    val methods = resource.getActions
     createMethods(methods, clazz, url)
 
-    for {child <- resource.getResources().asScala} {
+    for {child <- resource.getResources.asScala} {
       analyzeSubresource(child, clazz)
     }
   }
